@@ -1,0 +1,54 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kaihuynh.part_timejob.ForeignLanguageFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:weightSum="8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/foreign_language_title"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="22sp"
+            android:textColor="@color/end_color"
+            android:fontFamily="@font/iciel_cadena"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+
+        <ListView
+            android:id="@+id/lv_foreign_language"
+            android:background="@drawable/white_background"
+            android:layout_marginTop="@dimen/distance_view_20"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"></ListView>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <Button
+                android:id="@+id/btn_next_foreignLanguage"
+                android:background="@drawable/next_button"
+                android:fontFamily="@font/iciel_cadena"
+                android:layout_gravity="right"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:text="@string/next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_home"
+        android:checkable="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/home"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/action_like_jobs"
+        android:icon="@drawable/liked_jobs"
+        android:checkable="true"
+        app:showAsAction="ifRoom"
+        android:title="@string/liked_job"/>
+
+    <item android:id="@+id/action_applied_jobs"
+        android:icon="@drawable/applied_jobs"
+        android:checkable="true"
+        app:showAsAction="ifRoom"
+        android:title="@string/applied_job"/>
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/notification"
+        android:checkable="true"
+        app:showAsAction="ifRoom"
+        android:title="@string/notification"/>
+</menu>

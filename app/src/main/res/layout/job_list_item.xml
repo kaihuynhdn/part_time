@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/ripple_custom"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/distance_view_10"
+        android:paddingHorizontal="@dimen/activity_padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_job_item_title"
+                android:text="Job Title"
+                android:textColor="@color/back_87"
+                android:fontFamily="@font/linotte_semi_bold"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_job_item_menu"
+                android:text="&#8942;"
+                android:layout_alignParentRight="true"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Địa điểm:"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_job_item_location"
+                android:text="Đà Nẵng"
+                android:textSize="13sp"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Lương:"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_job_item_salary"
+                android:text="2 triệu"
+                android:textSize="13sp"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_posted_date"
+                android:text="Ngày Đăng:"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_job_item_date"
+                android:layout_toRightOf="@id/tv_posted_date"
+                android:text="12/10/2017"
+                android:textSize="13sp"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/btn_like_item"
+                android:src="@drawable/like"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

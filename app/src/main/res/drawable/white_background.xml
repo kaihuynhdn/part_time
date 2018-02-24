@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="@dimen/distance_view_1"
+                android:color="@color/lightBlue_700"/>
+            <solid android:color="@color/white"/>
+            <corners
+                android:topLeftRadius="@dimen/background_corners"
+                android:topRightRadius="@dimen/background_corners"
+                android:bottomLeftRadius="@dimen/background_corners"
+                android:bottomRightRadius="@dimen/background_corners"/>
+        </shape>
+    </item>
+
+</selector>

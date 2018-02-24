@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_padding"
+    tools:context="com.example.kaihuynh.part_timejob.PickLocationActivity">
+
+    <TextView
+        android:text="@string/location"
+        android:textColor="@color/back_87"
+        android:textSize="16sp"
+        android:elevation="@dimen/distance_view_20"
+        android:paddingBottom="@dimen/activity_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/lv_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>

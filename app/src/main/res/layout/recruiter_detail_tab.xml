@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/activity_padding"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/distance_view_5"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/user"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Huỳnh Quang Thảo"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#ff8f00"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/dob"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="20-01-1995"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/back_87"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/email"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="kaihuynhdn@gmail.com"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/back_87"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/phone_number"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="0935432632"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/back_87"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/address"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Đà Nẵng"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/back_87"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+</LinearLayout>

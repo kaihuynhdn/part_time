@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1565c0</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#fdd835</color>
+    <color name="green">#3cba54</color>
+    <color name="red">#db3236</color>
+    <color name="lightBlue_700">#1976d2</color>
+    <color name="grey_200">#eeeeee</color>
+    <color name="grey_400">#bdbdbd</color>
+    <color name="grey_600">#db757575</color>
+    <color name="grey_54">#93000000</color>
+    <color name="back_87">#d4000000</color>
+    <color name="colorHighlight">#B6B6B6</color>
+
+    <!--Splash background-->
+    <color name="start_color">#5ac4f4</color>
+    <color name="center_color">#34b8f4</color>
+    <color name="end_color">#039BE5</color>
+
+    <!--fb colors-->
+    <color name="fb_normal">#3b5998</color>
+    <color name="fb_press">#2d4474</color>
+
+    <!--google colors-->
+    <color name="google_normal">#db3236</color>
+    <color name="google_press">#ba2b2f</color>
+
+    <!--create button-->
+    <color name="create_normal">#33c4f9</color>
+    <color name="create_press">#33abe2</color>
+
+    <!--login button-->
+    <color name="login_normal">#42a5f5</color>
+    <color name="login_press">#2196f3</color>
+
+</resources>

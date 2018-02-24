@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/splash_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/activity_padding"
+    tools:context="com.example.kaihuynh.part_timejob.JobDescriptionActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:background="@drawable/grey_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginTop="@dimen/distance_view_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/distance_view_5"
+                android:text="Job Title"
+                android:textColor="@color/back_87"
+                android:textSize="22sp" />
+
+            <TextView
+                android:text="2 ngày trước"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TabHost
+                    android:id="@+id/tabHost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TabWidget
+                            android:id="@android:id/tabs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <FrameLayout
+                            android:id="@android:id/tabcontent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:id="@+id/tab1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <include layout="@layout/job_detail_tab"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/tab2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <include layout="@layout/recruiter_detail_tab"/>
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+                </TabHost>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_5"
+                app:cardCornerRadius="@dimen/distance_view_2"
+                android:elevation="@dimen/distance_view_20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="@dimen/activity_padding"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="MÔ TẢ CÔNG VIỆC"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:text="abc \ndce \noir"
+                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColor="@color/back_87"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_5"
+                android:elevation="@dimen/distance_view_20"
+                android:layout_marginBottom="@dimen/requirement_margin_bottom"
+                app:cardCornerRadius="@dimen/distance_view_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="@dimen/activity_padding"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="YÊU CẦU CHUYÊN MÔN"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:text="abc \ndce \noir"
+                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColor="@color/back_87"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="@dimen/distance_view_20"
+        app:contentPaddingRight="@dimen/distance_view_2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/distance_view_5"
+            android:weightSum="2">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/distance_view_5"
+                android:text="Lưu" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/distance_view_5"
+                android:text="Ứng tuyển" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

@@ -1,0 +1,149 @@
+<resources>
+    <string name="app_name">Part-time Job</string>
+    <string name="title">Việc Làm Part Time</string>
+    <string name="fb_button">ĐĂNG NHẬP BẰNG FACEBOOK</string>
+    <string name="google_button">ĐĂNG NHẬP BẰNG GOOGLE</string>
+    <string name="create_button">TẠO TÀI KHOẢN MỚI</string>
+    <string name="toLogin">Đăng nhập tại đây</string>
+    <string name="toRegister">Đăng ký tại đây</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_confirm_password">Xác nhận lại mật khẩu</string>
+    <string name="next">Tiếp theo</string>
+    <string name="personal_info_title">Thông Tin Cá Nhân</string>
+    <string name="hint_full_name">Họ tên</string>
+    <string name="hint_dob">Ngày sinh</string>
+    <string name="hint_address">Địa chỉ</string>
+    <string name="hint_education">Học vấn</string>
+    <string name="hint_phone_number">Số điện thoại</string>
+    <string name="foreign_language_title">Ngoại Ngữ</string>
+    <string name="skill_title">Kỹ Năng</string>
+    <string name="register">ĐĂNG KÝ</string>
+
+    <!--others-->
+    <string name="text1">Đã có tài khoản?</string>
+    <string name="text2">Chưa có tài khoản?</string>
+    <string name="account_info_title">Thông Tin Tài Khoản</string>
+    <string name="login">ĐĂNG NHẬP</string>
+    <string name="text3">Huỳnh Quang Thảo</string>
+    <string name="text_mail">kaihuynhdn@gmail.com</string>
+
+    <!--foreign language array-->
+    <string-array name="foreign_language">
+        <item>Không</item>
+        <item>Tiếng Anh</item>
+        <item>Tiếng Bồ Đào Nha</item>
+        <item>Tiếng Hàn</item>
+        <item>Tiếng Hindi</item>
+        <item>Tiếng Mã Lai</item>
+        <item>Tiếng Nga</item>
+        <item>Tiếng Nhật</item>
+        <item>Tiếng Pháp</item>
+        <item>Tiếng Tây Ban Nha</item>
+        <item>Tiếng Trung</item>
+        <item>Khác</item>
+    </string-array>
+
+    <!--Skill array-->
+    <string-array name="skill_array">
+        <item>Không</item>
+        <item>Kỹ năng giao tiếp</item>
+        <item>Tư duy sáng tạo</item>
+        <item>Chịu được áp lực công việc</item>
+        <item>Kỹ năng nghiên cứu</item>
+        <item>Giải quyết vấn đề</item>
+        <item>Kỹ năng sử dụng máy tính</item>
+        <item>Tinh thần học hỏi</item>
+        <item>Kỹ năng quản lý thời gian</item>
+        <item>Làm việc theo nhóm</item>
+        <item>Sự chủ động</item>
+        <item>Giải quyết khủng hoảng</item>
+        <item>Tư duy phản biện</item>
+        <item>Kỹ năng tổ chức</item>
+        <item>Kỹ năng thuyết trình</item>
+        <item>Kỹ năng quản lý tài chính</item>
+        <item>Khác</item>
+    </string-array>
+    <string name="title_activity_home_page">HomePageActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="home">Trang Chủ</string>
+    <string name="liked_job">CV Yêu Thích</string>
+    <string name="applied_job">CV Ứng Tuyển</string>
+    <string name="notification">Thông Báo</string>
+    <string name="hint_gender">Giới tính</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="arrangement">Sắp xếp</string>
+    <string name="location">Địa điểm</string>
+
+    <string-array name="location">
+        <item>An Giang</item>
+        <item>Bà Rịa - Vũng Tàu</item>
+        <item>Bắc Giang</item>
+        <item>Bắc Kạn</item>
+        <item>Bạc Liêu</item>
+        <item>Bắc Ninh</item>
+        <item>Bến Tre</item>
+        <item>Bình Định</item>
+        <item>Bình Dương</item>
+        <item>Bình Phước</item>
+        <item>Bình Thuận</item>
+        <item>Cà Mau</item>
+        <item>Cần Thơ</item>
+        <item>Cao Bằng</item>
+        <item>Đà Nẵng</item>
+        <item>Đắk Lắk</item>
+        <item>Đắk Nông</item>
+        <item>Điện Biên</item>
+        <item>Đồng Nai</item>
+        <item>Đồng Tháp</item>
+        <item>Gia Lai</item>
+        <item>Hà Giang</item>
+        <item>Hà Nam</item>
+        <item>Hà Nội</item>
+        <item>Hà Tĩnh</item>
+        <item>Hải Dương</item>
+        <item>Hải Phòng</item>
+        <item>Hậu Giang</item>
+        <item>Hòa Bình</item>
+        <item>Hưng Yên</item>
+        <item>Khánh Hòa</item>
+        <item>Kiên Giang</item>
+        <item>Kon Tum</item>
+        <item>Lai Châu</item>
+        <item>Lâm Đồng</item>
+        <item>Lạng Sơn</item>
+        <item>Lào Cai</item>
+        <item>Long An</item>
+        <item>Nam Định</item>
+        <item>Nghệ An</item>
+        <item>Ninh Bình</item>
+        <item>Ninh Thuận</item>
+        <item>Phú Thọ</item>
+        <item>Phú Yên</item>
+        <item>Quảng Bình</item>
+        <item>Quảng Nam</item>
+        <item>Quảng Ngãi</item>
+        <item>Quảng Ninh</item>
+        <item>Quảng Trị</item>
+        <item>Sóc Trăng</item>
+        <item>Sơn La</item>
+        <item>Tây Ninh</item>
+        <item>Thái Bình</item>
+        <item>Thái Nguyên</item>
+        <item>Thanh Hóa</item>
+        <item>Thừa Thiên Huế</item>
+        <item>Tiền Giang</item>
+        <item>TP HCM</item>
+        <item>Trà Vinh</item>
+        <item>Tuyên Quang</item>
+        <item>Vĩnh Long</item>
+        <item>Vĩnh Phúc</item>
+        <item>Yên Bái</item>
+    </string-array>
+</resources>

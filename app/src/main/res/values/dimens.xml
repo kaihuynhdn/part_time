@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_padding">16dp</dimen>
+    <dimen name="seekBar_width">230dp</dimen>
+    <dimen name="progressBar_width">200dp</dimen>
+    <dimen name="progressBar_height">8dp</dimen>
+    <dimen name="distance_view_1">1dp</dimen>
+    <dimen name="distance_view_2">2dp</dimen>
+    <dimen name="distance_view_5">5dp</dimen>
+    <dimen name="distance_view_10">10dp</dimen>
+    <dimen name="distance_view_20">20dp</dimen>
+    <dimen name="distance_view_30">30dp</dimen>
+    <dimen name="distance_view_40">40dp</dimen>
+    <dimen name="background_corners">7dp</dimen>
+    <dimen name="distance_view_15">15dp</dimen>
+    <dimen name="navigation_header">160dp</dimen>
+    <dimen name="icon_user">75dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="bottom_navigation">56dp</dimen>
+    <dimen name="requirement_margin_bottom">66dp</dimen>
+</resources>

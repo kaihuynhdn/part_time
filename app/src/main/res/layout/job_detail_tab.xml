@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/activity_padding"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/distance_view_5"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/salary"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Thương lượng"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#ff8f00"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/address"
+            android:layout_marginRight="@dimen/distance_view_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Đà Nẵng"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/back_87"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:background="@color/grey_400"
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_view_1"/>
+
+    <TextView
+        android:layout_marginTop="@dimen/distance_view_15"
+        android:textSize="20sp"
+        android:textColor="@color/grey_54"
+        android:fontFamily="@font/linotte_semi_bold"
+        android:text="PHÚC LỢI:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="@dimen/distance_view_10"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/distance_view_10"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/back_87"
+        android:text="&#9679; Bao ăn ngày 2 bữa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
