@@ -1,12 +1,13 @@
 package com.example.kaihuynh.part_timejob.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Kai on 2018-02-03.
  */
 
-public class Candidate {
+public class Candidate implements Serializable{
     private User mUser;
     private String mJobExperience;
     private Date mDate;

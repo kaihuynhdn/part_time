@@ -1,6 +1,7 @@
 package com.example.kaihuynh.part_timejob;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -138,7 +139,7 @@ public class HomePageActivity extends AppCompatActivity
         if (id == R.id.personal_info_menu) {
             // Handle the camera action
         } else if (id == R.id.recruitment_menu) {
-
+            startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
         } else if (id == R.id.manage_recruitment_post_menu) {
 
         } else if (id == R.id.log_out_menu) {

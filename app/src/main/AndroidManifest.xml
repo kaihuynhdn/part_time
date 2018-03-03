@@ -23,7 +23,7 @@
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".RegisterPersonalInfoActivity"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/ActionBarTransparent" />
         <activity
             android:name=".RegisterAccountInfoActivity"
             android:theme="@style/NoActionBar" />
@@ -34,9 +34,10 @@
         <activity
             android:name=".HomePageActivity"
             android:label="@string/title_activity_home_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".JobDescriptionActivity" />
-        <activity android:name=".PickLocationActivity"></activity>
+        <activity android:name=".PickLocationActivity" />
+        <activity android:name=".RecruitingActivity"></activity>
     </application>
 
 </manifest>

@@ -26,18 +26,19 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (mProgressBar.getProgress()<100){
+                while (mProgressBar.getProgress() < 100) {
                     android.os.SystemClock.sleep(30);
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mSeekBar.setProgress(mSeekBar.getProgress()+1);
-                            mProgressBar.setProgress(mProgressBar.getProgress()+1);
+                            mSeekBar.setProgress(mSeekBar.getProgress() + 1);
+                            mProgressBar.setProgress(mProgressBar.getProgress() + 1);
                         }
                     });
                 }
 
-            startActivity(new Intent(MainActivity.this, LoginMethodActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
             }
         }).start();
     }

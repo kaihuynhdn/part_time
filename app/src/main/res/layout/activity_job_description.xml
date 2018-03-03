@@ -28,7 +28,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/distance_view_5"
-                android:text="Job Title"
+                android:text="@string/job_title"
                 android:textColor="@color/back_87"
                 android:textSize="22sp" />
 
@@ -100,9 +100,10 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="MÔ TẢ CÔNG VIỆC"
+                        android:text="@string/job_description"
                         android:fontFamily="@font/linotte_semi_bold"
                         android:textSize="20sp"
+                        android:textColor="@color/back_87"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -133,7 +134,8 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="YÊU CẦU CHUYÊN MÔN"
+                        android:text="@string/personal_requirement"
+                        android:textColor="@color/back_87"
                         android:fontFamily="@font/linotte_semi_bold"
                         android:textSize="20sp"
                         android:layout_width="match_parent"
@@ -173,14 +175,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/distance_view_5"
-                android:text="Lưu" />
+                android:text="@string/save" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/distance_view_5"
-                android:text="Ứng tuyển" />
+                android:text="@string/apply" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

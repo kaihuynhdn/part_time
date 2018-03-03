@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:id="@+id/personal_info_menu" android:title="Hồ sơ cá nhân" android:icon="@drawable/resume"/>
-    <item android:id="@+id/recruitment_menu" android:title="Đăng tuyển" android:icon="@drawable/post"/>
-    <item android:id="@+id/manage_recruitment_post_menu" android:title="Quản lý tin đăng" android:icon="@drawable/management"/>
+    <item android:id="@+id/personal_info_menu" android:title="@string/profile" android:icon="@drawable/resume"/>
+    <item android:id="@+id/recruitment_menu" android:title="@string/recruitment" android:icon="@drawable/post"/>
+    <item android:id="@+id/manage_recruitment_post_menu" android:title="@string/management" android:icon="@drawable/management"/>
 
     <item android:title="">
         <menu>
             <group>
-                <item android:id="@+id/log_out_menu" android:title="Đăng xuất" android:icon="@drawable/log_out"/>
-                <item android:id="@+id/contact_menu" android:title="Liên hệ" android:icon="@drawable/contact"/>
+                <item android:id="@+id/log_out_menu" android:title="@string/logout" android:icon="@drawable/log_out"/>
+                <item android:id="@+id/contact_menu" android:title="@string/contact" android:icon="@drawable/contact"/>
             </group>
         </menu>
     </item>

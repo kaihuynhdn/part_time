@@ -44,6 +44,7 @@ public class SkillAdapter extends ArrayAdapter<Skill> {
 
             viewHolder.mSkillName = convertView.findViewById(R.id.tv_skill_name);
             viewHolder.mCheckedImage = convertView.findViewById(R.id.img_checked_skill);
+            viewHolder.view = convertView.findViewById(R.id.view_skill_item);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -58,11 +59,13 @@ public class SkillAdapter extends ArrayAdapter<Skill> {
             viewHolder.mCheckedImage.setVisibility(View.INVISIBLE);
         }
 
+
         return convertView;
     }
 
     static class ViewHolder{
         TextView mSkillName;
         ImageView mCheckedImage;
+        View view;
     }
 }

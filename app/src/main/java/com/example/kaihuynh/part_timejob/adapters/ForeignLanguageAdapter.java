@@ -1,8 +1,10 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ public class ForeignLanguageAdapter extends ArrayAdapter<ForeignLanguage> {
         this.mForeignLanguages = objects;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -44,6 +47,7 @@ public class ForeignLanguageAdapter extends ArrayAdapter<ForeignLanguage> {
 
             viewHolder.mForeignLanguageName = convertView.findViewById(R.id.tv_foreignLanguage);
             viewHolder.mCheckedImage = convertView.findViewById(R.id.img_checked);
+            viewHolder.view = convertView.findViewById(R.id.view_fl_item);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -64,5 +68,6 @@ public class ForeignLanguageAdapter extends ArrayAdapter<ForeignLanguage> {
     static class ViewHolder{
         TextView mForeignLanguageName;
         ImageView mCheckedImage;
+        View view;
     }
 }

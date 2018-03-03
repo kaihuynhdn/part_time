@@ -13,7 +13,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
+
+import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 
 import java.util.Calendar;
 
@@ -25,9 +29,12 @@ public class PersonalInfoFragment extends Fragment {
 
     private final int REQUEST_CODE = 123;
 
+    private Button mNextButton;
+    private CustomViewPager mViewPager;
     private TextInputEditText inputDob, inputGender, inputAddress, inputPhoneNumber, inputEducation;
     private TextInputLayout inputDobLayout, inputGenderLayout, inputAddressLayout, inputPhoneNumberLayout, inputEducationLayout;
-    private AlertDialog alertDialog;
+    private AlertDialog genderDialog;
+
 
     public PersonalInfoFragment() {
         // Required empty public constructor
@@ -57,15 +64,86 @@ public class PersonalInfoFragment extends Fragment {
         inputAddressLayout = view.findViewById(R.id.input_address_layout);
         inputEducationLayout = view.findViewById(R.id.input_education_layout);
         inputPhoneNumberLayout = view.findViewById(R.id.input_phone_number_layout);
+        mNextButton = view.findViewById(R.id.btn_next_personal);
+        mViewPager = RegisterPersonalInfoActivity.sInstance.findViewById(R.id.viewPage_register);
+
     }
 
     private void addEvents() {
         inputDobEvents();
         inputGenderEvents();
-        showLocationActivity();
+        inputLocationEvents();
+        inputEducationEvents();
+        nextButtonEvents();
     }
 
-    private void showLocationActivity() {
+    private void nextButtonEvents() {
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+            }
+        });
+    }
+
+    private void inputEducationEvents() {
+        inputEducation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEducationPicker();
+            }
+        });
+
+        inputEducation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    showEducationPicker();
+                }
+            }
+        });
+    }
+
+    private void showEducationPicker() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.education_picker_dialog, null);
+        builder.setTitle("Chọn...");
+        builder.setView(view);
+
+        final NumberPicker numberPicker = view.findViewById(R.id.np_education);
+        final String[] strings = {"Trung học", "Trung cấp", "Cao đẳng", "Cử nhân", "Thạc sĩ", "Tiến sĩ", "Khác"};
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(strings.length-1);
+        numberPicker.setDisplayedValues(strings);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+
+            }
+        });
+
+        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                inputEducation.setText(strings[numberPicker.getValue()]);
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    private void inputLocationEvents() {
         inputAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,13 +195,14 @@ public class PersonalInfoFragment extends Fragment {
                         inputGender.setText("Khác");
                         break;
                 }
-                alertDialog.dismiss();
+                genderDialog.dismiss();
             }
         });
+        builder.setTitle("Chọn...");
 
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
+        genderDialog = builder.create();
+        genderDialog.setCanceledOnTouchOutside(false);
+        genderDialog.show();
     }
 
     private void inputDobEvents() {

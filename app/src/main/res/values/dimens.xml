@@ -23,4 +23,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bottom_navigation">56dp</dimen>
     <dimen name="requirement_margin_bottom">66dp</dimen>
+    <dimen name="distance_view_90">90dp</dimen>
+    <dimen name="job_title_width">250dp</dimen>
+    <dimen name="distance_view_23">23dp</dimen>
 </resources>

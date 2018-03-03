@@ -32,7 +32,8 @@
     </LinearLayout>
 
     <View
-        android:background="@color/start_color"
+        android:id="@+id/view_skill_item"
+        android:background="@color/green"
         android:layout_width="match_parent"
         android:layout_height="@dimen/distance_view_1"/>
 

@@ -1,12 +1,10 @@
 package com.example.kaihuynh.part_timejob.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by Kai on 2018-02-03.
- */
 
-public class Notification {
+public class Notification implements Serializable{
     private String types;
     private String status;
     private Date date;

@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  * Created by Kai on 2018-02-03.
  */
 
-public class User {
+public class User implements Serializable{
     private int id;
     private String fullName;
     private String gender;

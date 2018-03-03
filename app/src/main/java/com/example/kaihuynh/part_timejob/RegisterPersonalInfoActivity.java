@@ -3,16 +3,18 @@ package com.example.kaihuynh.part_timejob;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.example.kaihuynh.part_timejob.adapters.PagerAdapter;
+import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.shuhart.stepview.StepView;
 
 public class RegisterPersonalInfoActivity extends AppCompatActivity {
 
-    private final int NUMBER_TABS = 4;
+    private final int NUMBER_TABS = 3;
     private StepView mRegisterStepView;
-    private ViewPager mRegisterViewPager;
+    private CustomViewPager mRegisterViewPager;
     private PagerAdapter mPagerAdapter;
 
     public static RegisterPersonalInfoActivity sInstance = null;
@@ -21,6 +23,10 @@ public class RegisterPersonalInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_personal_info);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -57,7 +63,18 @@ public class RegisterPersonalInfoActivity extends AppCompatActivity {
         mRegisterViewPager = findViewById(R.id.viewPage_register);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), NUMBER_TABS);
         mRegisterViewPager.setAdapter(mPagerAdapter);
+        mRegisterViewPager.setPagingEnabled(false);
 
         sInstance=this;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

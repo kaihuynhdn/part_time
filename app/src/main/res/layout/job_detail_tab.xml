@@ -64,9 +64,9 @@
     <TextView
         android:layout_marginTop="@dimen/distance_view_15"
         android:textSize="20sp"
-        android:textColor="@color/grey_54"
+        android:textColor="@color/back_87"
         android:fontFamily="@font/linotte_semi_bold"
-        android:text="PHÚC LỢI:"
+        android:text="@string/benefit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

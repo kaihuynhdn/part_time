@@ -1,167 +1,175 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.kaihuynh.part_timejob.PersonalInfoFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:weightSum="8"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:text="@string/personal_info_title"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:textSize="22sp"
-            android:textColor="@color/end_color"
-            android:fontFamily="@font/iciel_cadena"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_weight="6"
-            android:layout_marginTop="@dimen/distance_view_20"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_dob_layout"
-                app:hintTextAppearance="@style/TextInputLayoutHintText"
-                android:textColorHint="@color/grey_54"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_dob"
-                    android:drawablePadding="@dimen/distance_view_10"
-                    android:drawableLeft="@drawable/dob"
-                    android:editable="false"
-                    android:textSize="18sp"
-                    android:textColor="@color/grey_600"
-                    android:fontFamily="@font/linotte_semi_bold"
-                    android:hint="@string/hint_dob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_gender_layout"
-                app:hintTextAppearance="@style/TextInputLayoutHintText"
-                android:textColorHint="@color/grey_54"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_gender"
-                    android:drawablePadding="@dimen/distance_view_10"
-                    android:drawableLeft="@drawable/gender"
-                    android:textSize="18sp"
-                    android:editable="false"
-                    android:textColor="@color/grey_600"
-                    android:fontFamily="@font/linotte_semi_bold"
-                    android:hint="@string/hint_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_address_layout"
-                app:hintTextAppearance="@style/TextInputLayoutHintText"
-                android:textColorHint="@color/grey_54"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_address"
-                    android:drawablePadding="@dimen/distance_view_10"
-                    android:textSize="18sp"
-                    android:editable="false"
-                    android:drawableLeft="@drawable/address"
-                    android:textColor="@color/grey_600"
-                    android:fontFamily="@font/linotte_semi_bold"
-                    android:hint="@string/hint_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_phone_number_layout"
-                app:hintTextAppearance="@style/TextInputLayoutHintText"
-                android:textColorHint="@color/grey_54"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_phone_number"
-                    android:drawablePadding="@dimen/distance_view_10"
-                    android:inputType="number"
-                    android:textSize="18sp"
-                    android:drawableLeft="@drawable/phone_number"
-                    android:textColor="@color/grey_600"
-                    android:fontFamily="@font/linotte_semi_bold"
-                    android:hint="@string/hint_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_education_layout"
-                app:hintTextAppearance="@style/TextInputLayoutHintText"
-                android:textColorHint="@color/grey_54"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/input_education"
-                    android:drawablePadding="@dimen/distance_view_10"
-                    android:drawableLeft="@drawable/education"
-                    android:textSize="18sp"
-                    android:textColor="@color/grey_600"
-                    android:fontFamily="@font/linotte_semi_bold"
-                    android:hint="@string/hint_education"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:weightSum="8">
 
-            <Button
-                android:id="@+id/btn_next_personal"
-                android:background="@drawable/next_button"
-                android:fontFamily="@font/iciel_cadena"
-                android:layout_gravity="right"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:text="@string/next"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/iciel_cadena"
+                android:gravity="center"
+                android:text="@string/personal_info_title"
+                android:textColor="@color/end_color"
+                android:textSize="22sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/distance_view_20"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_dob_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/distance_view_20"
+                    android:textColorHint="@color/grey_54"
+                    app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_dob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/dob"
+                        android:drawablePadding="@dimen/distance_view_10"
+                        android:editable="false"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:hint="@string/hint_dob"
+                        android:textColor="@color/grey_600"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_gender_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/distance_view_20"
+                    android:textColorHint="@color/grey_54"
+                    app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/gender"
+                        android:drawablePadding="@dimen/distance_view_10"
+                        android:editable="false"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:hint="@string/hint_gender"
+                        android:textColor="@color/grey_600"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_address_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/distance_view_20"
+                    android:textColorHint="@color/grey_54"
+                    app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/address"
+                        android:drawablePadding="@dimen/distance_view_10"
+                        android:editable="false"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:hint="@string/hint_address"
+                        android:textColor="@color/grey_600"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_phone_number_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/distance_view_20"
+                    android:textColorHint="@color/grey_54"
+                    app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/phone_number"
+                        android:drawablePadding="@dimen/distance_view_10"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:hint="@string/hint_phone_number"
+                        android:inputType="number"
+                        android:textColor="@color/grey_600"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_education_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/distance_view_20"
+                    android:textColorHint="@color/grey_54"
+                    app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/education"
+                        android:drawablePadding="@dimen/distance_view_10"
+                        android:editable="false"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:hint="@string/hint_education"
+                        android:textColor="@color/grey_600"
+                        android:textSize="18sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/distance_view_10"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_next_personal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@drawable/next_button"
+                    android:fontFamily="@font/iciel_cadena"
+                    android:text="@string/next"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-
+    </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

@@ -12,6 +12,8 @@ public class LoginMethodActivity extends AppCompatActivity {
     private Button mCreateButton;
     private TextView mToLoginTextView;
 
+    public static LoginMethodActivity sInstance = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,14 +27,14 @@ public class LoginMethodActivity extends AppCompatActivity {
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginMethodActivity.this, RegisterPersonalInfoActivity.class));
+                startActivity(new Intent(LoginMethodActivity.this, RegisterAccountInfoActivity.class));
             }
         });
 
         mToLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginMethodActivity.this, LoginActivity.class));
+                finish();
             }
         });
     }
@@ -40,5 +42,6 @@ public class LoginMethodActivity extends AppCompatActivity {
     private void addComponents() {
         mCreateButton = findViewById(R.id.btn_create);
         mToLoginTextView = findViewById(R.id.tv_toLogin_method);
+        sInstance = this;
     }
 }

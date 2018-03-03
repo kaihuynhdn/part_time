@@ -23,6 +23,12 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="TextInputLayoutHintTextForJob">
+        <item name="android:fontFamily">@font/linotte_semi_bold</item>
+        <item name="android:color">@color/back_87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -37,6 +43,13 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="ActionBarTransparent" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/back_87</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 </resources>
