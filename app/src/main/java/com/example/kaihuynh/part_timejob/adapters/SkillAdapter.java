@@ -39,7 +39,7 @@ public class SkillAdapter extends ArrayAdapter<Skill> {
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(itemLayout, null);
+            convertView = inflater.inflate(itemLayout, parent, false);
             viewHolder = new ViewHolder();
 
             viewHolder.mSkillName = convertView.findViewById(R.id.tv_skill_name);
@@ -57,6 +57,12 @@ public class SkillAdapter extends ArrayAdapter<Skill> {
             viewHolder.mCheckedImage.setVisibility(View.VISIBLE);
         }else {
             viewHolder.mCheckedImage.setVisibility(View.INVISIBLE);
+        }
+
+        if(position == mSkills.size()-1){
+            viewHolder.view.setVisibility(View.INVISIBLE);
+        }else{
+            viewHolder.view.setVisibility(View.VISIBLE);
         }
 
 

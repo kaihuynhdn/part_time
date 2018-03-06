@@ -31,7 +31,7 @@ public class HomePageActivity extends AppCompatActivity
 
     //Bottom navigation
     private BottomNavigationView mBottomNavigationView;
-
+    public static HomePageActivity sInstance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class HomePageActivity extends AppCompatActivity
                 fragment = new JobLikedFragment();
                 break;
             case R.id.action_applied_jobs:
-                fragment = new Fragment();
+                fragment = new JobAppliedFragment();
                 break;
             case R.id.action_notification:
                 fragment = new Fragment();
@@ -94,6 +94,7 @@ public class HomePageActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         mBottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_nav);
+        sInstance = this;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout_home, new JobListFragment());
@@ -137,7 +138,7 @@ public class HomePageActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.personal_info_menu) {
-            // Handle the camera action
+            startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
         } else if (id == R.id.recruitment_menu) {
             startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
         } else if (id == R.id.manage_recruitment_post_menu) {
@@ -171,5 +172,16 @@ public class HomePageActivity extends AppCompatActivity
         } catch (IllegalAccessException e) {
             Log.e("BNVHelper", "Unable to change value of shift mode", e);
         }
+    }
+
+    public BottomNavigationView getBottomNavigation(){
+        return this.mBottomNavigationView;
+    }
+
+    public static HomePageActivity getInstance(){
+        if (sInstance == null) {
+            sInstance = new HomePageActivity();
+        }
+        return sInstance;
     }
 }

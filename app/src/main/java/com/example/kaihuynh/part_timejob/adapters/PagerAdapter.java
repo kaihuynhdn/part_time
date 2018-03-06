@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.kaihuynh.part_timejob.ForeignLanguageFragment;
+import com.example.kaihuynh.part_timejob.PersonalDescriptionFragment;
 import com.example.kaihuynh.part_timejob.PersonalInfoFragment;
 import com.example.kaihuynh.part_timejob.SkillFragment;
 
@@ -31,6 +32,8 @@ public class PagerAdapter extends FragmentPagerAdapter{
                 return new ForeignLanguageFragment();
             case 2:
                 return new SkillFragment();
+            case 3:
+                return new PersonalDescriptionFragment();
             default:
                 return new Fragment();
         }

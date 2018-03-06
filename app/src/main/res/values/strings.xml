@@ -79,12 +79,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="arrangement">Sắp xếp</string>
-    <string name="location">Địa điểm</string>
+    <string name="location">Địa điểm:</string>
     <string name="previous">Quay lại</string>
     <string name="done">Xong</string>
     <string name="text5">Đăng ký tài khoản thành công !</string>
     <string name="text6">Bạn muốn tiếp tục đăng ký thông tin cá nhân?</string>
-    <string name="salary">Lương bổng</string>
+    <string name="salary">Lương bổng:</string>
     <string name="profile">Hồ sơ cá nhân</string>
     <string name="recruitment">Đăng tuyển</string>
     <string name="management">Quản lý tin đăng</string>
@@ -101,6 +101,10 @@
     <string name="other">Khác:</string>
     <string name="save">Lưu</string>
     <string name="apply">Ứng tuyển</string>
+    <string name="share_1">Chia sẻ...</string>
+    <string name="delete">Xóa</string>
+    <string name="personal_description">Mô tả cá nhân</string>
+    <string name="general">Thông tin chung</string>
 
     <string-array name="location">
         <item>An Giang</item>

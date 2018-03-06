@@ -26,6 +26,8 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     private RecyclerView mLikedJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
 
+    public static JobLikedFragment sInstance = null;
+
     public JobLikedFragment() {
         // Required empty public constructor
     }
@@ -58,6 +60,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     }
 
     private void addComponents(View view) {
+        sInstance = this;
         mLikedJobRecyclerView = view.findViewById(R.id.rv_liked_jobs);
         mJobArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -68,5 +71,21 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     @Override
     public void onListItemClick(int clickItemIndex) {
         startActivity(new Intent(getContext(), JobDescriptionActivity.class));
+    }
+
+    public JobAdapter getAdapter() {
+        return mAdapter;
+    }
+
+
+    public ArrayList<Job> getJobArrayList() {
+        return mJobArrayList;
+    }
+
+    public static JobLikedFragment getInstance(){
+        if (sInstance == null) {
+            sInstance = new JobLikedFragment();
+        }
+        return sInstance;
     }
 }

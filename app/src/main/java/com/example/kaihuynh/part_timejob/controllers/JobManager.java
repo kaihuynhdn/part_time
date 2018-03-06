@@ -30,6 +30,7 @@ public class JobManager {
             job.setSalary("");
             job.setLocation("");
             job.setRequirement("");
+            job.setStatus("");
 
             User u = new User();
             u.setFullName("");
@@ -59,6 +60,7 @@ public class JobManager {
                 user.setForeignLanguages("");
                 user.setPhoneNumber("");
                 user.setSkills("");
+                user.setPersonalDescription("");
                 user.setEmail("");
 
 

@@ -42,7 +42,7 @@ public class ForeignLanguageAdapter extends ArrayAdapter<ForeignLanguage> {
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(itemLayout, null);
+            convertView = inflater.inflate(itemLayout, parent, false);
             viewHolder = new ViewHolder();
 
             viewHolder.mForeignLanguageName = convertView.findViewById(R.id.tv_foreignLanguage);
@@ -60,6 +60,12 @@ public class ForeignLanguageAdapter extends ArrayAdapter<ForeignLanguage> {
             viewHolder.mCheckedImage.setVisibility(View.VISIBLE);
         }else {
             viewHolder.mCheckedImage.setVisibility(View.INVISIBLE);
+        }
+
+        if(position == mForeignLanguages.size()-1){
+            viewHolder.view.setVisibility(View.INVISIBLE);
+        }else{
+            viewHolder.view.setVisibility(View.VISIBLE);
         }
 
         return convertView;

@@ -45,4 +45,11 @@ public class LoginActivity extends AppCompatActivity {
         mToRegisterTextView = findViewById(R.id.tv_to_register);
         sInstance = this;
     }
+
+    public static LoginActivity getInstance(){
+        if (sInstance == null) {
+            sInstance = new LoginActivity();
+        }
+        return sInstance;
+    }
 }

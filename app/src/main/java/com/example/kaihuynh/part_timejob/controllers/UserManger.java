@@ -32,6 +32,7 @@ public class UserManger {
             user.setForeignLanguages("");
             user.setPhoneNumber("");
             user.setSkills("");
+            user.setPersonalDescription("");
             user.setEmail("");
             user.setPassword("");
 
@@ -52,6 +53,7 @@ public class UserManger {
                 job.setDescription("");
                 job.setLocation("");
                 job.setRequirement("");
+                job.setStatus("");
 
                 user = new User();
                 user.setFullName("");
@@ -78,6 +80,7 @@ public class UserManger {
                 job.setDescription("");
                 job.setLocation("");
                 job.setRequirement("");
+                job.setStatus("");
 
                 user = new User();
                 user.setFullName("");

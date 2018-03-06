@@ -18,6 +18,7 @@ public class User implements Serializable{
     private String skills;
     private String education;
     private String foreignLanguages;
+    private String personalDescription;
     private String email;
     private String password;
     private ArrayList<Notification> mNotificationList;
@@ -35,7 +36,7 @@ public class User implements Serializable{
     }
 
     public User(int id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber,
-                String skills, String education, String foreignLanguages, String email,
+                String skills, String education, String foreignLanguages,String personalDescription, String email,
                 String password, ArrayList<Notification> mNotificationList) {
         this.id = id;
         this.fullName = fullName;
@@ -46,9 +47,18 @@ public class User implements Serializable{
         this.skills = skills;
         this.education = education;
         this.foreignLanguages = foreignLanguages;
+        this.personalDescription = personalDescription;
         this.email = email;
         this.password = password;
         this.mNotificationList = mNotificationList;
+    }
+
+    public String getPersonalDescription() {
+        return personalDescription;
+    }
+
+    public void setPersonalDescription(String personalDescription) {
+        this.personalDescription = personalDescription;
     }
 
     public int getId() {

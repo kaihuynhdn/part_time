@@ -12,7 +12,7 @@ import com.shuhart.stepview.StepView;
 
 public class RegisterPersonalInfoActivity extends AppCompatActivity {
 
-    private final int NUMBER_TABS = 3;
+    private final int NUMBER_TABS = 4;
     private StepView mRegisterStepView;
     private CustomViewPager mRegisterViewPager;
     private PagerAdapter mPagerAdapter;
@@ -76,5 +76,12 @@ public class RegisterPersonalInfoActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static RegisterPersonalInfoActivity getInstance(){
+        if (sInstance == null) {
+            sInstance = new RegisterPersonalInfoActivity();
+        }
+        return sInstance;
     }
 }

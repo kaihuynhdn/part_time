@@ -52,7 +52,7 @@ public class ForeignLanguageFragment extends Fragment {
     private void addComponents(View view) {
         mNextButton = view.findViewById(R.id.btn_next_foreignLanguage);
         mPreviousButton = view.findViewById(R.id.btn_previous_foreignLanguage);
-        mViewPager = RegisterPersonalInfoActivity.sInstance.findViewById(R.id.viewPage_register);
+        mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
         mForeignLanguageListView = view.findViewById(R.id.lv_foreign_language);
 
     }

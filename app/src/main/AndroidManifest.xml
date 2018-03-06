@@ -27,7 +27,6 @@
         <activity
             android:name=".RegisterAccountInfoActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".AddressActivity" />
         <activity
             android:name=".LoginActivity"
             android:theme="@style/NoActionBar" />
@@ -37,7 +36,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".JobDescriptionActivity" />
         <activity android:name=".PickLocationActivity" />
-        <activity android:name=".RecruitingActivity"></activity>
+        <activity android:name=".RecruitingActivity" />
+        <activity android:name=".ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

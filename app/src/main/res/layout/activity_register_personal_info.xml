@@ -23,7 +23,7 @@
             android:layout_marginLeft="@dimen/distance_view_40"
             android:layout_marginRight="@dimen/distance_view_40"
             android:padding="@dimen/activity_padding"
-            app:stepsNumber="3"
+            app:stepsNumber="4"
             app:animationType="Line"
             app:selectedCircleColor="@color/lightBlue_700"
             app:nextStepLineColor="@color/grey_400"

@@ -65,7 +65,7 @@ public class PersonalInfoFragment extends Fragment {
         inputEducationLayout = view.findViewById(R.id.input_education_layout);
         inputPhoneNumberLayout = view.findViewById(R.id.input_phone_number_layout);
         mNextButton = view.findViewById(R.id.btn_next_personal);
-        mViewPager = RegisterPersonalInfoActivity.sInstance.findViewById(R.id.viewPage_register);
+        mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
 
     }
 

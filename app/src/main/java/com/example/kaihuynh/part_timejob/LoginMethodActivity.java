@@ -44,4 +44,11 @@ public class LoginMethodActivity extends AppCompatActivity {
         mToLoginTextView = findViewById(R.id.tv_toLogin_method);
         sInstance = this;
     }
+
+    public static LoginMethodActivity getInstance(){
+        if (sInstance == null) {
+            sInstance = new LoginMethodActivity();
+        }
+        return sInstance;
+    }
 }

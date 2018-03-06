@@ -19,6 +19,7 @@ public class Job implements Serializable{
     private String requirement;
     private String benefits;
     private ArrayList<Candidate> mCandidateList;
+    private String status;
 
     public Job(){
 
@@ -26,7 +27,7 @@ public class Job implements Serializable{
 
 
     public Job(int id, User recruiter, String name, String salary, String location, Date postedDate,
-               String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList) {
+               String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList, String status) {
         this.id = id;
         this.recruiter = recruiter;
         this.name = name;
@@ -37,6 +38,15 @@ public class Job implements Serializable{
         this.requirement = requirement;
         this.benefits = benefits;
         this.mCandidateList = mCandidateList;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getPostedDate() {

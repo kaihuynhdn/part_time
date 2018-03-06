@@ -62,14 +62,14 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/btn_done_skill"
+                    android:id="@+id/btn_next_skill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
                     android:background="@drawable/next_button"
                     android:fontFamily="@font/iciel_cadena"
-                    android:text="@string/done"
+                    android:text="@string/next"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp" />

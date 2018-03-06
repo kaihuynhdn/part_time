@@ -3,7 +3,6 @@ package com.example.kaihuynh.part_timejob;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -50,9 +49,9 @@ public class SkillFragment extends Fragment {
     }
 
     private void addComponents(View view) {
-        mDoneButton = view.findViewById(R.id.btn_done_skill);
+        mDoneButton = view.findViewById(R.id.btn_next_skill);
         mPreviousButton = view.findViewById(R.id.btn_previous_skill);
-        mViewPager = RegisterPersonalInfoActivity.sInstance.findViewById(R.id.viewPage_register);
+        mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
         mSkillListView = view.findViewById(R.id.lv_skill);
     }
 
@@ -72,16 +71,15 @@ public class SkillFragment extends Fragment {
     private void addEvents() {
         listViewEvents();
         previousButtonEvents();
-        doneButtonEvents();
+        nextButtonEvents();
     }
 
-    private void doneButtonEvents() {
+    private void nextButtonEvents() {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), HomePageActivity.class));
-                getActivity().finish();
-                LoginMethodActivity.sInstance.finish();
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+
             }
         });
     }
