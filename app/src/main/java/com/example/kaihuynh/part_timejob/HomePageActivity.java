@@ -3,6 +3,7 @@ package com.example.kaihuynh.part_timejob;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -69,7 +70,7 @@ public class HomePageActivity extends AppCompatActivity
 
     private void bottomNavigationEvents(MenuItem item) {
         Fragment fragment = new JobListFragment();
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_home:
                 fragment = new JobListFragment();
                 break;
@@ -93,7 +94,7 @@ public class HomePageActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mBottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_nav);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
         sInstance = this;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -135,21 +136,35 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.personal_info_menu) {
-            startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
-        } else if (id == R.id.recruitment_menu) {
-            startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
-        } else if (id == R.id.manage_recruitment_post_menu) {
-
-        } else if (id == R.id.log_out_menu) {
-
-        } else if (id == R.id.contact_menu) {
-
-        }
+        final int id = item.getItemId();
 
         drawer.closeDrawer(GravityCompat.START);
+
+
+        final Handler mHandler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                android.os.SystemClock.sleep(180);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (id == R.id.personal_info_menu) {
+                            startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                        } else if (id == R.id.recruitment_menu) {
+                            startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
+                        } else if (id == R.id.manage_recruitment_post_menu) {
+                            startActivity(new Intent(HomePageActivity.this, ListRecruitmentActivity.class));
+                        } else if (id == R.id.log_out_menu) {
+
+                        } else if (id == R.id.contact_menu) {
+
+                        }
+                    }
+                });
+            }
+        }).start();
+
         return true;
     }
 
@@ -174,11 +189,11 @@ public class HomePageActivity extends AppCompatActivity
         }
     }
 
-    public BottomNavigationView getBottomNavigation(){
+    public BottomNavigationView getBottomNavigation() {
         return this.mBottomNavigationView;
     }
 
-    public static HomePageActivity getInstance(){
+    public static HomePageActivity getInstance() {
         if (sInstance == null) {
             sInstance = new HomePageActivity();
         }

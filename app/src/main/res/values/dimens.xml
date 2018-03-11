@@ -26,4 +26,6 @@
     <dimen name="job_title_width">250dp</dimen>
     <dimen name="distance_view_23">23dp</dimen>
     <dimen name="distance_view_90">90dp</dimen>
+    <dimen name="distance_50">50dp</dimen>
+    <dimen name="distance_view_100">100dp</dimen>
 </resources>

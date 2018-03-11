@@ -105,6 +105,26 @@
     <string name="delete">Xóa</string>
     <string name="personal_description">Mô tả cá nhân</string>
     <string name="general">Thông tin chung</string>
+    <string name="update">Chỉnh sửa</string>
+    <string name="applied_date">Ngày ứng tuyển:</string>
+    <string name="age">Tuổi</string>
+
+    <string-array name="gender">
+        <item>Nam</item>
+        <item>Nữ</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="education">
+        <item>Trung học</item>
+        <item>Trung cấp</item>
+        <item>Cao đẳng</item>
+        <item>Đại học</item>
+        <item>Cử nhân</item>
+        <item>Thạc sĩ</item>
+        <item>Tiến sĩ</item>
+        <item>Khác</item>
+    </string-array>
 
     <string-array name="location">
         <item>An Giang</item>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.HomePageActivity;
 import com.example.kaihuynh.part_timejob.JobLikedFragment;
+import com.example.kaihuynh.part_timejob.ListRecruitmentActivity;
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.models.Job;
 
@@ -59,6 +60,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
 
         if (HomePageActivity.getInstance().getBottomNavigation().getSelectedItemId() == R.id.action_applied_jobs) {
             holder.mOption.setVisibility(View.GONE);
+        } else if(ListRecruitmentActivity.getInstance() == context){
+            holder.mOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopupWindow(view, R.menu.list_recruitment_menu, position);
+                }
+            });
         } else {
             holder.mOption.setOnClickListener(new View.OnClickListener() {
                 @Override

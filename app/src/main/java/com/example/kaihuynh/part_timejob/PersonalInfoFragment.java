@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,6 @@ public class PersonalInfoFragment extends Fragment {
     private Button mNextButton;
     private CustomViewPager mViewPager;
     private TextInputEditText inputDob, inputGender, inputAddress, inputPhoneNumber, inputEducation;
-    private TextInputLayout inputDobLayout, inputGenderLayout, inputAddressLayout, inputPhoneNumberLayout, inputEducationLayout;
     private AlertDialog genderDialog;
 
 
@@ -59,11 +57,6 @@ public class PersonalInfoFragment extends Fragment {
         inputAddress = view.findViewById(R.id.input_address);
         inputEducation = view.findViewById(R.id.input_education);
         inputPhoneNumber = view.findViewById(R.id.input_phone_number);
-        inputDobLayout = view.findViewById(R.id.input_dob_layout);
-        inputGenderLayout = view.findViewById(R.id.input_gender_layout);
-        inputAddressLayout = view.findViewById(R.id.input_address_layout);
-        inputEducationLayout = view.findViewById(R.id.input_education_layout);
-        inputPhoneNumberLayout = view.findViewById(R.id.input_phone_number_layout);
         mNextButton = view.findViewById(R.id.btn_next_personal);
         mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
 

@@ -37,7 +37,16 @@
         <activity android:name=".JobDescriptionActivity" />
         <activity android:name=".PickLocationActivity" />
         <activity android:name=".RecruitingActivity" />
-        <activity android:name=".ProfileActivity"
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ListRecruitmentActivity"
+            android:label="Danh sách CV đăng tuyển" />
+        <activity
+            android:name=".ListCandidateActivity"
+            android:label="Danh sách Ứng viên" />
+        <activity android:name=".CandidateActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
