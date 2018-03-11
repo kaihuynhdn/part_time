@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="@dimen/distance_view_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="@dimen/activity_padding"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_name_profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/distance_view_20"
+                android:textColorHint="@color/green"
+                app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/input_name_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="@dimen/distance_view_10"
+                    android:fontFamily="@font/linotte_semi_bold"
+                    android:hint="@string/hint_full_name"
+                    android:textColor="@color/grey_600"
+                    android:textSize="18sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_phone_profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/distance_view_20"
+                android:textColorHint="@color/green"
+                app:hintTextAppearance="@style/TextInputLayoutHintText">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/input_phone_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/phone_number"
+                    android:drawablePadding="@dimen/distance_view_10"
+                    android:fontFamily="@font/linotte_semi_bold"
+                    android:hint="@string/hint_phone_number"
+                    android:textColor="@color/grey_600"
+                    android:textSize="18sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

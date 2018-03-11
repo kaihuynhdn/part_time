@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="ring"
+            android:innerRadiusRatio="2.4"
+            android:thicknessRatio="20"
+            android:useLevel="false">
+
+            <gradient
+                android:endColor="#23ffffff"
+                android:startColor="#58ffffff"
+                android:gradientRadius="@dimen/distance_view_15"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:type="radial" />
+
+            <size
+                android:width="80dp"
+                android:height="80dp" />
+
+        </shape>
+    </item>
+</selector>
