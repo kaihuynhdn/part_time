@@ -22,7 +22,7 @@ public class JobManager {
     public void load(){
         for (int i = 0; i<10; i++){
             Job job = new Job();
-            job.setId(i);
+            job.setId("");
             job.setName("");
             job.setPostedDate(new Date());
             job.setBenefits("");
@@ -41,7 +41,6 @@ public class JobManager {
             u.setPhoneNumber("");
             u.setSkills("");
             u.setEmail("");
-            u.setPassword("");
 
             job.setRecruiter(u);
 
@@ -77,7 +76,7 @@ public class JobManager {
         return this.mJobList;
     }
 
-    public Job getJobByRecruiterId(int id){
+    public Job getJobByRecruiterId(String id){
         for(Job j : mJobList){
             if(j.getId() == id){
                 return j;
@@ -88,7 +87,7 @@ public class JobManager {
     }
 
 
-    public ArrayList<Candidate> getCandidatesById(int id){
+    public ArrayList<Candidate> getCandidatesById(String id){
         for(Job j : mJobList){
             if(j.getId() == id){
                 return j.getCandidateList();

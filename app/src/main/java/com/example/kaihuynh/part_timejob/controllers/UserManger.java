@@ -23,7 +23,7 @@ public class UserManger {
 
         for (int i = 0; i < 10; i++){
             User user = new User();
-            user.setId(i);
+            user.setId("");
             user.setFullName("");
             user.setGender("");
             user.setAddress("");
@@ -34,7 +34,6 @@ public class UserManger {
             user.setSkills("");
             user.setPersonalDescription("");
             user.setEmail("");
-            user.setPassword("");
 
             ArrayList<Notification> mNotificationList = new ArrayList<>();
             mNotificationList.add(new Notification("", "", new Date(), ""));
@@ -115,9 +114,9 @@ public class UserManger {
         return null;
     }
 
-    public ArrayList<Job> getFavouriteJobListById(int id){
+    public ArrayList<Job> getFavouriteJobListById(String id){
         for(User u : mUserList){
-            if(u.getId() == id){
+            if(u.getId().equals(id)){
                 return u.getFavouriteJobList();
             }
         }
@@ -125,7 +124,7 @@ public class UserManger {
         return null;
     }
 
-    public ArrayList<Job> getAppliedJobListById(int id){
+    public ArrayList<Job> getAppliedJobListById(String id){
         for(User u : mUserList){
             if(u.getId() == id){
                 return u.getAppliedJobList();
@@ -135,7 +134,7 @@ public class UserManger {
         return null;
     }
 
-    public User getUserById(int id){
+    public User getUserById(String id){
         for(User u : mUserList){
             if(u.getId() == id){
                 return u;
@@ -144,7 +143,7 @@ public class UserManger {
         return null;
     }
 
-    public ArrayList<Notification> getUserNotificationById(int id){
+    public ArrayList<Notification> getUserNotificationById(String id){
         for(User u : mUserList){
             if(u.getId() == id){
                 return u.getNotificationList();

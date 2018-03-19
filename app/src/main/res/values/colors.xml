@@ -36,6 +36,7 @@
     <!--login button-->
     <color name="login_normal">#42a5f5</color>
     <color name="login_press">#2196f3</color>
+    <color name="login_disable">#4994cf</color>
     <color name="orange">#ff8f00</color>
 
 </resources>

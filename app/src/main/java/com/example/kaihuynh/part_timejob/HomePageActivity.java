@@ -20,10 +20,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.lang.reflect.Field;
 
 public class HomePageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
     //Navigation drawer
     private DrawerLayout drawer;
@@ -34,14 +43,23 @@ public class HomePageActivity extends AppCompatActivity
     private BottomNavigationView mBottomNavigationView;
     public static HomePageActivity sInstance = null;
 
+    //Firebase Instance variables
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    //Google Instance variables
+    private GoogleApiClient mGoogleApiClient;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
         addComponents();
+        initialize();
         addEvents();
-        initial();
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,8 +70,30 @@ public class HomePageActivity extends AppCompatActivity
         disableShiftMode(mBottomNavigationView);
     }
 
-    private void initial() {
+    private void initialize() {
         toolbar.setTitle("Danh Sách Công Việc");
+        mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser()==null){
+                    startActivity(new Intent(HomePageActivity.this, LoginActivity.class));
+                    finish();
+                }
+            }
+        };
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
     }
 
     private void addEvents() {
@@ -156,7 +196,7 @@ public class HomePageActivity extends AppCompatActivity
                         } else if (id == R.id.manage_recruitment_post_menu) {
                             startActivity(new Intent(HomePageActivity.this, ListRecruitmentActivity.class));
                         } else if (id == R.id.log_out_menu) {
-
+                            signOut();
                         } else if (id == R.id.contact_menu) {
 
                         }
@@ -166,6 +206,35 @@ public class HomePageActivity extends AppCompatActivity
         }).start();
 
         return true;
+    }
+
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google sign out
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+
+            }
+        });
+
+        LoginManager.getInstance().logOut();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null){
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -198,5 +267,10 @@ public class HomePageActivity extends AppCompatActivity
             sInstance = new HomePageActivity();
         }
         return sInstance;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

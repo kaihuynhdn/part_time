@@ -9,7 +9,7 @@ import java.util.Date;
  */
 
 public class User implements Serializable{
-    private int id;
+    private String id;
     private String fullName;
     private String gender;
     private Date dayOfBirth;
@@ -20,7 +20,6 @@ public class User implements Serializable{
     private String foreignLanguages;
     private String personalDescription;
     private String email;
-    private String password;
     private ArrayList<Notification> mNotificationList;
     private ArrayList<Job> mFavouriteJobList;
     private ArrayList<Job> mAppliedJobList;
@@ -32,10 +31,9 @@ public class User implements Serializable{
     public User(String fullName, String email, String password) {
         this.fullName = fullName;
         this.email = email;
-        this.password = password;
     }
 
-    public User(int id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber,
+    public User(String id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber,
                 String skills, String education, String foreignLanguages,String personalDescription, String email,
                 String password, ArrayList<Notification> mNotificationList) {
         this.id = id;
@@ -49,7 +47,6 @@ public class User implements Serializable{
         this.foreignLanguages = foreignLanguages;
         this.personalDescription = personalDescription;
         this.email = email;
-        this.password = password;
         this.mNotificationList = mNotificationList;
     }
 
@@ -61,11 +58,11 @@ public class User implements Serializable{
         this.personalDescription = personalDescription;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -131,14 +128,6 @@ public class User implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public ArrayList<Notification> getNotificationList() {

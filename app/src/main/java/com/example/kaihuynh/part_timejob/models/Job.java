@@ -9,7 +9,7 @@ import java.util.Date;
  */
 
 public class Job implements Serializable{
-    private int id;
+    private String id;
     private User recruiter;
     private String name;
     private String salary;
@@ -26,7 +26,7 @@ public class Job implements Serializable{
     }
 
 
-    public Job(int id, User recruiter, String name, String salary, String location, Date postedDate,
+    public Job(String id, User recruiter, String name, String salary, String location, Date postedDate,
                String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList, String status) {
         this.id = id;
         this.recruiter = recruiter;
@@ -57,11 +57,11 @@ public class Job implements Serializable{
         this.postedDate = postedDate;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

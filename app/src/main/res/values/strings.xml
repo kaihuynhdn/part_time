@@ -109,6 +109,16 @@
     <string name="applied_date">Ngày ứng tuyển:</string>
     <string name="age">Tuổi</string>
 
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
+    <string name="com_facebook_loginview_log_out_button">Log out</string>
+    <string name="com_facebook_loginview_log_in_button">Log in</string>
+    <string name="com_facebook_loginview_log_in_button_long">Log in with Facebook</string>
+
+    <string name="facebook_app_id">108585286650544</string>
+    <string name="fb_login_protocol_scheme">fb108585286650544</string>
+
     <string-array name="gender">
         <item>Nam</item>
         <item>Nữ</item>
