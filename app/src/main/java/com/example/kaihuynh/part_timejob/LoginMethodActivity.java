@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -35,6 +37,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginMethodActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -51,6 +58,8 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
     //Firebase instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUserDatabaseReference;
 
     //Google instance variables
     private GoogleApiClient mGoogleApiClient;
@@ -75,6 +84,10 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         mProgress.setMessage("Đang kiểm tra dữ liệu...");
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
+
         googleButtonUi();
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -82,9 +95,24 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    mProgress.dismiss();
-                    startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
-                    finish();
+                    mUserDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User u = dataSnapshot.getValue(User.class);
+                            UserManger.getInstance().load(u);
+                            if (mProgress.isShowing()){
+                                mProgress.dismiss();
+                            }
+                            startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     LoginActivity.getInstance().finish();
                 }else {
 
@@ -246,7 +274,26 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            final FirebaseUser userFirebase = mAuth.getCurrentUser();
+                            mUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(!dataSnapshot.child(userFirebase.getUid()).exists()){
+                                        User user = new User();
+                                        user.setId(userFirebase.getUid().toString());
+                                        user.setEmail(userFirebase.getEmail());
+                                        user.setFullName(userFirebase.getDisplayName());
+
+                                        mUserDatabaseReference.child(user.getId()).setValue(user);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -269,7 +316,25 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            final FirebaseUser userFirebase = mAuth.getCurrentUser();
+                            mUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(!dataSnapshot.child(userFirebase.getUid()).exists()){
+                                        User user = new User();
+                                        user.setId(userFirebase.getUid().toString());
+                                        user.setEmail(userFirebase.getEmail());
+                                        user.setFullName(userFirebase.getDisplayName());
+
+                                        mUserDatabaseReference.child(user.getId()).setValue(user);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

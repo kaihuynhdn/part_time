@@ -565,7 +565,7 @@ public class ProfileActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                inputDOB.setText(day + "/" + (month + 1) + "/" + year);
+                inputDOB.setText(day + "-" + (month + 1) + "-" + year);
             }
         };
 
@@ -578,7 +578,7 @@ public class ProfileActivity extends AppCompatActivity {
             month = calendar.get(Calendar.MONTH);
             year = calendar.get(Calendar.YEAR);
         } else {
-            String[] dateSplit = dateText.split("/");
+            String[] dateSplit = dateText.split("-");
             dayOfMonth = Integer.parseInt(dateSplit[0]);
             month = Integer.parseInt(dateSplit[1]) - 1;
             year = Integer.parseInt(dateSplit[2]);

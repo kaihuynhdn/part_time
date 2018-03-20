@@ -13,13 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -34,7 +39,7 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserDatabaseReference;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +58,32 @@ public class LoginActivity extends AppCompatActivity{
         mProgress.setIndeterminate(true);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
+        mUserRef = mFirebaseDatabase.getReference().child("users");
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!= null){
-                    startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
-                    finish();
+                    mUserRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User u = dataSnapshot.getValue(User.class);
+                            UserManger.getInstance().load(u);
+                            if (mProgress.isShowing()){
+                                mProgress.dismiss();
+                            }
+                            startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 }else {
 
                 }
@@ -79,14 +101,13 @@ public class LoginActivity extends AppCompatActivity{
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    mProgress.dismiss();
                                     // Sign in success, update UI with the signed-in user's information
-                                    finish();
                                 } else {
                                     mProgress.dismiss();
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(LoginActivity.this, "Thông tin đăng nhập không chính xác.",
                                             Toast.LENGTH_SHORT).show();
+                                    mEmail.requestFocus();
                                 }
 
                                 // ...

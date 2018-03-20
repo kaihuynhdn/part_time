@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,6 +30,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Field;
 
@@ -46,10 +53,10 @@ public class HomePageActivity extends AppCompatActivity
     //Firebase Instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private DatabaseReference mUserRef;
 
     //Google Instance variables
     private GoogleApiClient mGoogleApiClient;
-
 
 
     @Override
@@ -68,6 +75,7 @@ public class HomePageActivity extends AppCompatActivity
         toggle.syncState();
 
         disableShiftMode(mBottomNavigationView);
+
     }
 
     private void initialize() {
@@ -76,12 +84,14 @@ public class HomePageActivity extends AppCompatActivity
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()==null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(HomePageActivity.this, LoginActivity.class));
                     finish();
                 }
             }
         };
+
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -93,6 +103,18 @@ public class HomePageActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        mUserRef.child(UserManger.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.getValue(User.class);
+                UserManger.getInstance().load(u);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -190,7 +212,13 @@ public class HomePageActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         if (id == R.id.personal_info_menu) {
-                            startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                            if (UserManger.getInstance().isUpdated()) {
+                                startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                            } else {
+                                Intent intent = new Intent(HomePageActivity.this, RegisterPersonalInfoActivity.class);
+                                intent.putExtra("activity", "HomePageActivity");
+                                startActivity(intent);
+                            }
                         } else if (id == R.id.recruitment_menu) {
                             startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
                         } else if (id == R.id.manage_recruitment_post_menu) {
@@ -232,7 +260,7 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuthStateListener != null){
+        if (mAuthStateListener != null) {
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
     }

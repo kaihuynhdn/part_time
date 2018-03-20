@@ -13,17 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="8">
+            android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv1"
+                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:fontFamily="@font/iciel_cadena"
                 android:gravity="center"
                 android:text="@string/foreign_language_title"
@@ -32,18 +31,19 @@
 
             <com.example.kaihuynh.part_timejob.others.NonScrollListView
                 android:id="@+id/lv_foreign_language"
+                android:layout_below="@+id/tv1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/distance_view_5"
-                android:layout_marginTop="@dimen/distance_view_20"
-                android:layout_weight="6"
+                android:layout_marginTop="@dimen/distance_view_40"
                 android:background="@drawable/white_background"></com.example.kaihuynh.part_timejob.others.NonScrollListView>
 
             <RelativeLayout
-                android:layout_marginTop="@dimen/distance_view_30"
+                android:layout_below="@+id/lv_foreign_language"
+                android:layout_marginTop="@dimen/distance_view_20"
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="bottom">
 
                 <Button
@@ -73,7 +73,7 @@
                     android:textSize="16sp" />
             </RelativeLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
 </FrameLayout>

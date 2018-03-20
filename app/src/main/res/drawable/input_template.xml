@@ -9,7 +9,7 @@
                 android:topRightRadius="@dimen/distance_view_5"
                 android:bottomLeftRadius="@dimen/distance_view_5"
                 android:bottomRightRadius="@dimen/distance_view_5"/>
-            <solid android:color="@color/grey_200"/>
+            <solid android:color="@color/input_background"/>
         </shape>
     </item>
 
@@ -22,7 +22,7 @@
                 android:topRightRadius="@dimen/distance_view_5"
                 android:bottomLeftRadius="@dimen/distance_view_5"
                 android:bottomRightRadius="@dimen/distance_view_5"/>
-            <solid android:color="@color/grey_200"/>
+            <solid android:color="@color/input_background"/>
         </shape>
     </item>
 </selector>

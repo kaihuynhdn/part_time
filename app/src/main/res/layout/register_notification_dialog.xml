@@ -18,6 +18,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_success"
             android:layout_marginLeft="@dimen/distance_view_10"
             android:fontFamily="@font/roboto_bold"
             android:textSize="20sp"
@@ -27,6 +28,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_content_success"
         android:layout_marginTop="@dimen/distance_view_15"
         android:text="@string/text6"
         android:layout_width="wrap_content"

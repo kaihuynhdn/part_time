@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import android.widget.NumberPicker;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -30,12 +34,17 @@ public class PersonalInfoFragment extends Fragment {
 
     private Button mNextButton;
     private CustomViewPager mViewPager;
+    private TextInputLayout inputLayoutDob, inputLayoutGender, inputLayoutAddress, inputLayoutPhone, inputLayoutEducation;
     private TextInputEditText inputDob, inputGender, inputAddress, inputPhoneNumber, inputEducation;
     private AlertDialog genderDialog;
+
+    private static PersonalInfoFragment sInstance = null;
 
 
     public PersonalInfoFragment() {
         // Required empty public constructor
+        sInstance = this;
+
     }
 
 
@@ -57,6 +66,11 @@ public class PersonalInfoFragment extends Fragment {
         inputAddress = view.findViewById(R.id.input_address);
         inputEducation = view.findViewById(R.id.input_education);
         inputPhoneNumber = view.findViewById(R.id.input_phone_number);
+        inputLayoutDob = view.findViewById(R.id.input_dob_layout);
+        inputLayoutGender = view.findViewById(R.id.input_gender_layout);
+        inputLayoutAddress = view.findViewById(R.id.input_address_layout);
+        inputLayoutEducation = view.findViewById(R.id.input_education_layout);
+        inputLayoutPhone = view.findViewById(R.id.input_phone_number_layout);
         mNextButton = view.findViewById(R.id.btn_next_personal);
         mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
 
@@ -74,7 +88,9 @@ public class PersonalInfoFragment extends Fragment {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+                if (isValid()){
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+                }
             }
         });
     }
@@ -220,7 +236,7 @@ public class PersonalInfoFragment extends Fragment {
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                inputDob.setText(day + "/" + (month+1) + "/" + year);
+                inputDob.setText(day + "-" + (month+1) + "-" + year);
             }
         };
 
@@ -233,13 +249,57 @@ public class PersonalInfoFragment extends Fragment {
             month = calendar.get(Calendar.MONTH);
             year = calendar.get(Calendar.YEAR);
         }else{
-            String[] dateSplit = dateText.split("/");
+            String[] dateSplit = dateText.split("-");
             dayOfMonth = Integer.parseInt(dateSplit[0]);
             month = Integer.parseInt(dateSplit[1]) - 1;
             year = Integer.parseInt(dateSplit[2]);
         }
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), callback, year, month, dayOfMonth);
         datePickerDialog.show();
+    }
+
+    private boolean isValid(){
+        if (TextUtils.isEmpty(inputDob.getText())){
+            inputLayoutDob.setErrorEnabled(true);
+            inputLayoutDob.setError("Cần nhập đủ thông tin.");
+            return false;
+        }else {
+            inputLayoutDob.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(inputGender.getText())){
+            inputLayoutGender.setErrorEnabled(true);
+            inputLayoutGender.setError("Cần nhập đủ thông tin.");
+            return false;
+        }else {
+            inputLayoutGender.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(inputAddress.getText())){
+            inputLayoutAddress.setErrorEnabled(true);
+            inputLayoutAddress.setError("Cần nhập đủ thông tin.");
+            return false;
+        }else {
+            inputLayoutAddress.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(inputPhoneNumber.getText())){
+            inputLayoutPhone.setErrorEnabled(true);
+            inputLayoutPhone.setError("Cần nhập đủ thông tin.");
+            return false;
+        }else {
+            inputLayoutPhone.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(inputEducation.getText())){
+            inputLayoutEducation.setErrorEnabled(true);
+            inputLayoutEducation.setError("Cần nhập đủ thông tin.");
+            return false;
+        }else {
+            inputLayoutEducation.setErrorEnabled(false);
+        }
+
+        return true;
     }
 
     @Override
@@ -251,5 +311,23 @@ public class PersonalInfoFragment extends Fragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    public static PersonalInfoFragment getInstance(){
+        if (sInstance == null) {
+            sInstance = new PersonalInfoFragment();
+        }
+        return sInstance;
+    }
+
+    public Map<String, String> getPersonalInfo(){
+        Map<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("dob", inputDob.getText().toString());
+        hashMap.put("gender", inputGender.getText().toString());
+        hashMap.put("address", inputAddress.getText().toString());
+        hashMap.put("education", inputEducation.getText().toString());
+        hashMap.put("phone", inputPhoneNumber.getText().toString());
+
+        return hashMap;
     }
 }

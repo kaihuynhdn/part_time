@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.UserManger;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +35,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
     private TextInputLayout inputNameLayout, inputEmailLayout, inputPasswordLayout, inputConfirmPasswordLayout;
     private TextInputEditText mFullName, mEmail, mPassword, mConfirmPassword;
     private ProgressDialog mProgress;
+    private Handler mHandler;
 
     //Firebase instance variables
     private FirebaseAuth mAuth;
@@ -79,7 +82,9 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent(RegisterAccountInfoActivity.this, RegisterPersonalInfoActivity.class));
+                Intent intent = new Intent(RegisterAccountInfoActivity.this, RegisterPersonalInfoActivity.class);
+                intent.putExtra("activity", "RegisterAccountInfoActivity");
+                startActivity(intent);
                 LoginMethodActivity.getInstance().finish();
                 finish();
             }
@@ -117,7 +122,8 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 user.setEmail(userFirebase.getEmail());
                                 user.setFullName(mFullName.getText().toString());
 
-                                mUserDatabaseReference.child(user.getId()).setValue(user);
+                                UserManger.getInstance().load(user);
+                                UserManger.getInstance().updateUser(user);
 
                                 mProgress.dismiss();
                                 showAlertDialog();

@@ -31,8 +31,11 @@ public class SkillFragment extends Fragment {
     private ArrayList<Skill> mSkills;
     private SkillAdapter mSkillAdapter;
 
+    private static SkillFragment sInstance = null;
+
     public SkillFragment() {
         // Required empty public constructor
+        sInstance = this;
     }
 
 
@@ -60,8 +63,9 @@ public class SkillFragment extends Fragment {
         mSkills = new ArrayList<>();
 
         String[] skillList = getResources().getStringArray(R.array.skill_array);
-        for(String s : skillList){
-            mSkills.add(new Skill(s, false));
+        mSkills.add(new Skill(skillList[0], true));
+        for(int i = 1; i<skillList.length; i++){
+            mSkills.add(new Skill(skillList[i], false));
         }
 
         mSkillAdapter = new SkillAdapter(getContext(), R.layout.skill_item, mSkills);
@@ -97,14 +101,14 @@ public class SkillFragment extends Fragment {
         mSkillListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(mSkills.get(i).isChecked()){
+                if(mSkills.get(i).isChecked()&& i != 0){
                     mSkills.get(i).setChecked(false);
                 }else {
-                    if (i==0){
-                        for(Skill s : mSkills){
+                    if (i == 0) {
+                        for (Skill s : mSkills) {
                             s.setChecked(false);
                         }
-                    }else{
+                    } else {
                         mSkills.get(0).setChecked(false);
                     }
                     if(i!=mSkills.size()-1){
@@ -144,4 +148,20 @@ public class SkillFragment extends Fragment {
         alertDialog.show();
     }
 
+    public static SkillFragment getInstance(){
+        if(sInstance == null){
+            sInstance = new SkillFragment();
+        }
+        return sInstance;
+    }
+
+    public String getSkills(){
+        String s = "";
+        for (Skill f : mSkills){
+            if(f.isChecked()){
+                s+=f.getName()+"\n";
+            }
+        }
+        return s == "" ? "" : s.substring(0, s.length() - 1);
+    }
 }

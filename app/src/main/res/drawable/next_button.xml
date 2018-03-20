@@ -13,6 +13,21 @@
                 android:bottomRightRadius="@dimen/distance_view_5"/>
         </shape>
     </item>
+
+    <item android:state_pressed="false" android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="@dimen/distance_view_2"
+                android:color="@color/white"/>
+            <solid android:color="@color/login_disable"/>
+            <corners
+                android:topLeftRadius="@dimen/distance_view_5"
+                android:topRightRadius="@dimen/distance_view_5"
+                android:bottomLeftRadius="@dimen/distance_view_5"
+                android:bottomRightRadius="@dimen/distance_view_5"/>
+        </shape>
+    </item>
+
     <item android:state_pressed="false">
         <shape android:shape="rectangle">
             <stroke

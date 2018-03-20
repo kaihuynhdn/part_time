@@ -31,8 +31,11 @@ public class ForeignLanguageFragment extends Fragment {
     private ArrayList<ForeignLanguage> mForeignLanguages;
     private ForeignLanguageAdapter mForeignLanguageAdapter;
 
+    private static ForeignLanguageFragment sInstance = null;
+
     public ForeignLanguageFragment() {
         // Required empty public constructor
+        sInstance = this;
     }
 
 
@@ -43,7 +46,7 @@ public class ForeignLanguageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_foreign_language, container, false);
 
         addComponents(view);
-        init();
+        initialize();
         addEvents();
 
         return view;
@@ -57,13 +60,13 @@ public class ForeignLanguageFragment extends Fragment {
 
     }
 
-    private void init() {
+    private void initialize() {
         dpi = getContext().getResources().getDisplayMetrics().density;
         String[] foreignList = getResources().getStringArray(R.array.foreign_language);
         mForeignLanguages = new ArrayList<>();
-
-        for(String s : foreignList){
-            mForeignLanguages.add(new ForeignLanguage(s, false));
+        mForeignLanguages.add(new ForeignLanguage(foreignList[0], true));
+        for (int i =1; i<foreignList.length; i++) {
+            mForeignLanguages.add(new ForeignLanguage(foreignList[i], false));
         }
 
         mForeignLanguageAdapter = new ForeignLanguageAdapter(getContext(), R.layout.foreign_language_item, mForeignLanguages);
@@ -80,7 +83,7 @@ public class ForeignLanguageFragment extends Fragment {
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1);
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
             }
         });
     }
@@ -89,7 +92,7 @@ public class ForeignLanguageFragment extends Fragment {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
             }
         });
     }
@@ -98,19 +101,19 @@ public class ForeignLanguageFragment extends Fragment {
         mForeignLanguageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(mForeignLanguages.get(i).isChecked()){
+                if (mForeignLanguages.get(i).isChecked() && i != 0) {
                     mForeignLanguages.get(i).setChecked(false);
-                }else {
-                    if (i==0){
-                        for(ForeignLanguage f : mForeignLanguages){
+                } else {
+                    if (i == 0) {
+                        for (ForeignLanguage f : mForeignLanguages) {
                             f.setChecked(false);
                         }
                     } else {
                         mForeignLanguages.get(0).setChecked(false);
                     }
-                    if(i!= mForeignLanguages.size()-1){
+                    if (i != mForeignLanguages.size() - 1) {
                         mForeignLanguages.get(i).setChecked(true);
-                    }else{
+                    } else {
                         showAddLanguageDialog();
                     }
                 }
@@ -126,8 +129,8 @@ public class ForeignLanguageFragment extends Fragment {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(editText.getText().toString()!="" && editText.getText().toString()!= null){
-                    mForeignLanguages.add(mForeignLanguages.size()-1, new ForeignLanguage(editText.getText().toString(), true));
+                if (editText.getText().toString() != "" && editText.getText().toString() != null) {
+                    mForeignLanguages.add(mForeignLanguages.size() - 1, new ForeignLanguage(editText.getText().toString(), true));
                     mForeignLanguageAdapter.notifyDataSetChanged();
                 }
             }
@@ -139,9 +142,26 @@ public class ForeignLanguageFragment extends Fragment {
             }
         });
         AlertDialog alertDialog = builder.create();
-        alertDialog.setView(editText, (int)(19*dpi), (int)(10*dpi), (int)(14*dpi), (int)(5*dpi));
+        alertDialog.setView(editText, (int) (19 * dpi), (int) (10 * dpi), (int) (14 * dpi), (int) (5 * dpi));
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+    }
+
+    public static ForeignLanguageFragment getInstance() {
+        if (sInstance == null) {
+            sInstance = new ForeignLanguageFragment();
+        }
+        return sInstance;
+    }
+
+    public String getLanguages(){
+        String s = "";
+        for (ForeignLanguage f : mForeignLanguages){
+            if(f.isChecked()){
+                s+=f.getName()+"\n";
+            }
+        }
+        return s == "" ? "" : s.substring(0, s.length() - 1);
     }
 
 }

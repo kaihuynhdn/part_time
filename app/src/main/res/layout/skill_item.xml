@@ -33,7 +33,8 @@
 
     <View
         android:id="@+id/view_skill_item"
-        android:background="@color/green"
+        android:layout_marginHorizontal="@dimen/distance_view_15"
+        android:background="@color/view_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/distance_view_1"/>
 

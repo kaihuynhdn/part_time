@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +73,12 @@ public class RegisterPersonalInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                String s = getIntent().getStringExtra("activity");
+                if(s.equals("RegisterAccountInfoActivity")){
+                    startActivity(new Intent(RegisterPersonalInfoActivity.this, HomePageActivity.class));
+                }
                 finish();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
