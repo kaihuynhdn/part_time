@@ -105,9 +105,9 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_phone_number_layout"
+                    android:layout_marginTop="@dimen/distance_view_20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/distance_view_20"
                     android:textColorHint="@color/green"
                     app:hintTextAppearance="@style/TextInputLayoutHintText">
 
@@ -115,6 +115,7 @@
                         android:id="@+id/input_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="0123456789"
                         android:drawableLeft="@drawable/phone_number"
                         android:drawablePadding="@dimen/distance_view_10"
                         android:fontFamily="@font/linotte_semi_bold"
@@ -150,9 +151,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/distance_view_10"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="@dimen/distance_view_10"
                 android:layout_weight="1"
                 android:gravity="bottom"
                 android:orientation="vertical">

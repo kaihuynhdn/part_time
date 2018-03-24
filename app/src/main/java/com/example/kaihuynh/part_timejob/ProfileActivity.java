@@ -10,6 +10,8 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,11 +28,20 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
+import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -40,7 +51,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button mEditPersonalDescription;
     private ImageButton mEditInfoProfile;
-    private TextView mDescriptionTextView, mName, mPhoneNumber;
+    private TextView mDescriptionTextView, mName, mPhoneNumber, mEmail;
+    private User user;
 
     private String genderChoice;
     private ArrayList<ForeignLanguage> languages;
@@ -49,13 +61,16 @@ public class ProfileActivity extends AppCompatActivity {
     private SkillAdapter skillAdapter;
     private ArrayList<String> languageList, skillList;
 
+    //Firebase instance variables
+    private DatabaseReference mUserRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         addComponents();
-        init();
+        initialize();
         addEvents();
 
     }
@@ -70,6 +85,86 @@ public class ProfileActivity extends AppCompatActivity {
 
         editDescriptionEvents();
         editInfoProfileEvents();
+    }
+
+    private void initialize() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this,R.drawable.back));
+
+        user = UserManger.getInstance().getUser();
+        mName.setText(user.getFullName());
+        mEmail.setText(user.getEmail());
+        mPhoneNumber.setText(user.getPhoneNumber());
+        inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(user.getDayOfBirth()));
+        inputGender.setText(user.getGender());
+        inputAddress.setText(user.getAddress());
+        inputEducation.setText(user.getEducation());
+        inputLanguage.setText(user.getForeignLanguages());
+        inputSkill.setText(user.getSkills());
+        mDescriptionTextView.setText(user.getPersonalDescription());
+
+
+        dpi = ProfileActivity.this.getResources().getDisplayMetrics().density;
+
+        languageList = new ArrayList<>();
+        skillList = new ArrayList<>();
+        languages = new ArrayList<>();
+        skills = new ArrayList<>();
+
+        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
+        for(String s : languageArray){
+            languageList.add(s);
+        }
+
+        String[] skillArray = getResources().getStringArray(R.array.skill_array);
+        for(String s : skillArray){
+            skillList.add(s);
+        }
+
+        genderChoice = "";
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
+        mUserRef.child(user.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.getValue(User.class);
+                mName.setText(u.getFullName());
+                mEmail.setText(u.getEmail());
+                mPhoneNumber.setText(u.getPhoneNumber());
+                inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
+                inputGender.setText(u.getGender());
+                inputAddress.setText(u.getAddress());
+                inputEducation.setText(u.getEducation());
+                inputLanguage.setText(u.getForeignLanguages());
+                inputSkill.setText(u.getSkills());
+                mDescriptionTextView.setText(u.getPersonalDescription());
+                UserManger.getInstance().load(u);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addComponents() {
+        toolbar = findViewById(R.id.toolbar_profile);
+        inputDOB = findViewById(R.id.input_dob_profile);
+        inputGender = findViewById(R.id.input_gender_profile);
+        inputAddress = findViewById(R.id.input_address_profile);
+        inputEducation = findViewById(R.id.input_education_profile);
+        inputLanguage = findViewById(R.id.input_language_profile);
+        inputSkill = findViewById(R.id.input_skill_profile);
+        mEditPersonalDescription = findViewById(R.id.btn_edit_personal_description);
+        mDescriptionTextView = findViewById(R.id.tv_personal_description);
+        mName = findViewById(R.id.tv_name_profile);
+        mEmail = findViewById(R.id.tv_email_profile);
+        mPhoneNumber = findViewById(R.id.tv_phone_number_profile);
+        mEditInfoProfile = findViewById(R.id.btn_edit_info_profile);
+
     }
 
     private void editInfoProfileEvents() {
@@ -92,11 +187,50 @@ public class ProfileActivity extends AppCompatActivity {
         inputName.setText(name);
         inputPhoneNumber.setText(phoneNumber);
 
+        inputPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    if(inputPhoneNumber.getText().toString().equals("")){
+                        inputPhoneNumber.setText("+84 ");
+                    }
+                }else {
+                    if(inputPhoneNumber.getText().toString().equals("+84 ")){
+                        inputPhoneNumber.setText("");
+                    }
+                }
+            }
+        });
+
+        inputPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String s = inputPhoneNumber.getText().toString();
+                if (s.equals("+84")){
+                    inputPhoneNumber.setText("+84 ");
+                    inputPhoneNumber.setSelection(inputPhoneNumber.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mName.setText(inputName.getText().toString());
-                mPhoneNumber.setText(inputPhoneNumber.getText().toString());
+                User u = UserManger.getInstance().getUser();
+                u.setFullName(inputName.getText().toString());
+                u.setPhoneNumber(inputPhoneNumber.getText().toString());
+                UserManger.getInstance().updateUser(u);
+                mName.requestFocus();
             }
         });
 
@@ -132,6 +266,8 @@ public class ProfileActivity extends AppCompatActivity {
         editText.setPadding(15,10,10,15);
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
+        editText.setText(mDescriptionTextView.getText());
+        editText.setSelection(mDescriptionTextView.getText().toString().length());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Mô tả bản thân:");
@@ -144,7 +280,10 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDescriptionTextView.setText(editText.getText());
+                User u = UserManger.getInstance().getUser();
+                u.setPersonalDescription(editText.getText().toString());
+                UserManger.getInstance().updateUser(u);
+                mDescriptionTextView.requestFocus();
             }
         });
 
@@ -242,7 +381,10 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                inputSkill.setText(s == "" ? "" : s.substring(0, s.length() - 1));
+                User u = UserManger.getInstance().getUser();
+                u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
+                UserManger.getInstance().updateUser(u);
+                inputSkill.requestFocus();
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -366,7 +508,10 @@ public class ProfileActivity extends AppCompatActivity {
                         s += f.getName() + "\n";
                     }
                 }
-                inputLanguage.setText(s == "" ? "" : s.substring(0, s.length() - 1));
+                User u = UserManger.getInstance().getUser();
+                u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
+                UserManger.getInstance().updateUser(u);
+                inputLanguage.requestFocus();
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -451,7 +596,10 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                inputEducation.setText(strings[numberPicker.getValue()]);
+                User u = UserManger.getInstance().getUser();
+                u.setEducation(strings[numberPicker.getValue()]);
+                UserManger.getInstance().updateUser(u);
+                inputEducation.requestFocus();
             }
         });
 
@@ -528,7 +676,10 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                inputGender.setText(genderChoice);
+                User u = UserManger.getInstance().getUser();
+                u.setGender(genderChoice);
+                UserManger.getInstance().updateUser(u);
+                inputGender.requestFocus();
             }
         });
         builder.setNegativeButton("Huỷ", new DialogInterface.OnClickListener() {
@@ -565,7 +716,13 @@ public class ProfileActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                inputDOB.setText(day + "-" + (month + 1) + "-" + year);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+                calendar.set(year, month, day);
+                User u = UserManger.getInstance().getUser();
+                u.setDayOfBirth(calendar.getTime());
+                UserManger.getInstance().updateUser(u);
+                inputDOB.requestFocus();
             }
         };
 
@@ -590,7 +747,10 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            inputAddress.setText(data.getStringExtra("location"));
+            User u = UserManger.getInstance().getUser();
+            u.setAddress(data.getStringExtra("location"));
+            UserManger.getInstance().updateUser(u);
+            inputAddress.requestFocus();
         } else {
             inputAddress.setSelection(0);
         }
@@ -598,48 +758,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void init() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this,R.drawable.back));
-
-        dpi = ProfileActivity.this.getResources().getDisplayMetrics().density;
-
-        languageList = new ArrayList<>();
-        skillList = new ArrayList<>();
-        languages = new ArrayList<>();
-        skills = new ArrayList<>();
-
-        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        for(String s : languageArray){
-            languageList.add(s);
-        }
-
-        String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        for(String s : skillArray){
-            skillList.add(s);
-        }
-
-        genderChoice = "";
-    }
-
-    private void addComponents() {
-        toolbar = findViewById(R.id.toolbar_profile);
-        inputDOB = findViewById(R.id.input_dob_profile);
-        inputGender = findViewById(R.id.input_gender_profile);
-        inputAddress = findViewById(R.id.input_address_profile);
-        inputEducation = findViewById(R.id.input_education_profile);
-        inputLanguage = findViewById(R.id.input_language_profile);
-        inputSkill = findViewById(R.id.input_skill_profile);
-        mEditPersonalDescription = findViewById(R.id.btn_edit_personal_description);
-        mDescriptionTextView = findViewById(R.id.tv_personal_description);
-        mName = findViewById(R.id.tv_name_profile);
-        mPhoneNumber = findViewById(R.id.tv_phone_number_profile);
-        mEditInfoProfile = findViewById(R.id.btn_edit_info_profile);
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

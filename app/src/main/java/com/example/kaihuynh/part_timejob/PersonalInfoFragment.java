@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +83,46 @@ public class PersonalInfoFragment extends Fragment {
         inputGenderEvents();
         inputLocationEvents();
         inputEducationEvents();
+        inputPhoneNumberEvents();
         nextButtonEvents();
+    }
+
+    private void inputPhoneNumberEvents() {
+        inputPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    if(inputPhoneNumber.getText().toString().equals("")){
+                        inputPhoneNumber.setText("+84 ");
+                    }
+                }else {
+                    if(inputPhoneNumber.getText().toString().equals("+84 ")){
+                        inputPhoneNumber.setText("");
+                    }
+                }
+            }
+        });
+
+        inputPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String s = inputPhoneNumber.getText().toString();
+                if (s.equals("+84")){
+                    inputPhoneNumber.setText("+84 ");
+                    inputPhoneNumber.setSelection(inputPhoneNumber.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void nextButtonEvents() {
@@ -107,6 +148,7 @@ public class PersonalInfoFragment extends Fragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if(b){
+
                     showEducationPicker();
                 }
             }

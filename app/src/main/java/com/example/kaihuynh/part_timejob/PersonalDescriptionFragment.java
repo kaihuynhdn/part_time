@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
 /**
@@ -92,7 +93,7 @@ public class PersonalDescriptionFragment extends Fragment {
                 int month = Integer.parseInt(dateSplit[1]) - 1;
                 int year = Integer.parseInt(dateSplit[2]);
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+                calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 calendar.set(year, month, dayOfMonth);
                 User user = UserManger.getInstance().getUser();
                 user.setAddress(PersonalInfoFragment.getInstance().getPersonalInfo().get("address"));

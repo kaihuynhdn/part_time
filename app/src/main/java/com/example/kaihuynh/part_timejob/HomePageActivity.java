@@ -19,6 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManger;
 import com.example.kaihuynh.part_timejob.models.User;
@@ -45,6 +47,9 @@ public class HomePageActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private TextView mUserName, mUserEmail;
+    private View header;
+    private User user;
 
     //Bottom navigation
     private BottomNavigationView mBottomNavigationView;
@@ -79,6 +84,10 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initialize() {
+        user = UserManger.getInstance().getUser();
+        mUserName.setText(user.getFullName());
+        mUserEmail.setText(user.getEmail());
+
         toolbar.setTitle("Danh Sách Công Việc");
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -107,6 +116,8 @@ public class HomePageActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
+                mUserEmail.setText(u.getEmail());
+                mUserName.setText(u.getFullName());
                 UserManger.getInstance().load(u);
             }
 
@@ -116,6 +127,21 @@ public class HomePageActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void addComponents() {
+        drawer = findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        header = navigationView.getHeaderView(0);
+        mUserEmail = header.findViewById(R.id.tv_user_email);
+        mUserName = header.findViewById(R.id.tv_user_name);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
+        sInstance = this;
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout_home, new JobListFragment());
+        transaction.commit();
     }
 
     private void addEvents() {
@@ -152,17 +178,6 @@ public class HomePageActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    private void addComponents() {
-        drawer = findViewById(R.id.drawer_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
-        sInstance = this;
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout_home, new JobListFragment());
-        transaction.commit();
-    }
 
     @Override
     public void onBackPressed() {

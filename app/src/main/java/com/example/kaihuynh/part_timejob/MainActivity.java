@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManger;
 import com.example.kaihuynh.part_timejob.models.User;
@@ -19,10 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-
+    private boolean interrupt, firstLoad;
     private SeekBar mSeekBar;
     private ProgressBar mProgressBar;
     private Handler mHandler;
+    private int FINISH_LOADED;
+    private Thread t;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseReference;
@@ -38,32 +41,87 @@ public class MainActivity extends AppCompatActivity {
 
         addComponents();
         initialize();
+
     }
 
     private void initialize() {
+        firstLoad = true;
+        interrupt = false;
+        mHandler = new Handler();
+        FINISH_LOADED = 0;
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
+
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    interrupt = false;
+                } else {
+                    interrupt = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
+
+        t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while ((mProgressBar.getProgress() < 100 || FINISH_LOADED == 0)) {
+                    android.os.SystemClock.sleep(30);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!interrupt) {
+                                mSeekBar.setProgress(mSeekBar.getProgress() + 1);
+                                mProgressBar.setProgress(mProgressBar.getProgress() + 1);
+                            }
+                        }
+                    });
+                }
+
+                if (mProgressBar.getProgress() >= 100 && FINISH_LOADED != 0) {
+                    if (FINISH_LOADED == 1) {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    } else if (FINISH_LOADED == 2) {
+                        startActivity(new Intent(MainActivity.this, HomePageActivity.class));
+                        finish();
+                    }
+                }
+            }
+        });
+
+        t.start();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user==null){
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }else {
+
+//                anim();
+                if (user == null) {
+                    FINISH_LOADED = 1;
+
+                } else {
                     mUserDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
                             UserManger.getInstance().load(u);
-                            startActivity(new Intent(MainActivity.this, HomePageActivity.class));
-                            finish();
+                            FINISH_LOADED = 2;
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -72,33 +130,9 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-
-
-    private void addEvents() {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (mProgressBar.getProgress() < 100) {
-                    android.os.SystemClock.sleep(30);
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mSeekBar.setProgress(mSeekBar.getProgress() + 1);
-                            mProgressBar.setProgress(mProgressBar.getProgress() + 1);
-                        }
-                    });
-                }
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-            }
-        }).start();
-    }
-
     private void addComponents() {
         mSeekBar = findViewById(R.id.seekBar);
         mProgressBar = findViewById(R.id.progressBar);
-        mHandler = new Handler();
     }
 
     @Override
@@ -113,4 +147,11 @@ public class MainActivity extends AppCompatActivity {
         mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Thread.currentThread().isAlive()) {
+            t.interrupt();
+        }
+    }
 }
