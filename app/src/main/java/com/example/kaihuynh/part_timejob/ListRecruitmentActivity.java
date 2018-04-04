@@ -11,7 +11,6 @@ import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
 import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ListRecruitmentActivity extends AppCompatActivity implements JobAdapter.ListItemClickListener {
 
@@ -38,7 +37,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
             Job job = new Job();
             job.setName("Job Title " + i);
             job.setSalary(String.valueOf(i));
-            job.setPostedDate(new Date());
+            //job.setTimestamp(new Date().getTime());
             job.setLocation("Location " + i);
 
             mJobArrayList.add(job);

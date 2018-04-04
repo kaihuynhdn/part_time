@@ -1,6 +1,7 @@
 package com.example.kaihuynh.part_timejob;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -131,12 +133,12 @@ public class HomePageActivity extends AppCompatActivity
 
     private void addComponents() {
         drawer = findViewById(R.id.drawer_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
         header = navigationView.getHeaderView(0);
         mUserEmail = header.findViewById(R.id.tv_user_email);
         mUserName = header.findViewById(R.id.tv_user_name);
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
+        mBottomNavigationView = findViewById(R.id.bottom_nav);
         sInstance = this;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -178,6 +180,9 @@ public class HomePageActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    public BottomNavigationView getmBottomNavigationView() {
+        return mBottomNavigationView;
+    }
 
     @Override
     public void onBackPressed() {
@@ -235,7 +240,11 @@ public class HomePageActivity extends AppCompatActivity
                                 startActivity(intent);
                             }
                         } else if (id == R.id.recruitment_menu) {
-                            startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
+                            if (UserManger.getInstance().isUpdated()) {
+                                startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
+                            } else {
+                                showDialog();
+                            }
                         } else if (id == R.id.manage_recruitment_post_menu) {
                             startActivity(new Intent(HomePageActivity.this, ListRecruitmentActivity.class));
                         } else if (id == R.id.log_out_menu) {
@@ -249,6 +258,29 @@ public class HomePageActivity extends AppCompatActivity
         }).start();
 
         return true;
+    }
+
+    private void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn cần hoàn thiện hồ sơ cá nhân để đăng tuyển");
+        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(HomePageActivity.this, RegisterPersonalInfoActivity.class);
+                intent.putExtra("activity", "HomePageActivity");
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void signOut() {

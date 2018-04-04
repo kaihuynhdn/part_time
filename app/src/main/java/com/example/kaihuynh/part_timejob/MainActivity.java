@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManger;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        mSeekBar.setEnabled(false);
         firstLoad = true;
         interrupt = false;
         mHandler = new Handler();
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
                             UserManger.getInstance().load(u);
+                            JobManager.getInstance().loadData();
+
                             FINISH_LOADED = 2;
                         }
 

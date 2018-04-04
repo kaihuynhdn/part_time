@@ -17,8 +17,8 @@ import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Kai on 2018-02-12.
@@ -32,10 +32,10 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
 
     final private ListItemClickListener mOnClickListener;
 
-
     public interface ListItemClickListener {
         void onListItemClick(int clickItemIndex);
     }
+
 
     public JobAdapter(Context context, int layout, ArrayList<Job> mJobList, ListItemClickListener listener) {
         this.mJobList = mJobList;
@@ -53,7 +53,17 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
     @Override
     public void onBindViewHolder(JobItemViewHolder holder, final int position) {
         Job job = mJobList.get(position);
-        holder.mJobPostedDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(job.getPostedDate()));
+        Calendar calendar = Calendar.getInstance();
+        //calendar.setTime(job.getTimestamp());
+        String s = "";
+        if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)){
+            s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1)+ " năm " + calendar.get(Calendar.YEAR)
+                    + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        }else {
+            s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1)
+                    + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        }
+        holder.mJobPostedDate.setText(s);
         holder.mJobLocation.setText(job.getLocation());
         holder.mJobTitle.setText(job.getName());
         holder.mJobSalary.setText(job.getSalary());

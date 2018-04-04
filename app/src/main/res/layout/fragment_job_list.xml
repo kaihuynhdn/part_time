@@ -7,14 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.kaihuynh.part_timejob.JobListFragment">
 
-    <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <RelativeLayout
+        <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -26,7 +19,6 @@
                 android:paddingLeft="@dimen/activity_padding"
                 android:paddingRight="@dimen/activity_padding"
                 android:background="#5c82d8f4"
-                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -57,15 +49,20 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_jobs"
-                android:layout_below="@+id/relative_layout"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </android.support.v7.widget.RecyclerView>
-        </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_jobs"
+                    android:layout_below="@+id/relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-    </android.support.v4.widget.NestedScrollView>
+                </android.support.v7.widget.RecyclerView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
 
 </FrameLayout>

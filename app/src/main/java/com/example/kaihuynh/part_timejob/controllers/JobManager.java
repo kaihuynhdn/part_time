@@ -2,83 +2,132 @@ package com.example.kaihuynh.part_timejob.controllers;
 
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
-import com.example.kaihuynh.part_timejob.models.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 
 /**
  * Created by Kai on 2018-02-03.
  */
 
 public class JobManager {
+    private final int NUMBER_DATA = 10;
     private static JobManager sInstance = null;
     private ArrayList<Job> mJobList;
+    private ArrayList<Job> mLoadMoreList;
+    private int jobCount = 0;
 
-    private JobManager(){
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mJobRef;
+
+    private JobManager() {
         this.mJobList = new ArrayList<>();
+        this.mLoadMoreList = new ArrayList<>();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mJobRef = mFirebaseDatabase.getReference().child("jobs");
     }
 
-    public void load(){
-        for (int i = 0; i<10; i++){
-            Job job = new Job();
-            job.setId("");
-            job.setName("");
-            job.setPostedDate(new Date());
-            job.setBenefits("");
-            job.setDescription("");
-            job.setSalary("");
-            job.setLocation("");
-            job.setRequirement("");
-            job.setStatus("");
-
-            User u = new User();
-            u.setFullName("");
-            u.setAddress("");
-            u.setEducation("");
-            u.setDayOfBirth(new Date());
-            u.setForeignLanguages("");
-            u.setPhoneNumber("");
-            u.setSkills("");
-            u.setEmail("");
-
-            job.setRecruiter(u);
-
-            job.setSalary("");
-            job.setName("");
-
-            ArrayList<Candidate> mCandidateList = new ArrayList<>();
-
-            for(int j = 0; j<5; j++){
-                User user = new User();
-                user.setFullName("");
-                user.setGender("");
-                user.setAddress("");
-                user.setEducation("");
-                user.setDayOfBirth(new Date());
-                user.setForeignLanguages("");
-                user.setPhoneNumber("");
-                user.setSkills("");
-                user.setPersonalDescription("");
-                user.setEmail("");
-
-
-                mCandidateList.add(new Candidate(user, "", new Date(),""));
+    public void loadData() {
+        mJobRef.orderByKey().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                jobCount = (int) dataSnapshot.getChildrenCount();
             }
 
-            job.setCandidateList(mCandidateList);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-            mJobList.add(job);
-        }
+            }
+        });
+
+        Query query = mJobRef.orderByChild("timestamp").limitToLast(10);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Job job = noteDataSnapshot.getValue(Job.class);
+                    if(job.getStatus().equals("Đang tuyển")){
+                        mJobList.add(job);
+                        if (mJobList.size() == NUMBER_DATA){
+                            break;
+                        }
+                    }
+                }
+                Collections.reverse(mJobList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    public ArrayList<Job> getJobs(){
+    public void loadMoreJob(long timestamp) {
+        Query query = mJobRef.orderByChild("timestamp").endAt(timestamp).limitToLast(NUMBER_DATA);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mLoadMoreList.clear();
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Job job = noteDataSnapshot.getValue(Job.class);
+                    mLoadMoreList.add(job);
+                }
+                mLoadMoreList.remove(mLoadMoreList.size()-1);
+                Collections.reverse(mLoadMoreList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void refreshData() {
+        Query query = mJobRef.orderByChild("timestamp").limitToLast(NUMBER_DATA);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mJobList.clear();
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Job job = noteDataSnapshot.getValue(Job.class);
+                    mJobList.add(job);
+                }
+                Collections.reverse(mJobList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void addJob(Job job) {
+        String id = mJobRef.push().getKey();
+        job.setId(id);
+        mJobRef.child(id).setValue(job);
+    }
+
+    public ArrayList<Job> getJobs() {
         return this.mJobList;
     }
 
-    public Job getJobByRecruiterId(String id){
-        for(Job j : mJobList){
-            if(j.getId() == id){
+    public ArrayList<Job> getLoadMoreJobs() {
+        return this.mLoadMoreList;
+    }
+
+    public Job getJobByRecruiterId(String id) {
+        for (Job j : mJobList) {
+            if (j.getId() == id) {
                 return j;
             }
         }
@@ -87,9 +136,9 @@ public class JobManager {
     }
 
 
-    public ArrayList<Candidate> getCandidatesById(String id){
-        for(Job j : mJobList){
-            if(j.getId() == id){
+    public ArrayList<Candidate> getCandidatesById(String id) {
+        for (Job j : mJobList) {
+            if (j.getId() == id) {
                 return j.getCandidateList();
             }
         }
@@ -97,8 +146,12 @@ public class JobManager {
         return null;
     }
 
-    public static JobManager getInstance(){
-        if(sInstance == null){
+    public int getJobCount() {
+        return this.jobCount;
+    }
+
+    public static JobManager getInstance() {
+        if (sInstance == null) {
             sInstance = new JobManager();
         }
 

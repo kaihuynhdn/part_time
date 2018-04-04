@@ -2,7 +2,6 @@ package com.example.kaihuynh.part_timejob.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Kai on 2018-02-03.
@@ -14,7 +13,7 @@ public class Job implements Serializable{
     private String name;
     private String salary;
     private String location;
-    private Date postedDate;
+    private long timestamp;
     private String description;
     private String requirement;
     private String benefits;
@@ -26,14 +25,14 @@ public class Job implements Serializable{
     }
 
 
-    public Job(String id, User recruiter, String name, String salary, String location, Date postedDate,
+    public Job(String id, User recruiter, String name, String salary, String location, long postedDate,
                String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList, String status) {
         this.id = id;
         this.recruiter = recruiter;
         this.name = name;
         this.salary = salary;
         this.location = location;
-        this.postedDate = postedDate;
+        this.timestamp = postedDate;
         this.description = description;
         this.requirement = requirement;
         this.benefits = benefits;
@@ -49,12 +48,12 @@ public class Job implements Serializable{
         this.status = status;
     }
 
-    public Date getPostedDate() {
-        return postedDate;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setPostedDate(Date postedDate) {
-        this.postedDate = postedDate;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getId() {

@@ -146,7 +146,9 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
             @Override
             public void onError(FacebookException error) {
-
+                if(mProgress.isShowing()){
+                    mProgress.dismiss();
+                }
             }
         });
 
@@ -230,6 +232,10 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
+                Toast.makeText(LoginMethodActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                if(mProgress.isShowing()){
+                    mProgress.dismiss();
+                }
                 // ...
             }
         }

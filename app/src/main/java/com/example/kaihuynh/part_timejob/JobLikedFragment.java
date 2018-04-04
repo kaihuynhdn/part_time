@@ -14,7 +14,6 @@ import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
 import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 /**
@@ -49,7 +48,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
             Job job = new Job();
             job.setName("Job Title " + i);
             job.setSalary(String.valueOf(i));
-            job.setPostedDate(new Date());
+            //job.setTimestamp(new Date().getTime());
             job.setLocation("Location " + i);
 
             mJobArrayList.add(job);
