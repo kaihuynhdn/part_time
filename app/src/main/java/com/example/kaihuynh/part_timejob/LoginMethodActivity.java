@@ -11,7 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -95,16 +96,21 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    mUserDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    mUserDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
-                            UserManger.getInstance().load(u);
+                            UserManager.getInstance().load(u);
                             if (mProgress.isShowing()){
                                 mProgress.dismiss();
                             }
-                            startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
-                            finish();
+                            if(u!=null){
+                                JobManager.getInstance().refreshData();
+                                startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
+                                finish();
+                                LoginActivity.getInstance().finish();
+                            }
+
                         }
 
                         @Override
@@ -112,9 +118,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
                         }
                     });
-
-                    LoginActivity.getInstance().finish();
-                }else {
 
                 }
             }

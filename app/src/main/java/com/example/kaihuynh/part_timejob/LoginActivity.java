@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity{
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
-                            UserManger.getInstance().load(u);
+                            UserManager.getInstance().load(u);
                             if (mProgress.isShowing()){
                                 mProgress.dismiss();
                             }

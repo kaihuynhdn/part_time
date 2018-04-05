@@ -24,7 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -86,9 +86,9 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initialize() {
-        user = UserManger.getInstance().getUser();
-        mUserName.setText(user.getFullName());
-        mUserEmail.setText(user.getEmail());
+        user = UserManager.getInstance().getUser();
+//        mUserName.setText(user.getFullName());
+//        mUserEmail.setText(user.getEmail());
 
         toolbar.setTitle("Danh Sách Công Việc");
         mAuth = FirebaseAuth.getInstance();
@@ -114,13 +114,13 @@ public class HomePageActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mUserRef.child(UserManger.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
+        mUserRef.child(UserManager.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
                 mUserEmail.setText(u.getEmail());
                 mUserName.setText(u.getFullName());
-                UserManger.getInstance().load(u);
+                UserManager.getInstance().load(u);
             }
 
             @Override
@@ -232,7 +232,7 @@ public class HomePageActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         if (id == R.id.personal_info_menu) {
-                            if (UserManger.getInstance().isUpdated()) {
+                            if (UserManager.getInstance().isUpdated()) {
                                 startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
                             } else {
                                 Intent intent = new Intent(HomePageActivity.this, RegisterPersonalInfoActivity.class);
@@ -240,7 +240,7 @@ public class HomePageActivity extends AppCompatActivity
                                 startActivity(intent);
                             }
                         } else if (id == R.id.recruitment_menu) {
-                            if (UserManger.getInstance().isUpdated()) {
+                            if (UserManager.getInstance().isUpdated()) {
                                 startActivity(new Intent(HomePageActivity.this, RecruitingActivity.class));
                             } else {
                                 showDialog();

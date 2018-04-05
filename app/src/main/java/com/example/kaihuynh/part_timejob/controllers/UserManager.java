@@ -8,12 +8,12 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by Kai on 2018-02-03.
  */
 
-public class UserManger {
+public class UserManager {
     private DatabaseReference mUserRef;
-    private static UserManger sInstance = null;
+    private static UserManager sInstance = null;
     private User user;
 
-    private UserManger(){
+    private UserManager(){
         mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
@@ -35,9 +35,9 @@ public class UserManger {
                 || user.getForeignLanguages() != null || user.getSkills() != null;
     }
 
-    public static UserManger getInstance(){
+    public static UserManager getInstance(){
         if(sInstance == null){
-            sInstance = new UserManger();
+            sInstance = new UserManager();
         }
 
         return sInstance;

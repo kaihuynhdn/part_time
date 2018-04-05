@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
@@ -127,7 +127,7 @@ public class RecruitingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isValid()) {
                     Job job = new Job();
-                    job.setRecruiter(UserManger.getInstance().getUser());
+                    job.setRecruiter(UserManager.getInstance().getUser());
                     job.setName(mJobTitle.getText().toString());
                     job.setTimestamp(new Date().getTime());
                     job.setBenefits(mJobBenefits.getText().toString());

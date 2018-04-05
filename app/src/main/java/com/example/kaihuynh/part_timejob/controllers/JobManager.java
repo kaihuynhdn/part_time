@@ -34,6 +34,8 @@ public class JobManager {
     }
 
     public void loadData() {
+        refreshData();
+
         mJobRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -46,27 +48,7 @@ public class JobManager {
             }
         });
 
-        Query query = mJobRef.orderByChild("timestamp").limitToLast(10);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Job job = noteDataSnapshot.getValue(Job.class);
-                    if(job.getStatus().equals("Đang tuyển")){
-                        mJobList.add(job);
-                        if (mJobList.size() == NUMBER_DATA){
-                            break;
-                        }
-                    }
-                }
-                Collections.reverse(mJobList);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void loadMoreJob(long timestamp) {
@@ -79,7 +61,7 @@ public class JobManager {
                     Job job = noteDataSnapshot.getValue(Job.class);
                     mLoadMoreList.add(job);
                 }
-                mLoadMoreList.remove(mLoadMoreList.size()-1);
+                mLoadMoreList.remove(mLoadMoreList.size() - 1);
                 Collections.reverse(mLoadMoreList);
             }
 

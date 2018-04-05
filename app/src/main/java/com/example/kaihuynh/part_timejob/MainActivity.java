@@ -10,7 +10,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
-                            UserManger.getInstance().load(u);
+                            UserManager.getInstance().load(u);
                             JobManager.getInstance().loadData();
 
                             FINISH_LOADED = 2;

@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -122,8 +122,8 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 user.setEmail(userFirebase.getEmail());
                                 user.setFullName(mFullName.getText().toString());
 
-                                UserManger.getInstance().load(user);
-                                UserManger.getInstance().updateUser(user);
+                                UserManager.getInstance().load(user);
+                                UserManager.getInstance().updateUser(user);
 
                                 mProgress.dismiss();
                                 showAlertDialog();

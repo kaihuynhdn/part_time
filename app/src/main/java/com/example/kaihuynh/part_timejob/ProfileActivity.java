@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
@@ -94,7 +94,7 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this,R.drawable.back));
 
-        user = UserManger.getInstance().getUser();
+        user = UserManager.getInstance().getUser();
         mName.setText(user.getFullName());
         mEmail.setText(user.getEmail());
         mPhoneNumber.setText(user.getPhoneNumber());
@@ -140,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                 inputLanguage.setText(u.getForeignLanguages());
                 inputSkill.setText(u.getSkills());
                 mDescriptionTextView.setText(u.getPersonalDescription());
-                UserManger.getInstance().load(u);
+                UserManager.getInstance().load(u);
             }
 
             @Override
@@ -226,10 +226,10 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setFullName(inputName.getText().toString());
                 u.setPhoneNumber(inputPhoneNumber.getText().toString());
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 mName.requestFocus();
             }
         });
@@ -280,9 +280,9 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setPersonalDescription(editText.getText().toString());
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 mDescriptionTextView.requestFocus();
             }
         });
@@ -381,9 +381,9 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 inputSkill.requestFocus();
             }
         });
@@ -508,9 +508,9 @@ public class ProfileActivity extends AppCompatActivity {
                         s += f.getName() + "\n";
                     }
                 }
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 inputLanguage.requestFocus();
             }
         });
@@ -596,9 +596,9 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setEducation(strings[numberPicker.getValue()]);
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 inputEducation.requestFocus();
             }
         });
@@ -676,9 +676,9 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setGender(genderChoice);
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 inputGender.requestFocus();
             }
         });
@@ -719,9 +719,9 @@ public class ProfileActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 calendar.set(year, month, day);
-                User u = UserManger.getInstance().getUser();
+                User u = UserManager.getInstance().getUser();
                 u.setDayOfBirth(calendar.getTime());
-                UserManger.getInstance().updateUser(u);
+                UserManager.getInstance().updateUser(u);
                 inputDOB.requestFocus();
             }
         };
@@ -747,9 +747,9 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            User u = UserManger.getInstance().getUser();
+            User u = UserManager.getInstance().getUser();
             u.setAddress(data.getStringExtra("location"));
-            UserManger.getInstance().updateUser(u);
+            UserManager.getInstance().updateUser(u);
             inputAddress.requestFocus();
         } else {
             inputAddress.setSelection(0);

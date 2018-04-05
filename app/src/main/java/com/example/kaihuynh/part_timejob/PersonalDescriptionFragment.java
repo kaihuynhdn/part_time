@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.kaihuynh.part_timejob.controllers.UserManger;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -95,7 +95,7 @@ public class PersonalDescriptionFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 calendar.set(year, month, dayOfMonth);
-                User user = UserManger.getInstance().getUser();
+                User user = UserManager.getInstance().getUser();
                 user.setAddress(PersonalInfoFragment.getInstance().getPersonalInfo().get("address"));
                 user.setGender(PersonalInfoFragment.getInstance().getPersonalInfo().get("gender"));
                 user.setDayOfBirth(calendar.getTime());
@@ -105,7 +105,7 @@ public class PersonalDescriptionFragment extends Fragment {
                 user.setSkills(SkillFragment.getInstance().getSkills());
                 user.setPersonalDescription(mDescription.getText().toString());
                 Log.v("date", calendar.getTime().toString());
-                UserManger.getInstance().updateUser(user);
+                UserManager.getInstance().updateUser(user);
                 showAlertDialog();
             }
         });
