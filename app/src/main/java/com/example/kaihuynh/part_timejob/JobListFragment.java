@@ -88,6 +88,18 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         mAdapter = new MyAdapter(mJobRecyclerView, getContext(), R.layout.job_list_item, mJobArrayList, this);
         mJobRecyclerView.setAdapter(mAdapter);
 
+        swipeRefreshLayout.setRefreshing(true);
+        JobManager.getInstance().refreshData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mJobArrayList = JobManager.getInstance().getJobs();
+                mAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+                mJobRecyclerView.setLayoutManager(scrollableLayoutManager);
+            }
+        }, 2000);
+
         enableLoadMore();
 
     }

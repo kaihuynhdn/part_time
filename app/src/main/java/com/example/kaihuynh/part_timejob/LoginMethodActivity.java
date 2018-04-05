@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.AccessToken;
@@ -38,19 +37,21 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class LoginMethodActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class LoginMethodActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "SignInActivity";
 
     private SignInButton mGoogleSignIn;
-    private Button mCreateButton ;
+    private Button mCreateButton;
     private TextView mToLoginTextView;
     private ProgressDialog mProgress;
 
@@ -59,8 +60,9 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
     //Firebase instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserDatabaseReference;
+
+    private FirebaseFirestore db;
+    private CollectionReference mUserReference;
 
     //Google instance variables
     private GoogleApiClient mGoogleApiClient;
@@ -86,8 +88,8 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
+        db = FirebaseFirestore.getInstance();
+        mUserReference = db.collection("users");
 
         googleButtonUi();
         mAuth = FirebaseAuth.getInstance();
@@ -95,30 +97,27 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
-                    mUserDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                if (user != null) {
+                    mUserReference.document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User u = dataSnapshot.getValue(User.class);
-                            UserManager.getInstance().load(u);
-                            if (mProgress.isShowing()){
-                                mProgress.dismiss();
+                        public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                            if(documentSnapshot!=null && documentSnapshot.exists()){
+                                User u = documentSnapshot.toObject(User.class);
+                                UserManager.getInstance().load(u);
+                                if (mProgress.isShowing()) {
+                                    mProgress.dismiss();
+                                }
+                                if (u != null) {
+                                    startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
+                                    finish();
+                                    LoginActivity.getInstance().finish();
+                                }
                             }
-                            if(u!=null){
-                                JobManager.getInstance().refreshData();
-                                startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
-                                finish();
-                                LoginActivity.getInstance().finish();
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
                         }
                     });
 
+                } else {
+                    Toast.makeText(LoginMethodActivity.this, "1", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -149,7 +148,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
             @Override
             public void onError(FacebookException error) {
-                if(mProgress.isShowing()){
+                if (mProgress.isShowing()) {
                     mProgress.dismiss();
                 }
             }
@@ -193,13 +192,12 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void googleButtonUi(){
+    private void googleButtonUi() {
         mGoogleSignIn.setSize(SignInButton.SIZE_STANDARD);
         for (int i = 0; i < mGoogleSignIn.getChildCount(); i++) {
             View v = mGoogleSignIn.getChildAt(i);
 
-            if (v instanceof TextView)
-            {
+            if (v instanceof TextView) {
                 TextView tv = (TextView) v;
                 tv.setTextSize(14);
                 tv.setText("ĐĂNG NHẬP BẰNG GOOGLE");
@@ -210,7 +208,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         }
     }
 
-    public static LoginMethodActivity getInstance(){
+    public static LoginMethodActivity getInstance() {
         if (sInstance == null) {
             sInstance = new LoginMethodActivity();
         }
@@ -236,7 +234,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(LoginMethodActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
-                if(mProgress.isShowing()){
+                if (mProgress.isShowing()) {
                     mProgress.dismiss();
                 }
                 // ...
@@ -284,31 +282,24 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             final FirebaseUser userFirebase = mAuth.getCurrentUser();
-                            mUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+                            mUserReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(!dataSnapshot.child(userFirebase.getUid()).exists()){
-                                        User user = new User();
-                                        user.setId(userFirebase.getUid().toString());
-                                        user.setEmail(userFirebase.getEmail());
-                                        user.setFullName(userFirebase.getDisplayName());
-
-                                        mUserDatabaseReference.child(user.getId()).setValue(user);
+                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                    if (documentSnapshots != null) {
+                                        for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
+                                            User u = document.getDocument().toObject(User.class);
+                                            if (u.getId().equals(userFirebase.getUid())) {
+                                                return;
+                                            }
+                                        }
                                     }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
+                                    User user = new User();
+                                    user.setId(userFirebase.getUid().toString());
+                                    user.setEmail(userFirebase.getEmail());
+                                    user.setFullName(userFirebase.getDisplayName());
+                                    mUserReference.document(userFirebase.getUid()).set(user);
                                 }
                             });
-
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
                         // ...
@@ -326,25 +317,25 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             final FirebaseUser userFirebase = mAuth.getCurrentUser();
-                            mUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+                            mUserReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(!dataSnapshot.child(userFirebase.getUid()).exists()){
-                                        User user = new User();
-                                        user.setId(userFirebase.getUid().toString());
-                                        user.setEmail(userFirebase.getEmail());
-                                        user.setFullName(userFirebase.getDisplayName());
-
-                                        mUserDatabaseReference.child(user.getId()).setValue(user);
+                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                    if (documentSnapshots != null) {
+                                        for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
+                                            User u = document.getDocument().toObject(User.class);
+                                            if (u.getId().equals(userFirebase.getUid())) {
+                                                return;
+                                            }
+                                        }
                                     }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
+                                    User user = new User();
+                                    user.setId(userFirebase.getUid().toString());
+                                    user.setEmail(userFirebase.getEmail());
+                                    user.setFullName(userFirebase.getDisplayName());
+                                    mUserReference.document(userFirebase.getUid()).set(user);
                                 }
                             });
-                            //updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginMethodActivity.this, "Authentication failed.",

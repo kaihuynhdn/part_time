@@ -3,15 +3,15 @@ package com.example.kaihuynh.part_timejob;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
     private boolean interrupt, firstLoad;
@@ -28,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private int FINISH_LOADED;
     private Thread t;
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserDatabaseReference;
+    //    private FirebaseDatabase mFirebaseDatabase;
+//    private DatabaseReference mUserDatabaseReference;
+    private FirebaseFirestore db;
+    private CollectionReference mUserReference;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
@@ -52,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
         FINISH_LOADED = 0;
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
+
+        db = FirebaseFirestore.getInstance();
+        mUserReference = db.collection("users");
 
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
@@ -76,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
         t = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.v("AAA", FINISH_LOADED + "");
                 while ((mProgressBar.getProgress() < 100 || FINISH_LOADED == 0)) {
+                    Log.v("AAA1", FINISH_LOADED + "");
                     android.os.SystemClock.sleep(30);
                     mHandler.post(new Runnable() {
                         @Override
@@ -88,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-
+                Log.v("AAA2", FINISH_LOADED + "");
                 if (mProgressBar.getProgress() >= 100 && FINISH_LOADED != 0) {
                     if (FINISH_LOADED == 1) {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -105,30 +113,28 @@ public class MainActivity extends AppCompatActivity {
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
 //                anim();
                 if (user == null) {
                     FINISH_LOADED = 1;
-
                 } else {
-                    mUserDatabaseReference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User u = dataSnapshot.getValue(User.class);
-                            UserManager.getInstance().load(u);
-                            JobManager.getInstance().loadData();
+                    mUserReference.document(user.getUid()).get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()){
+                                        User u = documentSnapshot.toObject(User.class);
+                                        UserManager.getInstance().load(u);
+                                        JobManager.getInstance().loadData();
 
-                            FINISH_LOADED = 2;
-                        }
+                                    }
+                                    FINISH_LOADED = 2;
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                        }
-                    });
                 }
             }
         };
@@ -148,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mAuth.removeAuthStateListener(mAuthStateListener);
+        if (mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 
     @Override

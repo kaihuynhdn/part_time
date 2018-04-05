@@ -34,11 +34,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.lang.reflect.Field;
 
@@ -60,7 +60,9 @@ public class HomePageActivity extends AppCompatActivity
     //Firebase Instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private DatabaseReference mUserRef;
+    //private DatabaseReference mUserRef;
+    private FirebaseFirestore db;
+    private CollectionReference mUserReference;
 
     //Google Instance variables
     private GoogleApiClient mGoogleApiClient;
@@ -87,8 +89,8 @@ public class HomePageActivity extends AppCompatActivity
 
     private void initialize() {
         user = UserManager.getInstance().getUser();
-//        mUserName.setText(user.getFullName());
-//        mUserEmail.setText(user.getEmail());
+        mUserName.setText(user.getFullName());
+        mUserEmail.setText(user.getEmail());
 
         toolbar.setTitle("Danh Sách Công Việc");
         mAuth = FirebaseAuth.getInstance();
@@ -102,7 +104,10 @@ public class HomePageActivity extends AppCompatActivity
             }
         };
 
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
+        db = FirebaseFirestore.getInstance();
+        mUserReference = db.collection("users");
+
+//        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -114,20 +119,32 @@ public class HomePageActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mUserRef.child(UserManager.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
+        mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User u = dataSnapshot.getValue(User.class);
-                mUserEmail.setText(u.getEmail());
-                mUserName.setText(u.getFullName());
-                UserManager.getInstance().load(u);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if(documentSnapshot!=null && documentSnapshot.exists()){
+                    User u = documentSnapshot.toObject(User.class);
+                    mUserEmail.setText(u.getEmail());
+                    mUserName.setText(u.getFullName());
+                    UserManager.getInstance().load(u);
+                }
             }
         });
+
+//        mUserRef.child(UserManager.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                User u = dataSnapshot.getValue(User.class);
+//                mUserEmail.setText(u.getEmail());
+//                mUserName.setText(u.getFullName());
+//                UserManager.getInstance().load(u);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
     }
 

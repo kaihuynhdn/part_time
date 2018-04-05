@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,11 +33,11 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ArrayList<String> languageList, skillList;
 
     //Firebase instance variables
-    private DatabaseReference mUserRef;
+    private CollectionReference mUserReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,27 +126,24 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         genderChoice = "";
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
-        mUserRef.child(user.getId()).addValueEventListener(new ValueEventListener() {
+        mUserReference = FirebaseFirestore.getInstance().collection("users");
+        mUserReference.document(user.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User u = dataSnapshot.getValue(User.class);
-                mName.setText(u.getFullName());
-                mEmail.setText(u.getEmail());
-                mPhoneNumber.setText(u.getPhoneNumber());
-                inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
-                inputGender.setText(u.getGender());
-                inputAddress.setText(u.getAddress());
-                inputEducation.setText(u.getEducation());
-                inputLanguage.setText(u.getForeignLanguages());
-                inputSkill.setText(u.getSkills());
-                mDescriptionTextView.setText(u.getPersonalDescription());
-                UserManager.getInstance().load(u);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult().exists()){
+                    User u = task.getResult().toObject(User.class);
+                    mName.setText(u.getFullName());
+                    mEmail.setText(u.getEmail());
+                    mPhoneNumber.setText(u.getPhoneNumber());
+                    inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
+                    inputGender.setText(u.getGender());
+                    inputAddress.setText(u.getAddress());
+                    inputEducation.setText(u.getEducation());
+                    inputLanguage.setText(u.getForeignLanguages());
+                    inputSkill.setText(u.getSkills());
+                    mDescriptionTextView.setText(u.getPersonalDescription());
+                    UserManager.getInstance().load(u);
+                }
             }
         });
     }
@@ -283,6 +281,7 @@ public class ProfileActivity extends AppCompatActivity {
                 User u = UserManager.getInstance().getUser();
                 u.setPersonalDescription(editText.getText().toString());
                 UserManager.getInstance().updateUser(u);
+                mDescriptionTextView.setText(editText.getText().toString());
                 mDescriptionTextView.requestFocus();
             }
         });

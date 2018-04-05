@@ -1,20 +1,20 @@
 package com.example.kaihuynh.part_timejob.controllers;
 
 import com.example.kaihuynh.part_timejob.models.User;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Created by Kai on 2018-02-03.
  */
 
 public class UserManager {
-    private DatabaseReference mUserRef;
+    private CollectionReference mUserReference;
     private static UserManager sInstance = null;
     private User user;
 
     private UserManager(){
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
+        mUserReference = FirebaseFirestore.getInstance().collection("users");
     }
 
     public void load(User u){
@@ -26,7 +26,7 @@ public class UserManager {
     }
 
     public void updateUser(User u){
-        mUserRef.child(u.getId()).setValue(u);
+        mUserReference.document(u.getId()).set(u);
     }
 
     public boolean isUpdated(){

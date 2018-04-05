@@ -14,11 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class PickLocationActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private String[] strings;
+    private ArrayList<String> arraylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +32,18 @@ public class PickLocationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         addComponents();
+        initialize();
         addEvents();
+    }
+
+    private void initialize() {
+        arraylist = new ArrayList<>();
+        strings = getResources().getStringArray(R.array.location);
+        for (String s : strings) {
+            arraylist.add(s);
+        }
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arraylist);
+        listView.setAdapter(adapter);
     }
 
     private void addEvents() {
@@ -36,7 +51,7 @@ public class PickLocationActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
-                intent.putExtra("location", strings[i].toString());
+                intent.putExtra("location", arraylist.get(i));
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -45,9 +60,6 @@ public class PickLocationActivity extends AppCompatActivity {
 
     private void addComponents() {
         listView = findViewById(R.id.lv_location);
-        strings = getResources().getStringArray(R.array.location);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, strings);
-        listView.setAdapter(adapter);
     }
 
     @Override
@@ -69,7 +81,22 @@ public class PickLocationActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+                ArrayList<String> list = new ArrayList<>();
+                for (String ss : strings) {
+                    list.add(ss);
+                }
+                s = s.toLowerCase(Locale.getDefault());
+                arraylist.clear();
+                if (s.length() == 0) {
+                    arraylist.addAll(list);
+                } else {
+                    for (String string : list) {
+                        if (string.toLowerCase(Locale.getDefault()).contains(s)) {
+                            arraylist.add(string);
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 return false;
             }
         });
@@ -83,7 +110,7 @@ public class PickLocationActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
         }

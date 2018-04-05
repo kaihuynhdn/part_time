@@ -1,16 +1,20 @@
 package com.example.kaihuynh.part_timejob.controllers;
 
+import android.support.annotation.NonNull;
+
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query.Direction;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Kai on 2018-02-03.
@@ -23,80 +27,103 @@ public class JobManager {
     private ArrayList<Job> mLoadMoreList;
     private int jobCount = 0;
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mJobRef;
+    //    private FirebaseDatabase mFirebaseDatabase;
+//    private DatabaseReference mJobRef;
+    private CollectionReference mJobReference;
+
 
     private JobManager() {
         this.mJobList = new ArrayList<>();
         this.mLoadMoreList = new ArrayList<>();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mJobRef = mFirebaseDatabase.getReference().child("jobs");
+        mJobReference = FirebaseFirestore.getInstance().collection("jobs");
     }
 
     public void loadData() {
         refreshData();
-
-        mJobRef.orderByKey().addValueEventListener(new ValueEventListener() {
+        mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jobCount = (int) dataSnapshot.getChildrenCount();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                jobCount = (int) documentSnapshots.getDocuments().size();
             }
         });
-
-
     }
 
     public void loadMoreJob(long timestamp) {
-        Query query = mJobRef.orderByChild("timestamp").endAt(timestamp).limitToLast(NUMBER_DATA);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mLoadMoreList.clear();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Job job = noteDataSnapshot.getValue(Job.class);
-                    mLoadMoreList.add(job);
-                }
-                mLoadMoreList.remove(mLoadMoreList.size() - 1);
-                Collections.reverse(mLoadMoreList);
-            }
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(NUMBER_DATA).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            mLoadMoreList.clear();
+                            for (DocumentSnapshot d : task.getResult()) {
+                                Job job = d.toObject(Job.class);
+                                mLoadMoreList.add(job);
+                            }
+                            mLoadMoreList.remove(mLoadMoreList.size()-1);
+                        }
+                    }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        Query query = mJobRef.orderByChild("timestamp").endAt(timestamp).limitToLast(NUMBER_DATA);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mLoadMoreList.clear();
+//                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+//                    Job job = noteDataSnapshot.getValue(Job.class);
+//                    mLoadMoreList.add(job);
+//                }
+//                mLoadMoreList.remove(mLoadMoreList.size() - 1);
+//                Collections.reverse(mLoadMoreList);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     public void refreshData() {
-        Query query = mJobRef.orderByChild("timestamp").limitToLast(NUMBER_DATA);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mJobList.clear();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Job job = noteDataSnapshot.getValue(Job.class);
-                    mJobList.add(job);
-                }
-                Collections.reverse(mJobList);
-            }
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(NUMBER_DATA).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            mJobList.clear();
+                            for (DocumentSnapshot d : task.getResult()) {
+                                Job job = d.toObject(Job.class);
+                                mJobList.add(job);
+                            }
+                        }
+                    }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+//        Query query = mJobRef.orderByChild("timestamp").limitToLast(NUMBER_DATA);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mJobList.clear();
+//                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+//                    Job job = noteDataSnapshot.getValue(Job.class);
+//                    mJobList.add(job);
+//                }
+//                Collections.reverse(mJobList);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
 
     public void addJob(Job job) {
-        String id = mJobRef.push().getKey();
+        String id = mJobReference.document().getId();
         job.setId(id);
-        mJobRef.child(id).setValue(job);
+        mJobReference.document(id).set(job);
     }
 
     public ArrayList<Job> getJobs() {
