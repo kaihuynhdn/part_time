@@ -20,6 +20,7 @@ import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -92,19 +93,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             Job job = mJobList.get(position);
-            String s = "";
-            Date date = new Date();
-            date.setTime(job.getTimestamp());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)){
-                s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1) + " năm " + calendar.get(Calendar.YEAR)
-                        + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-            }else {
-                s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1)
-                        + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-            }
-            itemViewHolder.mJobPostedDate.setText(s);
+            Calendar current = Calendar.getInstance();
+            Date date = new Date(job.getTimestamp());
+            Calendar postingDate = Calendar.getInstance();
+            postingDate.setTime(date);
+            itemViewHolder.mJobPostedDate.setText(getTime(current, postingDate));
             itemViewHolder.mJobLocation.setText(job.getLocation());
             itemViewHolder.mJobTitle.setText(job.getName());
             itemViewHolder.mJobSalary.setText(job.getSalary());
@@ -143,6 +136,31 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public void setLoaded(){
         isLoading = false;
+    }
+
+    private String getTime(Calendar current, Calendar postingDate){
+        String s = "";
+        int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
+        if(minus<2){
+            if (minus == 1){
+                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+            }else if(minus == 0){
+                int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
+                if (minus1>0){
+                    s = minus1 + " giờ trước";
+                }else {
+                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                        s = "1 phút trước";
+                    }else {
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                    }
+                }
+            }
+        }else {
+            s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
+        }
+
+        return s;
     }
 
     private void showPopupWindow(View view, int menu, final int position) {

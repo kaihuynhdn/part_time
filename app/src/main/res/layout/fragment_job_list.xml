@@ -12,42 +12,53 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:id="@+id/relative_layout"
-                android:elevation="@dimen/distance_view_20"
-                android:minHeight="@dimen/bottom_navigation"
-                android:paddingLeft="@dimen/activity_padding"
-                android:paddingRight="@dimen/activity_padding"
-                android:background="#5c82d8f4"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:fontFamily="@font/iciel_cadena"
-                    android:textSize="16sp"
-                    android:layout_centerVertical="true"
-                    android:text="1,111 việc làm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:id="@+id/relative_layout"
+                    android:elevation="@dimen/distance_view_20"
+                    android:minHeight="@dimen/bottom_navigation"
+                    android:paddingLeft="@dimen/activity_padding"
+                    android:paddingRight="@dimen/activity_padding"
+                    android:background="#5c9fd8ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/btn_arrange"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/arrangement"
-                    android:textAllCaps="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:fontFamily="@font/iciel_cadena"
+                        android:textSize="16sp"
+                        android:layout_centerVertical="true"
+                        android:text="1,111 việc làm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-                <Button
-                    android:layout_toLeftOf="@id/btn_arrange"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/distance_view_5"
-                    android:text="@string/location"
-                    android:textAllCaps="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
+                    <Button
+                        android:id="@+id/btn_arrange"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/arrangement"
+                        android:textAllCaps="false"
+                        android:layout_width="wrap_content"
+                        android:fontFamily="@font/iciel_cadena"
+                        android:textColor="@color/white"
+                        android:background="@drawable/next_button"
+                        android:layout_height="@dimen/distance_view_40" />
+
+                    <Button
+                        android:layout_toLeftOf="@id/btn_arrange"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/distance_view_5"
+                        android:text="@string/location"
+                        android:textColor="@color/white"
+                        android:background="@drawable/next_button"
+                        android:fontFamily="@font/iciel_cadena"
+                        android:textAllCaps="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/distance_view_40" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"

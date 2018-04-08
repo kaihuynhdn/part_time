@@ -117,7 +117,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                     });
 
                 } else {
-                    Toast.makeText(LoginMethodActivity.this, "1", Toast.LENGTH_SHORT).show();
+
                 }
             }
         };

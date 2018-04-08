@@ -14,14 +14,14 @@
         android:layout_height="@dimen/distance_view_5"
         android:background="@drawable/drop_shadow" />
 
-    <FrameLayout
-        android:id="@+id/frame_layout_home"
+    <com.example.kaihuynh.part_timejob.others.CustomViewPager
+        android:id="@+id/view_pager_home"
         android:layout_above="@id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"></FrameLayout>
+        android:layout_alignParentTop="true"></com.example.kaihuynh.part_timejob.others.CustomViewPager>
 
     <View
         android:layout_width="match_parent"

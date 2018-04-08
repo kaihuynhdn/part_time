@@ -39,7 +39,6 @@ public class JobManager {
     }
 
     public void loadData() {
-        refreshData();
         mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -49,17 +48,24 @@ public class JobManager {
     }
 
     public void loadMoreJob(long timestamp) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(NUMBER_DATA).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             mLoadMoreList.clear();
                             for (DocumentSnapshot d : task.getResult()) {
                                 Job job = d.toObject(Job.class);
-                                mLoadMoreList.add(job);
+                                if (job.getStatus().equals("Đang tuyển")) {
+                                    mLoadMoreList.add(job);
+                                }
+                                if (mLoadMoreList.size() == NUMBER_DATA) {
+                                    break;
+                                }
                             }
-                            mLoadMoreList.remove(mLoadMoreList.size()-1);
+                            if(mLoadMoreList.size()>0){
+                                mLoadMoreList.remove(0);
+                            }
                         }
                     }
                 });
@@ -85,15 +91,21 @@ public class JobManager {
     }
 
     public void refreshData() {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(NUMBER_DATA).get()
+
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             mJobList.clear();
                             for (DocumentSnapshot d : task.getResult()) {
                                 Job job = d.toObject(Job.class);
-                                mJobList.add(job);
+                                if (job.getStatus().equals("Đang tuyển")) {
+                                    mJobList.add(job);
+                                }
+                                if (mJobList.size() == NUMBER_DATA) {
+                                    break;
+                                }
                             }
                         }
                     }

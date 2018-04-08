@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
+import com.example.kaihuynh.part_timejob.adapters.MyAdapter;
 import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JobLikedFragment extends Fragment implements JobAdapter.ListItemClickListener{
+public class JobLikedFragment extends Fragment implements MyAdapter.ListItemClickListener{
 
-    private JobAdapter mAdapter;
+    private MyAdapter mAdapter;
     private RecyclerView mLikedJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
 
@@ -54,7 +54,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
             mJobArrayList.add(job);
         }
 
-        mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
+        mAdapter = new MyAdapter(mLikedJobRecyclerView, getContext(), R.layout.job_list_item, mJobArrayList, this);
         mLikedJobRecyclerView.setAdapter(mAdapter);
     }
 
@@ -72,7 +72,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
         startActivity(new Intent(getContext(), JobDescriptionActivity.class));
     }
 
-    public JobAdapter getAdapter() {
+    public MyAdapter getAdapter() {
         return mAdapter;
     }
 

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tv_job_status_symbol"
             android:textSize="16sp"
             android:layout_marginRight="@dimen/distance_view_23"
             android:fontFamily="@font/roboto_regular"
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_job_status"
             android:text="Đang tuyển"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
@@ -50,7 +52,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="Thương lượng"
+            android:id="@+id/tv_job_salary"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/orange"
             android:textSize="16sp"
@@ -78,7 +80,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="Đà Nẵng"
+            android:id="@+id/tv_job_location"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
             android:textSize="16sp"
@@ -102,12 +104,12 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/tv_job_benefit"
         android:layout_marginTop="@dimen/distance_view_10"
         android:textSize="16sp"
         android:layout_marginLeft="@dimen/distance_view_10"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/back_87"
-        android:text="&#9679; Bao ăn ngày 2 bữa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

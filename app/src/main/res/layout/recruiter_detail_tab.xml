@@ -19,37 +19,9 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="Huỳnh Quang Thảo"
+            android:id="@+id/tv_recruiter_name"
             android:fontFamily="@font/roboto_regular"
             android:textColor="#ff8f00"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <View
-        android:background="@color/grey_400"
-        android:layout_marginTop="@dimen/distance_view_10"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/distance_view_1"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/distance_view_15"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:src="@drawable/dob"
-            android:layout_marginRight="@dimen/distance_view_20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:text="20-01-1995"
-            android:fontFamily="@font/roboto_regular"
-            android:textColor="@color/back_87"
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -75,7 +47,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="kaihuynhdn@gmail.com"
+            android:id="@+id/tv_recruiter_email"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
             android:textSize="16sp"
@@ -103,7 +75,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="0935432632"
+            android:id="@+id/tv_recruiter_phone"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
             android:textSize="16sp"
@@ -130,7 +102,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="Đà Nẵng"
+            android:id="@+id/tv_recruiter_address"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
             android:textSize="16sp"

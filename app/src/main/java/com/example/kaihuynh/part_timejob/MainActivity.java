@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
 
+        JobManager.getInstance().loadData();
+
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,9 +84,7 @@ public class MainActivity extends AppCompatActivity {
         t = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.v("AAA", FINISH_LOADED + "");
                 while ((mProgressBar.getProgress() < 100 || FINISH_LOADED == 0)) {
-                    Log.v("AAA1", FINISH_LOADED + "");
                     android.os.SystemClock.sleep(30);
                     mHandler.post(new Runnable() {
                         @Override
@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-                Log.v("AAA2", FINISH_LOADED + "");
                 if (mProgressBar.getProgress() >= 100 && FINISH_LOADED != 0) {
                     if (FINISH_LOADED == 1) {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -127,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                                     if (documentSnapshot.exists()){
                                         User u = documentSnapshot.toObject(User.class);
                                         UserManager.getInstance().load(u);
-                                        JobManager.getInstance().loadData();
 
                                     }
                                     FINISH_LOADED = 2;

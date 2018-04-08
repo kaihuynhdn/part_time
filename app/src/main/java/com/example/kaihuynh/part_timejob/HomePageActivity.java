@@ -11,7 +11,6 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,8 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.kaihuynh.part_timejob.adapters.HomeViewPagerAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -50,6 +51,7 @@ public class HomePageActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView mUserName, mUserEmail;
+    private CustomViewPager viewPager;
     private View header;
     private User user;
 
@@ -88,9 +90,18 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initialize() {
+        HomeViewPagerAdapter adapter = new HomeViewPagerAdapter(HomePageActivity.this.getSupportFragmentManager());
+        adapter.addFragment(new JobListFragment());
+        adapter.addFragment(new JobLikedFragment());
+        adapter.addFragment(new JobAppliedFragment());
+        adapter.addFragment(new Fragment());
+        viewPager.setAdapter(adapter);
+
         user = UserManager.getInstance().getUser();
-        mUserName.setText(user.getFullName());
-        mUserEmail.setText(user.getEmail());
+        if(user.getFullName()!=null && user.getEmail()!=null){
+            mUserName.setText(user.getFullName());
+            mUserEmail.setText(user.getEmail());
+        }
 
         toolbar.setTitle("Danh Sách Công Việc");
         mAuth = FirebaseAuth.getInstance();
@@ -156,11 +167,12 @@ public class HomePageActivity extends AppCompatActivity
         mUserEmail = header.findViewById(R.id.tv_user_email);
         mUserName = header.findViewById(R.id.tv_user_name);
         mBottomNavigationView = findViewById(R.id.bottom_nav);
+        viewPager = findViewById(R.id.view_pager_home);
         sInstance = this;
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout_home, new JobListFragment());
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frame_layout_home, new JobListFragment());
+//        transaction.commit();
     }
 
     private void addEvents() {
@@ -176,25 +188,29 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void bottomNavigationEvents(MenuItem item) {
-        Fragment fragment = new JobListFragment();
+//        Fragment fragment = new JobListFragment();
         switch (item.getItemId()) {
             case R.id.action_home:
-                fragment = new JobListFragment();
+//                fragment = new JobListFragment();
+                viewPager.setCurrentItem(0);
                 break;
             case R.id.action_like_jobs:
-                fragment = new JobLikedFragment();
+//                fragment = new JobLikedFragment();
+                viewPager.setCurrentItem(1);
                 break;
             case R.id.action_applied_jobs:
-                fragment = new JobAppliedFragment();
+//                fragment = new JobAppliedFragment();
+                viewPager.setCurrentItem(2);
                 break;
             case R.id.action_notification:
-                fragment = new Fragment();
+//                fragment = new Fragment();
+                viewPager.setCurrentItem(3);
                 break;
         }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout_home, fragment);
-        transaction.commit();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frame_layout_home, fragment);
+//        transaction.commit();
     }
 
     public BottomNavigationView getmBottomNavigationView() {
@@ -285,7 +301,7 @@ public class HomePageActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(HomePageActivity.this, RegisterPersonalInfoActivity.class);
-                intent.putExtra("activity", "HomePageActivity");
+                intent.putExtra("activity", "RecruitingActivity");
                 startActivity(intent);
             }
         });

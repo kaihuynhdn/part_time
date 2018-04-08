@@ -20,6 +20,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv_job_title"
                 android:layout_marginTop="@dimen/distance_view_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,6 +32,7 @@
                 android:textSize="22sp" />
 
             <TextView
+                android:id="@+id/tv_job_date"
                 android:text="2 ngày trước"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_gravity="center_horizontal"
@@ -107,9 +109,10 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/tv_job_description"
                         android:layout_marginLeft="@dimen/distance_view_10"
-                        android:text="abc \ndce \noir"
                         android:textSize="16sp"
+                        android:lineSpacingExtra="5dp"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColor="@color/back_87"
                         android:fontFamily="@font/roboto_regular"
@@ -142,9 +145,10 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/tv_job_requirement"
                         android:layout_marginLeft="@dimen/distance_view_10"
-                        android:text="abc \ndce \noir"
                         android:textSize="16sp"
+                        android:lineSpacingExtra="5dp"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColor="@color/back_87"
                         android:fontFamily="@font/roboto_regular"

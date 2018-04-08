@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,10 +145,18 @@ public class RecruitingActivity extends AppCompatActivity {
     }
 
     private String requirementToString() {
-        return "Kĩ năng:\n\t" + inputSkill.getText().toString() + "\n" +
-                "Ngoại ngữ:\n\t" + inputLanguage.getText().toString() + "\n" +
-                "Giới tính:\t" + inputGender.getText().toString() + "\n" +
-                "Khác:\n\t" + mJobRequirement.getText().toString();
+        String s =  mJobRequirement.getText().toString() + "\n\n";
+        if(!inputSkill.getText().toString().equals("")){
+            SpannableString spannableString = new SpannableString("Kĩ năng:" + "\n\t" + inputSkill.getText().toString() + "\n");
+            s += "Kĩ năng:" + "\n\t" + inputSkill.getText().toString() + "\n";
+        }
+        if(!inputLanguage.getText().toString().equals("")){
+            s += "Ngoại ngữ:" + "\n\t" + inputLanguage.getText().toString() + "\n";
+        }
+        if(!inputGender.getText().toString().equals("")){
+            s += "Giới tính:" + "\n\t" + inputGender.getText().toString() + "\n";
+        }
+        return s;
 
     }
 
@@ -208,8 +217,8 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final EditText input = new EditText(RecruitingActivity.this);
-                input.setText(mJobTitle.getText().toString());
-                input.setSelection(mJobTitle.getText().toString().length());
+                input.setText(mJobTitle.getText().toString().equals("Job Title")? "" : mJobTitle.getText().toString());
+                input.setSelection(input.getText().length());
                 AlertDialog dialog = (new AlertDialog.Builder(RecruitingActivity.this))
                         .setTitle("Tiêu đề công việc:")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {

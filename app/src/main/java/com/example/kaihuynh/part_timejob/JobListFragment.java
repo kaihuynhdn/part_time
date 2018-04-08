@@ -33,26 +33,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     private RelativeLayout relativeLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private LinearLayoutManager scrollableLayoutManager = new LinearLayoutManager(getContext()){
-        @Override
-        public boolean canScrollVertically() {
-            return true;
-        }
-    };
-
-    private LinearLayoutManager cantScrollLayoutManager = new LinearLayoutManager(getContext()){
-        @Override
-        public boolean canScrollVertically() {
-            return false;
-        }
-    };
-
-    private int scrollDist = 0;
-    private boolean isVisible = true;
-    private static final float MINIMUM = 25;
-
-    private boolean loading = true;
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private boolean isLoaded = false;
 
     public JobListFragment() {
         // Required empty public constructor
@@ -68,6 +49,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         addComponents(view);
         initialize();
         setWidgetListener();
+
         return view;
     }
 
@@ -82,23 +64,42 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
 
         mJobArrayList = JobManager.getInstance().getJobs();
-        mJobRecyclerView.setLayoutManager(scrollableLayoutManager);
+        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return true;
+            }
+        });
         mJobRecyclerView.setHasFixedSize(true);
 
         mAdapter = new MyAdapter(mJobRecyclerView, getContext(), R.layout.job_list_item, mJobArrayList, this);
         mJobRecyclerView.setAdapter(mAdapter);
 
-        swipeRefreshLayout.setRefreshing(true);
-        JobManager.getInstance().refreshData();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mJobArrayList = JobManager.getInstance().getJobs();
-                mAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-                mJobRecyclerView.setLayoutManager(scrollableLayoutManager);
-            }
-        }, 2000);
+        if (!isLoaded){
+            swipeRefreshLayout.setRefreshing(true);
+            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
+            JobManager.getInstance().refreshData();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mJobArrayList = JobManager.getInstance().getJobs();
+                    mAdapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+                    mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                        @Override
+                        public boolean canScrollVertically() {
+                            return true;
+                        }
+                    });
+                    isLoaded = true;
+                }
+            }, 2000);
+        }
 
         enableLoadMore();
 
@@ -109,9 +110,11 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             @Override
             public void onLoadMore() {
                 if(mJobArrayList.size() <= JobManager.getInstance().getJobCount() && mJobArrayList.size()>=10){
-                    mJobArrayList.add(null);
+                    if (mJobArrayList.size()>0 && mJobArrayList.get(mJobArrayList.size()-1)!= null){
+                        mJobArrayList.add(null);
+                    }
                     mAdapter.notifyItemInserted(mJobArrayList.size()-1);
-                    JobManager.getInstance().loadMoreJob(mJobArrayList.get(mJobArrayList.size()-2).getTimestamp());
+                    JobManager.getInstance().loadMoreJob(mJobArrayList.get(mJobArrayList.size()-2) == null ? 0:mJobArrayList.get(mJobArrayList.size()-2).getTimestamp());
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -135,7 +138,12 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mJobRecyclerView.setLayoutManager(cantScrollLayoutManager);
+                mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                });
                 JobManager.getInstance().refreshData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -143,7 +151,12 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                         mJobArrayList = JobManager.getInstance().getJobs();
                         mAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
-                        mJobRecyclerView.setLayoutManager(scrollableLayoutManager);
+                        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                            @Override
+                            public boolean canScrollVertically() {
+                                return true;
+                            }
+                        });
                     }
                 }, 2000);
             }
@@ -154,6 +167,8 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
     @Override
     public void onListItemClick(int clickItemIndex) {
-        startActivity(new Intent(getContext(), JobDescriptionActivity.class));
+        Intent intent = new Intent(getContext(), JobDescriptionActivity.class);
+        intent.putExtra("job", mJobArrayList.get(clickItemIndex));
+        startActivity(intent);
     }
 }

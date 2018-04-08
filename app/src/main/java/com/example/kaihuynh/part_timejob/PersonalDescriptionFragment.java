@@ -128,6 +128,8 @@ public class PersonalDescriptionFragment extends Fragment {
                     LoginMethodActivity.getInstance().finish();
                 }else if(getActivity().getIntent().getStringExtra("activity").equals("HomePageActivity")){
                     startActivity(new Intent(getContext(), ProfileActivity.class));
+                }else if(getActivity().getIntent().getStringExtra("activity").equals("RecruitingActivity")){
+                    startActivity(new Intent(getContext(), RecruitingActivity.class));
                 }
                 getActivity().finish();
             }
