@@ -61,4 +61,20 @@
         <item name="android:paddingLeft">@dimen/distance_view_5</item>
         <item name="android:text">@string/fb_button</item>
     </style>
+    
+    <style name="ApplyButton" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/colorRaiseButton</item>
+    </style>
+
+    <style name="SaveButton" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/SaveButton</item>
+    </style>
+
+    <style name="RegisterButton" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/colorRaiseButton</item>
+    </style>
+
+    <style name="LocationButton" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/colorRaiseButton</item>
+    </style>
 </resources>

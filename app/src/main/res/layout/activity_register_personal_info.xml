@@ -8,50 +8,54 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/splash_background"
     tools:context="com.example.kaihuynh.part_timejob.RegisterPersonalInfoActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@drawable/grey_background"
+    <android.support.v7.widget.CardView
+        app:cardElevation="@dimen/distance_view_10"
+        app:cardCornerRadius="@dimen/distance_view_5"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.shuhart.stepview.StepView
-            android:id="@+id/stepView_register"
-            android:layout_marginTop="@dimen/distance_view_10"
-            android:layout_marginLeft="@dimen/distance_view_40"
-            android:layout_marginRight="@dimen/distance_view_40"
-            android:padding="@dimen/activity_padding"
-            app:stepsNumber="4"
-            app:animationType="Line"
-            app:selectedCircleColor="@color/lightBlue_700"
-            app:nextStepLineColor="@color/grey_400"
-            app:doneCircleColor="@color/lightBlue_700"
-            app:doneStepLineColor="@color/lightBlue_700"
-            app:doneTextColor="@color/white"
-            app:selectedTextColor="@color/white"
-            app:nextTextColor="@color/lightBlue_700"
-            app:doneCircleRadius="@dimen/distance_view_10"
-            app:stepLineWidth="@dimen/distance_view_2"
-            android:animationDuration="@android:integer/config_shortAnimTime"
-            app:stepPadding="@dimen/distance_view_5"
-            app:selectedStepNumberColor="@color/white"
-            app:doneStepMarkColor="@color/white"
-            app:stepNumberTextSize="12sp"
-            app:stepViewStyle="@style/StepView"
-            app:selectedCircleRadius="@dimen/distance_view_10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.example.kaihuynh.part_timejob.others.CustomViewPager
-            android:id="@+id/viewPage_register"
-            android:padding="@dimen/activity_padding"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.example.kaihuynh.part_timejob.others.CustomViewPager>
+            <com.shuhart.stepview.StepView
+                android:id="@+id/stepView_register"
+                android:layout_marginTop="@dimen/distance_view_10"
+                android:layout_marginLeft="@dimen/distance_view_40"
+                android:layout_marginRight="@dimen/distance_view_40"
+                android:padding="@dimen/activity_padding"
+                app:stepsNumber="4"
+                app:animationType="Line"
+                app:selectedCircleColor="@color/lightBlue_700"
+                app:nextStepLineColor="@color/grey_400"
+                app:doneCircleColor="@color/lightBlue_700"
+                app:doneStepLineColor="@color/lightBlue_700"
+                app:doneTextColor="@color/white"
+                app:selectedTextColor="@color/white"
+                app:nextTextColor="@color/lightBlue_700"
+                app:doneCircleRadius="@dimen/distance_view_10"
+                app:stepLineWidth="@dimen/distance_view_2"
+                android:animationDuration="@android:integer/config_shortAnimTime"
+                app:stepPadding="@dimen/distance_view_5"
+                app:selectedStepNumberColor="@color/white"
+                app:doneStepMarkColor="@color/white"
+                app:stepNumberTextSize="12sp"
+                app:stepViewStyle="@style/StepView"
+                app:selectedCircleRadius="@dimen/distance_view_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            <com.example.kaihuynh.part_timejob.others.CustomViewPager
+                android:id="@+id/viewPage_register"
+                android:padding="@dimen/activity_padding"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </com.example.kaihuynh.part_timejob.others.CustomViewPager>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

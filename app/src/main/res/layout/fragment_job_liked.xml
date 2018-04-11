@@ -5,13 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.kaihuynh.part_timejob.JobLikedFragment">
 
-    <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sw_like_jobs"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
         <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -26,6 +23,5 @@
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
-    </android.support.v4.widget.NestedScrollView>
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

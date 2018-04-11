@@ -96,6 +96,7 @@ public class HomePageActivity extends AppCompatActivity
         adapter.addFragment(new JobAppliedFragment());
         adapter.addFragment(new Fragment());
         viewPager.setAdapter(adapter);
+        viewPager.setPagingEnabled(false);
 
         user = UserManager.getInstance().getUser();
         if(user.getFullName()!=null && user.getEmail()!=null){
@@ -141,22 +142,6 @@ public class HomePageActivity extends AppCompatActivity
                 }
             }
         });
-
-//        mUserRef.child(UserManager.getInstance().getUser().getId()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                User u = dataSnapshot.getValue(User.class);
-//                mUserEmail.setText(u.getEmail());
-//                mUserName.setText(u.getFullName());
-//                UserManager.getInstance().load(u);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
     private void addComponents() {
@@ -169,10 +154,6 @@ public class HomePageActivity extends AppCompatActivity
         mBottomNavigationView = findViewById(R.id.bottom_nav);
         viewPager = findViewById(R.id.view_pager_home);
         sInstance = this;
-
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.frame_layout_home, new JobListFragment());
-//        transaction.commit();
     }
 
     private void addEvents() {
@@ -188,29 +169,21 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void bottomNavigationEvents(MenuItem item) {
-//        Fragment fragment = new JobListFragment();
         switch (item.getItemId()) {
             case R.id.action_home:
-//                fragment = new JobListFragment();
                 viewPager.setCurrentItem(0);
                 break;
             case R.id.action_like_jobs:
-//                fragment = new JobLikedFragment();
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.action_applied_jobs:
-//                fragment = new JobAppliedFragment();
                 viewPager.setCurrentItem(2);
                 break;
             case R.id.action_notification:
-//                fragment = new Fragment();
                 viewPager.setCurrentItem(3);
                 break;
         }
 
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.frame_layout_home, fragment);
-//        transaction.commit();
     }
 
     public BottomNavigationView getmBottomNavigationView() {

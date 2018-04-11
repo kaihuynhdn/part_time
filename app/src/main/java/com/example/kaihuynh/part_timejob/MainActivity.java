@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (documentSnapshot.exists()){
                                         User u = documentSnapshot.toObject(User.class);
                                         UserManager.getInstance().load(u);
+                                        JobManager.getInstance().loadJobByUser(u.getId());
 
                                     }
                                     FINISH_LOADED = 2;

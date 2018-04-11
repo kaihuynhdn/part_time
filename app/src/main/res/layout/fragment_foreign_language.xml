@@ -52,12 +52,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_gravity="right"
-                    android:background="@drawable/next_button"
                     android:fontFamily="@font/iciel_cadena"
                     android:text="@string/previous"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:theme="@style/LocationButton"
+                    style="@style/Widget.AppCompat.Button.Colored"/>
 
                 <Button
                     android:id="@+id/btn_next_foreignLanguage"
@@ -65,12 +66,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
-                    android:background="@drawable/next_button"
                     android:fontFamily="@font/iciel_cadena"
                     android:text="@string/next"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:theme="@style/LocationButton"
+                    style="@style/Widget.AppCompat.Button.Colored"/>
             </RelativeLayout>
 
         </RelativeLayout>

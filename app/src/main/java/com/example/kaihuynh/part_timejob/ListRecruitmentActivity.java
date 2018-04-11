@@ -2,12 +2,17 @@ package com.example.kaihuynh.part_timejob;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
 import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
     private JobAdapter mAdapter;
     private RecyclerView mListRecruitmentRecyclerView;
     private ArrayList<Job> mJobArrayList;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static ListRecruitmentActivity sInstance = null;
 
@@ -29,36 +35,64 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         addComponents();
-        loadDataToRecyclerView();
-    }
-
-    private void loadDataToRecyclerView() {
-        for (int i = 0; i<11; i++){
-            Job job = new Job();
-            job.setName("Job Title " + i);
-            job.setSalary(String.valueOf(i));
-            //job.setTimestamp(new Date().getTime());
-            job.setLocation("Location " + i);
-
-            mJobArrayList.add(job);
-        }
-
-        mAdapter = new JobAdapter(this, R.layout.job_list_item, mJobArrayList, this);
-        mListRecruitmentRecyclerView.setAdapter(mAdapter);
+        initialize();
+        setWigetListeners();
     }
 
     private void addComponents() {
-        sInstance=this;
         mListRecruitmentRecyclerView = findViewById(R.id.rv_list_recruitment);
-        mJobArrayList = new ArrayList<>();
+        swipeRefreshLayout = findViewById(R.id.sw_list_recruitment);
+    }
+
+    private void initialize() {
+        sInstance=this;
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(ListRecruitmentActivity.this, R.color.lightBlue_700));
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mListRecruitmentRecyclerView.setLayoutManager(layoutManager);
         mListRecruitmentRecyclerView.setHasFixedSize(true);
+
+        mJobArrayList = new ArrayList<>();
+        mJobArrayList.addAll(JobManager.getInstance().getJobListByUser());
+        mAdapter = new JobAdapter(ListRecruitmentActivity.this, R.layout.job_list_item, mJobArrayList, this);
+        mListRecruitmentRecyclerView.setAdapter(mAdapter);
+    }
+
+
+    private void setWigetListeners() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mListRecruitmentRecyclerView.setLayoutManager(new LinearLayoutManager(ListRecruitmentActivity.this){
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                });
+                JobManager.getInstance().loadJobByUser(UserManager.getInstance().getUser().getId());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mJobArrayList = JobManager.getInstance().getJobListByUser();
+                        mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                        mListRecruitmentRecyclerView.setLayoutManager(new LinearLayoutManager(ListRecruitmentActivity.this){
+                            @Override
+                            public boolean canScrollVertically() {
+                                return true;
+                            }
+                        });
+                    }
+                }, 2000);
+            }
+        });
     }
 
     @Override
     public void onListItemClick(int clickItemIndex) {
-        startActivity(new Intent(this, ListCandidateActivity.class));
+        Intent intent = new Intent(this, ListCandidateActivity.class);
+        intent.putExtra("job", mJobArrayList.get(clickItemIndex));
+        startActivity(intent);
     }
 
     public static ListRecruitmentActivity getInstance(){

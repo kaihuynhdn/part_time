@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity{
                                     if (documentSnapshot.exists()){
                                         User u = documentSnapshot.toObject(User.class);
                                         UserManager.getInstance().load(u);
-
+                                        JobManager.getInstance().loadJobByUser(u.getId());
                                     }
                                     if (mProgress.isShowing()){
                                         mProgress.dismiss();
@@ -86,24 +87,6 @@ public class LoginActivity extends AppCompatActivity{
                                     finish();
                                 }
                             });
-
-//                    mUserRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            User u = dataSnapshot.getValue(User.class);
-//                            UserManager.getInstance().load(u);
-//                            if (mProgress.isShowing()){
-//                                mProgress.dismiss();
-//                            }
-//                            startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
-//                            finish();
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
 
                 }
             }

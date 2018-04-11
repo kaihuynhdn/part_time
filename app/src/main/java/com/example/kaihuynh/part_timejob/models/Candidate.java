@@ -1,7 +1,6 @@
 package com.example.kaihuynh.part_timejob.models;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Kai on 2018-02-03.
@@ -10,14 +9,14 @@ import java.util.Date;
 public class Candidate implements Serializable{
     private User mUser;
     private String mJobExperience;
-    private Date mDate;
+    private long mDate;
     private String status;
 
     public Candidate(){
 
     }
 
-    public Candidate(User mUser, String mJobExperience, Date mDate, String status) {
+    public Candidate(User mUser, String mJobExperience, long mDate, String status) {
         this.mUser = mUser;
         this.mJobExperience = mJobExperience;
         this.mDate = mDate;
@@ -40,11 +39,11 @@ public class Candidate implements Serializable{
         this.mJobExperience = mJobExperience;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return mDate;
     }
 
-    public void setDate(Date mDate) {
+    public void setDate(long mDate) {
         this.mDate = mDate;
     }
 

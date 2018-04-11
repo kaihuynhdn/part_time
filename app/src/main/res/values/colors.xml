@@ -15,6 +15,10 @@
     <color name="grey_54">#93000000</color>
     <color name="back_87">#d4000000</color>
     <color name="colorHighlight">#B6B6B6</color>
+    <color name="colorRaiseButton">#1E88E5</color>
+    <color name="colorRaiseButtonText">#FFFFFF</color>
+    <color name="SaveButton">#43A047</color>
+    <color name="SaveButtonText">#FFFFFF</color>
 
     <!--Splash background-->
     <color name="start_color">#5ac4f4</color>

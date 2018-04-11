@@ -27,6 +27,7 @@ public class UserManager {
 
     public void updateUser(User u){
         mUserReference.document(u.getId()).set(u);
+        load(u);
     }
 
     public boolean isUpdated(){

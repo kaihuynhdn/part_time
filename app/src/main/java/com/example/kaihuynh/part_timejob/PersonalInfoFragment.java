@@ -346,12 +346,12 @@ public class PersonalInfoFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
                 inputAddress.setText(data.getStringExtra("location"));
         }else{
             inputAddress.setSelection(0);
         }
-        super.onActivityResult(requestCode, resultCode, data);
 
     }
 

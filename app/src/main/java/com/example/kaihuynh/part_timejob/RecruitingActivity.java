@@ -26,6 +26,7 @@ import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
@@ -137,7 +138,9 @@ public class RecruitingActivity extends AppCompatActivity {
                     job.setLocation(inputLocation.getText().toString());
                     job.setRequirement(requirementToString());
                     job.setStatus("Đang tuyển");
+                    job.setCandidateList(new ArrayList<Candidate>());
                     JobManager.getInstance().addJob(job);
+                    JobManager.getInstance().loadJobByUser(UserManager.getInstance().getUser().getId());
                     showSuccessDialog();
                 }
             }

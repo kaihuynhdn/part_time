@@ -163,7 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:cardElevation="@dimen/distance_view_2"
+        app:cardElevation="@dimen/distance_view_5"
         app:contentPaddingRight="@dimen/distance_view_2">
 
         <LinearLayout
@@ -175,18 +175,26 @@
             android:weightSum="2">
 
             <Button
+                android:id="@+id/btn_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textStyle="bold"
                 android:padding="@dimen/distance_view_5"
-                android:text="@string/save" />
+                android:text="@string/save"
+                android:theme="@style/SaveButton"
+                style="@style/Widget.AppCompat.Button.Colored"/>
 
             <Button
+                android:id="@+id/btn_apply"
                 android:layout_width="0dp"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/distance_view_5"
-                android:text="@string/apply" />
+                android:text="@string/apply"
+                android:theme="@style/LocationButton"
+                style="@style/Widget.AppCompat.Button.Colored"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

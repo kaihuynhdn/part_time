@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -104,7 +106,9 @@ public class PersonalDescriptionFragment extends Fragment {
                 user.setForeignLanguages(ForeignLanguageFragment.getInstance().getLanguages());
                 user.setSkills(SkillFragment.getInstance().getSkills());
                 user.setPersonalDescription(mDescription.getText().toString());
-                Log.v("date", calendar.getTime().toString());
+                user.setFavouriteJobList(new ArrayList<Job>());
+                user.setAppliedJobList(new ArrayList<Job>());
+                user.setNotificationList(new ArrayList<Notification>());
                 UserManager.getInstance().updateUser(user);
                 showAlertDialog();
             }

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.facebook.AccessToken;
@@ -104,6 +105,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             if(documentSnapshot!=null && documentSnapshot.exists()){
                                 User u = documentSnapshot.toObject(User.class);
                                 UserManager.getInstance().load(u);
+                                JobManager.getInstance().loadJobByUser(u.getId());
                                 if (mProgress.isShowing()) {
                                     mProgress.dismiss();
                                 }

@@ -10,7 +10,10 @@ import android.widget.TextView;
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Kai on 2018-03-10.
@@ -49,7 +52,35 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
         holder.mEmail.setText(candidate.getUser().getEmail());
         holder.mPhoneNumber.setText(candidate.getUser().getPhoneNumber());
         holder.mGender.setText(candidate.getUser().getGender());
+        Date date = new Date(mCandidateList.get(position).getDate());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        holder.mDate.setText(getTime(Calendar.getInstance(), calendar));
+    }
 
+    private String getTime(Calendar current, Calendar postingDate){
+        String s = "";
+        int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
+        if(minus<2){
+            if (minus == 1){
+                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+            }else if(minus == 0){
+                int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
+                if (minus1>0){
+                    s = minus1 + " giờ trước";
+                }else {
+                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                        s = "1 phút trước";
+                    }else {
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                    }
+                }
+            }
+        }else {
+            s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
+        }
+
+        return s;
     }
 
     @Override

@@ -86,14 +86,14 @@
             android:layout_marginLeft="@dimen/distance_view_40"
             android:paddingLeft="@dimen/distance_view_10"
             android:paddingRight="@dimen/distance_view_10"
-            android:textSize="14sp"
             android:textStyle="bold"
-            android:background="@drawable/create_button"
             android:textColor="@color/white"
             android:layout_marginRight="@dimen/distance_view_40"
             android:text="@string/create_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:theme="@style/LocationButton"
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
         <LinearLayout
             android:orientation="horizontal"

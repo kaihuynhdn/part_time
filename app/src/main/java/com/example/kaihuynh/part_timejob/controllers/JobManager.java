@@ -23,18 +23,24 @@ import java.util.ArrayList;
 public class JobManager {
     private final int NUMBER_DATA = 10;
     private static JobManager sInstance = null;
+    private ArrayList<Candidate> mCandidateList;
     private ArrayList<Job> mJobList;
     private ArrayList<Job> mLoadMoreList;
+    private ArrayList<Job> mJobListByUser;
+    private ArrayList<Job> mJobListByLocation;
+    private ArrayList<Job> mMoreJobListByLocation;
     private int jobCount = 0;
 
-    //    private FirebaseDatabase mFirebaseDatabase;
-//    private DatabaseReference mJobRef;
     private CollectionReference mJobReference;
 
 
     private JobManager() {
         this.mJobList = new ArrayList<>();
         this.mLoadMoreList = new ArrayList<>();
+        this.mJobListByUser = new ArrayList<>();
+        this.mCandidateList = new ArrayList<>();
+        this.mJobListByLocation = new ArrayList<>();
+        this.mMoreJobListByLocation = new ArrayList<>();
         mJobReference = FirebaseFirestore.getInstance().collection("jobs");
     }
 
@@ -69,29 +75,9 @@ public class JobManager {
                         }
                     }
                 });
-
-//        Query query = mJobRef.orderByChild("timestamp").endAt(timestamp).limitToLast(NUMBER_DATA);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mLoadMoreList.clear();
-//                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-//                    Job job = noteDataSnapshot.getValue(Job.class);
-//                    mLoadMoreList.add(job);
-//                }
-//                mLoadMoreList.remove(mLoadMoreList.size() - 1);
-//                Collections.reverse(mLoadMoreList);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     public void refreshData() {
-
         mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -110,25 +96,6 @@ public class JobManager {
                         }
                     }
                 });
-
-
-//        Query query = mJobRef.orderByChild("timestamp").limitToLast(NUMBER_DATA);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mJobList.clear();
-//                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-//                    Job job = noteDataSnapshot.getValue(Job.class);
-//                    mJobList.add(job);
-//                }
-//                Collections.reverse(mJobList);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 
@@ -136,6 +103,97 @@ public class JobManager {
         String id = mJobReference.document().getId();
         job.setId(id);
         mJobReference.document(id).set(job);
+    }
+
+    public void updateJob(Job job){
+        mJobReference.document(job.getId()).set(job);
+    }
+
+    public void loadCandidateList(String id){
+        mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() && task.getResult()!=null){
+                    mCandidateList.clear();
+                    Job job = task.getResult().getDocuments().get(0).toObject(Job.class);
+                    mCandidateList.addAll(job.getCandidateList());
+                }
+            }
+        });
+    }
+
+    public void loadJobByUser(final String id){
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    mJobListByUser.clear();
+                    for (DocumentSnapshot d : task.getResult()) {
+                        Job job = d.toObject(Job.class);
+                        if(job.getRecruiter().getId().equals(id)){
+                            mJobListByUser.add(job);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public void loadJobByLocation(final String location) {
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            mJobListByLocation.clear();
+                            for (DocumentSnapshot d : task.getResult()) {
+                                Job job = d.toObject(Job.class);
+                                if (job.getStatus().equals("Đang tuyển") && job.getLocation().equals(location)) {
+                                    mJobListByLocation.add(job);
+                                }
+                                if (mJobListByLocation.size() == NUMBER_DATA) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void loadMoreJobByLocation(long timestamp, final String location) {
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            mMoreJobListByLocation.clear();
+                            for (DocumentSnapshot d : task.getResult()) {
+                                Job job = d.toObject(Job.class);
+                                if (job.getStatus().equals("Đang tuyển") && job.getLocation().equals(location)) {
+                                    mMoreJobListByLocation.add(job);
+                                }
+                                if (mMoreJobListByLocation.size() == NUMBER_DATA) {
+                                    break;
+                                }
+                            }
+                            if(mMoreJobListByLocation.size()>0){
+                                mMoreJobListByLocation.remove(0);
+                            }
+                        }
+                    }
+                });
+    }
+
+    public ArrayList<Job> getMoreJobListByLocation() {
+        return mMoreJobListByLocation;
+    }
+
+    public ArrayList<Job> getJobListByLocation() {
+        return mJobListByLocation;
+    }
+
+    public ArrayList<Candidate> getCandidateList() {
+        return mCandidateList;
     }
 
     public ArrayList<Job> getJobs() {
@@ -146,26 +204,10 @@ public class JobManager {
         return this.mLoadMoreList;
     }
 
-    public Job getJobByRecruiterId(String id) {
-        for (Job j : mJobList) {
-            if (j.getId() == id) {
-                return j;
-            }
-        }
-
-        return null;
+    public ArrayList<Job> getJobListByUser() {
+        return mJobListByUser;
     }
 
-
-    public ArrayList<Candidate> getCandidatesById(String id) {
-        for (Job j : mJobList) {
-            if (j.getId() == id) {
-                return j.getCandidateList();
-            }
-        }
-
-        return null;
-    }
 
     public int getJobCount() {
         return this.jobCount;

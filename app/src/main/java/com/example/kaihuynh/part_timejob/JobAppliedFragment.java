@@ -3,14 +3,18 @@ package com.example.kaihuynh.part_timejob;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kaihuynh.part_timejob.adapters.MyAdapter;
+import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.util.ArrayList;
@@ -19,11 +23,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JobAppliedFragment extends Fragment implements MyAdapter.ListItemClickListener{
+public class JobAppliedFragment extends Fragment implements JobAdapter.ListItemClickListener {
 
-    private MyAdapter mAdapter;
+    private JobAdapter mAdapter;
     private RecyclerView mAppliedJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static JobAppliedFragment sInstance = null;
 
@@ -39,32 +44,71 @@ public class JobAppliedFragment extends Fragment implements MyAdapter.ListItemCl
         View view = inflater.inflate(R.layout.fragment_job_applied, container, false);
 
         addComponents(view);
-        loadDataToRecyclerView();
+        initialize();
+        setWigetListeners();
         return view;
     }
 
-    private void loadDataToRecyclerView() {
-        for (int i = 0; i<11; i++){
-            Job job = new Job();
-            job.setName("Job Title " + i);
-            job.setSalary(String.valueOf(i));
-            //job.setTimestamp(new Date().getTime());
-            job.setLocation("Location " + i);
-
-            mJobArrayList.add(job);
-        }
-
-        mAdapter = new MyAdapter(mAppliedJobRecyclerView, getContext(), R.layout.job_list_item, mJobArrayList, this);
-        mAppliedJobRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void addComponents(View view) {
+    private void initialize() {
         sInstance = this;
-        mAppliedJobRecyclerView = view.findViewById(R.id.rv_applied_jobs);
+
         mJobArrayList = new ArrayList<>();
+        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
+            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
+        }
+        mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
+        mAppliedJobRecyclerView.setAdapter(mAdapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mAppliedJobRecyclerView.setLayoutManager(layoutManager);
         mAppliedJobRecyclerView.setHasFixedSize(true);
+
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
+    }
+
+    private void addComponents(View view) {
+        mAppliedJobRecyclerView = view.findViewById(R.id.rv_applied_jobs);
+        swipeRefreshLayout = view.findViewById(R.id.sw_apply_jobs);
+    }
+
+    private void setWigetListeners() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAppliedJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mJobArrayList.clear();
+                        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
+                            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                        mAppliedJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                            @Override
+                            public boolean canScrollVertically() {
+                                return true;
+                            }
+                        });
+                    }
+                }, 2000);
+            }
+        });
+    }
+
+    public void refreshData(){
+        mJobArrayList = new ArrayList<>();
+        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
+            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
+        }
+        mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
+        mAppliedJobRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -72,7 +116,7 @@ public class JobAppliedFragment extends Fragment implements MyAdapter.ListItemCl
         startActivity(new Intent(getContext(), JobDescriptionActivity.class));
     }
 
-    public MyAdapter getAdapter() {
+    public JobAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -81,10 +125,16 @@ public class JobAppliedFragment extends Fragment implements MyAdapter.ListItemCl
         return mJobArrayList;
     }
 
-    public static JobAppliedFragment getInstance(){
+    public static JobAppliedFragment getInstance() {
         if (sInstance == null) {
             sInstance = new JobAppliedFragment();
         }
         return sInstance;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshData();
     }
 }

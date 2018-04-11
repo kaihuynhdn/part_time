@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv3"
+        app:cardCornerRadius="@dimen/distance_view_10"
+        app:cardElevation="@dimen/distance_view_5">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Thêm mô tả cá nhân"
+                android:paddingHorizontal="@dimen/distance_view_20"
+                android:textSize="18sp"
+                android:fontFamily="@font/iciel_cadena"
+                android:textColor="@color/lightBlue_700"
+                android:paddingVertical="@dimen/distance_view_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/et_candidate_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/distance_view_20"
+                android:layout_marginTop="@dimen/distance_view_10"
+                android:layout_marginVertical="@dimen/distance_view_15"
+                android:background="@drawable/input_template"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="top|left"
+                android:hint="@string/text4"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="@dimen/distance_view_5"
+                android:minHeight="150dp"
+                android:paddingHorizontal="@dimen/distance_view_10"
+                android:paddingVertical="@dimen/distance_view_5"
+                android:textColor="@color/back_87"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

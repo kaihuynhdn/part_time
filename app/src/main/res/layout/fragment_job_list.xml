@@ -35,28 +35,29 @@
                         android:layout_height="wrap_content" />
 
                     <Button
-                        android:id="@+id/btn_arrange"
+                        android:id="@+id/btn_location"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="@string/arrangement"
+                        android:text="@string/location"
                         android:textAllCaps="false"
                         android:layout_width="wrap_content"
                         android:fontFamily="@font/iciel_cadena"
                         android:textColor="@color/white"
-                        android:background="@drawable/next_button"
-                        android:layout_height="@dimen/distance_view_40" />
+                        android:layout_height="wrap_content"
+                        android:theme="@style/LocationButton"
+                        style="@style/Widget.AppCompat.Button.Colored"/>
 
                     <Button
-                        android:layout_toLeftOf="@id/btn_arrange"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/distance_view_5"
-                        android:text="@string/location"
+                        android:id="@+id/btn_remove_location"
+                        android:layout_marginTop="@dimen/distance_view_2"
+                        android:layout_alignRight="@+id/btn_location"
+                        android:background="@drawable/remove_button"
+                        android:text="x"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/linotte_semi_bold"
                         android:textColor="@color/white"
-                        android:background="@drawable/next_button"
-                        android:fontFamily="@font/iciel_cadena"
-                        android:textAllCaps="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/distance_view_40" />
+                        android:layout_width="@dimen/distance_view_20"
+                        android:layout_height="@dimen/distance_view_20" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
