@@ -1,7 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
-import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
+import com.example.kaihuynh.part_timejob.adapters.ApplyJobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
-import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.others.ApplyJob;
 
 import java.util.ArrayList;
 
@@ -23,12 +25,14 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JobAppliedFragment extends Fragment implements JobAdapter.ListItemClickListener {
-
-    private JobAdapter mAdapter;
-    private RecyclerView mAppliedJobRecyclerView;
-    private ArrayList<Job> mJobArrayList;
+public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.ListItemClickListener {
+    private ApplyJobAdapter mAdapter, mEmployedAdapter, mUnemployedAdapter;
+    private RecyclerView mViewingRecyclerView, mEmployedRecyclerView, mUnemployedRecyclerView;
+    private ArrayList<ApplyJob> mViewingJobArrayList, mEmployedJobArrayList, mUnemployedJobArrayList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout mEmptyView, viewingLayout, relativeViewing, employedLayout, relativeEmployed, unemployedLayout, relativeUnemployed;
+    private View view1, view2, view3;
+    private Button mShowViewing, mShowEmployed, mShowUnemployed;
 
     public static JobAppliedFragment sInstance = null;
 
@@ -45,37 +49,61 @@ public class JobAppliedFragment extends Fragment implements JobAdapter.ListItemC
 
         addComponents(view);
         initialize();
-        setWigetListeners();
+        setWidgetListeners();
         return view;
     }
 
     private void initialize() {
         sInstance = this;
 
-        mJobArrayList = new ArrayList<>();
-        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
-            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
-        }
-        mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
-        mAppliedJobRecyclerView.setAdapter(mAdapter);
+        loadData();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mAppliedJobRecyclerView.setLayoutManager(layoutManager);
-        mAppliedJobRecyclerView.setHasFixedSize(true);
+        mViewingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mViewingRecyclerView.setHasFixedSize(true);
+
+        mEmployedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mEmployedRecyclerView.setHasFixedSize(true);
+
+        mUnemployedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mUnemployedRecyclerView.setHasFixedSize(true);
+
+        mShowViewing.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.blue_down_narrow));
+        mViewingRecyclerView.setVisibility(View.GONE);
+
+        mShowEmployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.green_down_narrow));
+        mEmployedRecyclerView.setVisibility(View.GONE);
+
+        mShowUnemployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.red_down_narrow));
+        mUnemployedRecyclerView.setVisibility(View.GONE);
 
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
     }
 
     private void addComponents(View view) {
-        mAppliedJobRecyclerView = view.findViewById(R.id.rv_applied_jobs);
+        view1 = view.findViewById(R.id.view1);
+        view2 = view.findViewById(R.id.view2);
+        view3 = view.findViewById(R.id.view3);
+        mViewingRecyclerView = view.findViewById(R.id.rv_viewing);
         swipeRefreshLayout = view.findViewById(R.id.sw_apply_jobs);
+        mEmptyView = view.findViewById(R.id.rl_empty_apply_job);
+        viewingLayout = view.findViewById(R.id.layout_viewing);
+        relativeViewing = view.findViewById(R.id.rl_viewing);
+        employedLayout = view.findViewById(R.id.layout_employed);
+        relativeEmployed = view.findViewById(R.id.rl_employed);
+        unemployedLayout = view.findViewById(R.id.layout_unemployed);
+        relativeUnemployed = view.findViewById(R.id.rl_unemployed);
+        mEmployedRecyclerView = view.findViewById(R.id.rv_employed);
+        mUnemployedRecyclerView = view.findViewById(R.id.rv_unemployed);
+        mShowViewing = view.findViewById(R.id.btn_show_viewing_job);
+        mShowEmployed = view.findViewById(R.id.btn_show_employed_job);
+        mShowUnemployed = view.findViewById(R.id.btn_show_unemployed_job);
     }
 
-    private void setWigetListeners() {
+    private void setWidgetListeners() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mAppliedJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                mViewingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                     @Override
                     public boolean canScrollVertically() {
                         return false;
@@ -84,13 +112,9 @@ public class JobAppliedFragment extends Fragment implements JobAdapter.ListItemC
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mJobArrayList.clear();
-                        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
-                            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
-                        }
-                        mAdapter.notifyDataSetChanged();
+                        refreshData();
                         swipeRefreshLayout.setRefreshing(false);
-                        mAppliedJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                        mViewingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                             @Override
                             public boolean canScrollVertically() {
                                 return true;
@@ -100,29 +124,139 @@ public class JobAppliedFragment extends Fragment implements JobAdapter.ListItemC
                 }, 2000);
             }
         });
+
+        mShowViewing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mShowViewing.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.blue_up_narrow).getConstantState())) {
+                    mShowViewing.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.blue_down_narrow));
+                    mViewingRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_up));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewingRecyclerView.clearAnimation();
+                            mViewingRecyclerView.setVisibility(View.GONE);
+                        }
+                    }, 400);
+                } else if (mShowViewing.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.blue_down_narrow).getConstantState())) {
+                    mViewingRecyclerView.setVisibility(View.VISIBLE);
+                    mShowViewing.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.blue_up_narrow));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewingRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_down));
+                        }
+                    }, -350);
+                }
+            }
+        });
+
+        mShowEmployed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mShowEmployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.green_up_narrow).getConstantState())) {
+                    mShowEmployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.green_down_narrow));
+                    mEmployedRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_up));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mEmployedRecyclerView.clearAnimation();
+                            mEmployedRecyclerView.setVisibility(View.GONE);
+                        }
+                    }, 400);
+                } else if (mShowEmployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.green_down_narrow).getConstantState())) {
+                    mEmployedRecyclerView.setVisibility(View.VISIBLE);
+                    mEmployedRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_down));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mShowEmployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.green_up_narrow));
+                        }
+                    }, 350);
+                }
+            }
+        });
+
+        mShowUnemployed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mShowUnemployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.red_up_narrow).getConstantState())) {
+                    mShowUnemployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.red_down_narrow));
+                    mUnemployedRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_up));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUnemployedRecyclerView.clearAnimation();
+                            mUnemployedRecyclerView.setVisibility(View.GONE);
+                        }
+                    }, 400);
+                } else if (mShowUnemployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.red_down_narrow).getConstantState())) {
+                    mUnemployedRecyclerView.setVisibility(View.VISIBLE);
+                    mUnemployedRecyclerView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_down));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mShowUnemployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.red_up_narrow));
+                        }
+                    }, 350);
+                }
+            }
+        });
     }
 
-    public void refreshData(){
-        mJobArrayList = new ArrayList<>();
-        if (UserManager.getInstance().getUser().getAppliedJobList()!=null){
-            mJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
+    private void loadData() {
+        mViewingJobArrayList = new ArrayList<>();
+        mEmployedJobArrayList = new ArrayList<>();
+        mUnemployedJobArrayList = new ArrayList<>();
+
+        if (UserManager.getInstance().getUser().getAppliedJobList() != null) {
+            mViewingJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
         }
-        mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
-        mAppliedJobRecyclerView.setAdapter(mAdapter);
+
+        for (ApplyJob job : mViewingJobArrayList) {
+            if (job.getStatus().equals(ApplyJob.EMPLOYED_STATUS)) {
+                mEmployedJobArrayList.add(job);
+                mViewingJobArrayList.remove(job);
+            } else if (job.getStatus().equals(ApplyJob.UNEMPLOYED_STATUS)) {
+                mUnemployedJobArrayList.add(job);
+                mViewingJobArrayList.remove(job);
+            }
+        }
+
+        mAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mViewingJobArrayList, this);
+        mViewingRecyclerView.setAdapter(mAdapter);
+
+        mEmployedAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mEmployedJobArrayList, this);
+        mEmployedRecyclerView.setAdapter(mEmployedAdapter);
+
+        mUnemployedAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mUnemployedJobArrayList, this);
+        mUnemployedRecyclerView.setAdapter(mUnemployedAdapter);
+    }
+
+    public void refreshData() {
+        loadData();
+        if (mViewingJobArrayList.size() < 1) {
+            mEmptyView.setVisibility(View.VISIBLE);
+            viewingLayout.setVisibility(View.GONE);
+            employedLayout.setVisibility(View.GONE);
+            unemployedLayout.setVisibility(View.GONE);
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            view3.setVisibility(View.GONE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+            viewingLayout.setVisibility(View.VISIBLE);
+            employedLayout.setVisibility(View.VISIBLE);
+            unemployedLayout.setVisibility(View.VISIBLE);
+            view1.setVisibility(View.VISIBLE);
+            view2.setVisibility(View.VISIBLE);
+            view3.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onListItemClick(int clickItemIndex) {
-        startActivity(new Intent(getContext(), JobDescriptionActivity.class));
-    }
-
-    public JobAdapter getAdapter() {
-        return mAdapter;
-    }
-
-
-    public ArrayList<Job> getJobArrayList() {
-        return mJobArrayList;
+        //startActivity(new Intent(getContext(), JobDescriptionActivity.class));
     }
 
     public static JobAppliedFragment getInstance() {

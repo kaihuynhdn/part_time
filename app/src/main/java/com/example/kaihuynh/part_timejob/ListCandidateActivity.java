@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.example.kaihuynh.part_timejob.adapters.CandidateAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
@@ -23,6 +25,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
     private RecyclerView mListCandidateRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Candidate> mCandidateList;
+    private RelativeLayout mEmptyView;
 
     private Job job;
 
@@ -36,16 +39,17 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
 
         addComponents();
         initialize();
-        setWigetListeners();
+        setWidgetListeners();
     }
 
     private void initialize() {
         Intent intent = getIntent();
         job = (Job) intent.getSerializableExtra("job");
+        getSupportActionBar().setTitle(job.getName());
+        JobManager.getInstance().loadJobById(job.getId());
+        JobManager.getInstance().loadCandidateList(job.getId());
         mCandidateList = new ArrayList<>();
-        if(job.getCandidateList()!=null){
-            mCandidateList.addAll(job.getCandidateList());
-        }
+        mCandidateList = JobManager.getInstance().getCandidateList();
         mAdapter = new CandidateAdapter(this, R.layout.candidate_rv_item, mCandidateList, this);
         mListCandidateRecyclerView.setAdapter(mAdapter);
 
@@ -54,14 +58,29 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         mListCandidateRecyclerView.setHasFixedSize(true);
 
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(ListCandidateActivity.this, R.color.lightBlue_700));
+        swipeRefreshLayout.setRefreshing(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (JobManager.getInstance().getCandidateList()!= null && JobManager.getInstance().getCandidateList().size()>0){
+                    mEmptyView.setVisibility(View.GONE);
+                    mCandidateList = JobManager.getInstance().getCandidateList();
+                }else {
+                    mEmptyView.setVisibility(View.VISIBLE);
+                }
+                mAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1300);
     }
 
     private void addComponents() {
         mListCandidateRecyclerView = findViewById(R.id.rv_list_candidate);
         swipeRefreshLayout = findViewById(R.id.sw_list_candidate);
+        mEmptyView = findViewById(R.id.rl_empty_candidate);
     }
 
-    private void setWigetListeners() {
+    private void setWidgetListeners() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -71,19 +90,21 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
                         return false;
                     }
                 });
+                JobManager.getInstance().loadJobById(job.getId());
                 JobManager.getInstance().loadCandidateList(job.getId());
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mCandidateList = JobManager.getInstance().getCandidateList();
+                        if (JobManager.getInstance().getCandidateList()!= null && JobManager.getInstance().getCandidateList().size()>0){
+                            mEmptyView.setVisibility(View.GONE);
+                            mCandidateList = JobManager.getInstance().getCandidateList();
+                        }else {
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        }
+
                         mAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
-                        mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(ListCandidateActivity.this){
-                            @Override
-                            public boolean canScrollVertically() {
-                                return true;
-                            }
-                        });
+                        mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(ListCandidateActivity.this));
                     }
                 }, 2000);
             }
@@ -94,6 +115,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
     public void onListItemClick(int clickItemIndex) {
         Intent intent = new Intent(ListCandidateActivity.this, CandidateActivity.class);
         intent.putExtra("candidate", mCandidateList.get(clickItemIndex));
+        intent.putExtra("job", JobManager.getInstance().getJobById());
         startActivity(intent);
     }
 

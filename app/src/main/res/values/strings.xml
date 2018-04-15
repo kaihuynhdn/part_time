@@ -114,6 +114,11 @@
 
     <string name="facebook_app_id">108585286650544</string>
     <string name="fb_login_protocol_scheme">fb108585286650544</string>
+    <string name="empty_apply_job">Bạn chưa <b>Ứng Tuyển</b> công việc nào.\nHãy tìm một công việc mới nào!</string>
+    <string name="empty_like_jobs">Bạn chưa thêm công việc nào vào danh sách!</string>
+    <string name="viewing">Đang duyệt</string>
+    <string name="empty_recruitment">Bạn chưa <b>Đăng tuyển</b> công việc nào.\nHãy đăng tin một công việc mới nào!</string>
+    <string name="empty_candidate">Chưa có ứng viên của công việc này !</string>
 
     <string-array name="gender">
         <item>Nam</item>

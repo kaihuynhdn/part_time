@@ -26,9 +26,9 @@ public class JobManager {
     private ArrayList<Candidate> mCandidateList;
     private ArrayList<Job> mJobList;
     private ArrayList<Job> mLoadMoreList;
-    private ArrayList<Job> mJobListByUser;
     private ArrayList<Job> mJobListByLocation;
     private ArrayList<Job> mMoreJobListByLocation;
+    private Job jobById;
     private int jobCount = 0;
 
     private CollectionReference mJobReference;
@@ -37,7 +37,6 @@ public class JobManager {
     private JobManager() {
         this.mJobList = new ArrayList<>();
         this.mLoadMoreList = new ArrayList<>();
-        this.mJobListByUser = new ArrayList<>();
         this.mCandidateList = new ArrayList<>();
         this.mJobListByLocation = new ArrayList<>();
         this.mMoreJobListByLocation = new ArrayList<>();
@@ -54,7 +53,7 @@ public class JobManager {
     }
 
     public void loadMoreJob(long timestamp) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount == 0 ? 1 : jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -69,7 +68,7 @@ public class JobManager {
                                     break;
                                 }
                             }
-                            if(mLoadMoreList.size()>0){
+                            if (mLoadMoreList.size() > 0) {
                                 mLoadMoreList.remove(0);
                             }
                         }
@@ -78,7 +77,7 @@ public class JobManager {
     }
 
     public void refreshData() {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount == 0 ? 1 : jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -99,40 +98,32 @@ public class JobManager {
     }
 
 
-    public void addJob(Job job) {
-        String id = mJobReference.document().getId();
-        job.setId(id);
-        mJobReference.document(id).set(job);
-    }
-
-    public void updateJob(Job job){
-        mJobReference.document(job.getId()).set(job);
-    }
-
-    public void loadCandidateList(String id){
+    public void loadJobById(String id) {
         mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult()!=null){
-                    mCandidateList.clear();
-                    Job job = task.getResult().getDocuments().get(0).toObject(Job.class);
-                    mCandidateList.addAll(job.getCandidateList());
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (DocumentSnapshot d : task.getResult()) {
+                        jobById = d.toObject(Job.class);
+                    }
                 }
             }
         });
     }
 
-    public void loadJobByUser(final String id){
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void updateJob(Job job) {
+        mJobReference.document(job.getId()).set(job);
+    }
+
+    public void loadCandidateList(String id) {
+        mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    mJobListByUser.clear();
+                if (task.isSuccessful() && task.getResult() != null) {
+                    mCandidateList.clear();
                     for (DocumentSnapshot d : task.getResult()) {
                         Job job = d.toObject(Job.class);
-                        if(job.getRecruiter().getId().equals(id)){
-                            mJobListByUser.add(job);
-                        }
+                        mCandidateList.addAll(job.getCandidateList());
                     }
                 }
             }
@@ -140,7 +131,7 @@ public class JobManager {
     }
 
     public void loadJobByLocation(final String location) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount == 0 ? 1 : jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -161,7 +152,7 @@ public class JobManager {
     }
 
     public void loadMoreJobByLocation(long timestamp, final String location) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount == 0 ? 1 : jobCount).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -176,12 +167,16 @@ public class JobManager {
                                     break;
                                 }
                             }
-                            if(mMoreJobListByLocation.size()>0){
+                            if (mMoreJobListByLocation.size() > 0) {
                                 mMoreJobListByLocation.remove(0);
                             }
                         }
                     }
                 });
+    }
+
+    public Job getJobById() {
+        return jobById;
     }
 
     public ArrayList<Job> getMoreJobListByLocation() {
@@ -193,7 +188,7 @@ public class JobManager {
     }
 
     public ArrayList<Candidate> getCandidateList() {
-        return mCandidateList;
+        return this.mCandidateList;
     }
 
     public ArrayList<Job> getJobs() {
@@ -203,11 +198,6 @@ public class JobManager {
     public ArrayList<Job> getLoadMoreJobs() {
         return this.mLoadMoreList;
     }
-
-    public ArrayList<Job> getJobListByUser() {
-        return mJobListByUser;
-    }
-
 
     public int getJobCount() {
         return this.jobCount;

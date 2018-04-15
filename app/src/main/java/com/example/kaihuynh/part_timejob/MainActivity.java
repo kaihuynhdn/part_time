@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
                                     if (documentSnapshot.exists()){
                                         User u = documentSnapshot.toObject(User.class);
                                         UserManager.getInstance().load(u);
-                                        JobManager.getInstance().loadJobByUser(u.getId());
-
                                     }
                                     FINISH_LOADED = 2;
 

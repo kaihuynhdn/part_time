@@ -18,6 +18,7 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.ApplyJob;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -107,7 +108,8 @@ public class PersonalDescriptionFragment extends Fragment {
                 user.setSkills(SkillFragment.getInstance().getSkills());
                 user.setPersonalDescription(mDescription.getText().toString());
                 user.setFavouriteJobList(new ArrayList<Job>());
-                user.setAppliedJobList(new ArrayList<Job>());
+                user.setRecruitmentList(new ArrayList<Job>());
+                user.setAppliedJobList(new ArrayList<ApplyJob>());
                 user.setNotificationList(new ArrayList<Notification>());
                 UserManager.getInstance().updateUser(user);
                 showAlertDialog();

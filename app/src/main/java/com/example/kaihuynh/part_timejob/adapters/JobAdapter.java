@@ -17,8 +17,10 @@ import com.example.kaihuynh.part_timejob.models.Job;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Kai on 2018-02-12.
@@ -54,16 +56,8 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
     public void onBindViewHolder(JobItemViewHolder holder, final int position) {
         Job job = mJobList.get(position);
         Calendar calendar = Calendar.getInstance();
-        //calendar.setTime(job.getTimestamp());
-        String s = "";
-        if(calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)){
-            s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1)+ " năm " + calendar.get(Calendar.YEAR)
-                    + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-        }else {
-            s = calendar.get(Calendar.DAY_OF_MONTH) + " tháng " + (calendar.get(Calendar.MONTH)+1)
-                    + " lúc " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-        }
-        holder.mJobPostedDate.setText(s);
+        calendar.setTime(new Date(job.getTimestamp()));
+        holder.mJobPostedDate.setText(getTime(Calendar.getInstance(), calendar));
         holder.mJobLocation.setText(job.getLocation());
         holder.mJobTitle.setText(job.getName());
         holder.mJobSalary.setText(job.getSalary());
@@ -95,6 +89,31 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
             });
         }
 
+    }
+
+    private String getTime(Calendar current, Calendar postingDate){
+        String s = "";
+        int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
+        if(minus<2){
+            if (minus == 1){
+                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+            }else if(minus == 0){
+                int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
+                if (minus1>0){
+                    s = minus1 + " giờ trước";
+                }else {
+                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                        s = "1 phút trước";
+                    }else {
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                    }
+                }
+            }
+        }else {
+            s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
+        }
+
+        return s;
     }
 
     private void showPopupWindow(View view, int menu, final int position) {

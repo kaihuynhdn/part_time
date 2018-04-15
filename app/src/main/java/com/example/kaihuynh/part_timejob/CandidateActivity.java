@@ -2,15 +2,24 @@ package com.example.kaihuynh.part_timejob;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
+import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.ApplyJob;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,6 +28,9 @@ public class CandidateActivity extends AppCompatActivity {
     private TextView mName, mEmail, mDate, mDescription;
     private TextInputEditText mDOB, mGender, mEducation, mAddress, mLanguage, mSkill, mPhone;
     private Toolbar toolbar;
+    private Button mIgnoreButton, mAcceptButton;
+    private Candidate candidate;
+    private Job job;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +39,7 @@ public class CandidateActivity extends AppCompatActivity {
 
         addComponents();
         initialize();
-
+        setWidgetListeners();
     }
 
     private void initialize() {
@@ -37,7 +49,8 @@ public class CandidateActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        Candidate candidate = (Candidate) intent.getSerializableExtra("candidate");
+        candidate = (Candidate) intent.getSerializableExtra("candidate");
+        job = (Job) getIntent().getSerializableExtra("job");
         mName.setText(candidate.getUser().getFullName());
         mEmail.setText(candidate.getUser().getEmail());
         mEducation.setText(candidate.getUser().getEducation());
@@ -54,6 +67,7 @@ public class CandidateActivity extends AppCompatActivity {
         calendar1.setTime(candidate.getUser().getDayOfBirth());
         mDOB.setText(Calendar.getInstance().get(Calendar.YEAR) - calendar1.get(Calendar.YEAR) + " tuổi");
 
+        setActionButton(candidate.getStatus());
     }
 
     private void addComponents() {
@@ -69,6 +83,68 @@ public class CandidateActivity extends AppCompatActivity {
         mSkill = findViewById(R.id.input_skill_candidate);
         mDescription = findViewById(R.id.tv_description_candidate);
         mDate = findViewById(R.id.tv_date_candidate);
+        mIgnoreButton = findViewById(R.id.btn_ignore);
+        mAcceptButton = findViewById(R.id.btn_accept);
+    }
+
+    private void setWidgetListeners() {
+        mIgnoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
+                setActionButton(ApplyJob.UNEMPLOYED_STATUS);
+            }
+        });
+
+        mAcceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionToCandidate(ApplyJob.EMPLOYED_STATUS);
+                setActionButton(ApplyJob.EMPLOYED_STATUS);
+            }
+        });
+    }
+
+    private void setActionButton(String action){
+        if (action.equals(ApplyJob.UNEMPLOYED_STATUS)){
+            mAcceptButton.setVisibility(View.GONE);
+            mIgnoreButton.setText("Bị từ chối !");
+            mIgnoreButton.setClickable(false);
+        }else if (action.equals(ApplyJob.EMPLOYED_STATUS)){
+            mIgnoreButton.setVisibility(View.GONE);
+            mAcceptButton.setText("Được tuyển chọn !");
+            mAcceptButton.setClickable(false);
+        }
+    }
+
+    private void actionToCandidate(final String action){
+        ArrayList<Candidate> candidateList = new ArrayList<>();
+        for (Candidate c : job.getCandidateList()){
+            if (c.getUser().getId().equals(candidate.getUser().getId())){
+                c.setStatus(action);
+            }
+            candidateList.add(c);
+        }
+        job.setCandidateList(candidateList);
+        JobManager.getInstance().updateJob(job);
+
+        UserManager.getInstance().loadUserByID(candidate.getUser().getId());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                User u = UserManager.getInstance().getUserById();
+                ArrayList<ApplyJob> applyJobs = new ArrayList<>();
+                for(ApplyJob a : u.getAppliedJobList()){
+                    if (a.getJob().getId().equals(job.getId())){
+                        a.setStatus(action);
+                    }
+                    applyJobs.add(a);
+                }
+                u.setAppliedJobList(applyJobs);
+                UserManager.getInstance().updateJobStatus(u);
+            }
+        }, 1500);
+
     }
 
     private String getTime(Calendar current, Calendar postingDate){

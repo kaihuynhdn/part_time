@@ -30,4 +30,5 @@
     <dimen name="distance_view_100">100dp</dimen>
     <dimen name="width_height_fb_button">43dp</dimen>
     <dimen name="phone_tag">35dp</dimen>
+    <dimen name="size_empty_img">70dp</dimen>
 </resources>

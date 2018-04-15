@@ -12,6 +12,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:id="@+id/rl_empty_candidate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_empty"
+                android:layout_width="@dimen/size_empty_img"
+                android:layout_height="@dimen/size_empty_img"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/distance_view_40"
+                android:src="@drawable/empty_candidate" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_empty"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/distance_view_5"
+                android:text="@string/empty_candidate" />
+
+        </RelativeLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/sw_list_candidate"
             android:layout_width="match_parent"

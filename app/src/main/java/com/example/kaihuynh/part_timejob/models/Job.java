@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 
 public class Job implements Serializable{
+    public static final String RECRUITING = "Đang tuyển", UNAVAILABLE = "Ngưng tuyển";
     private String id;
     private User recruiter;
     private String name;

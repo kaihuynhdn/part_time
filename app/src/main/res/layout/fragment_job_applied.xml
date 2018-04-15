@@ -1,29 +1,224 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.kaihuynh.part_timejob.JobAppliedFragment">
+
+    <RelativeLayout
+        android:id="@+id/rl_empty_apply_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_empty"
+            android:layout_width="@dimen/size_empty_img"
+            android:layout_height="@dimen/size_empty_img"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="@dimen/distance_view_40"
+            android:src="@drawable/empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_empty"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/distance_view_5"
+            android:text="@string/empty_apply_job" />
+
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sw_apply_jobs"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:orientation="vertical"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_applied_jobs"
-                android:layout_below="@+id/relative_layout"
+            android:layout_height="wrap_content">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-            </android.support.v7.widget.RecyclerView>
-        </RelativeLayout>
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_height="@dimen/distance_view_2"
+                    android:background="@drawable/drop_shadow_up" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_viewing"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/distance_view_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_viewing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl_viewing" />
+
+                    <View
+                        android:id="@+id/shadow_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:layout_below="@+id/rl_viewing"
+                        android:background="@drawable/drop_shadow" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_viewing"
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:padding="@dimen/distance_view_10"
+                            android:text="@string/viewing"
+                            android:textColor="@color/lightBlue_700"
+                            android:textSize="18sp" />
+
+                        <Button
+                            android:id="@+id/btn_show_viewing_job"
+                            android:background="@drawable/blue_up_narrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:layout_width="@dimen/distance_view_20"
+                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_alignParentRight="true"
+                            style="@style/Widget.AppCompat.Button.Colored"/>
+
+                    </RelativeLayout>
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_employed"
+                    android:layout_below="@id/layout_viewing"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_employed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl_employed" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_employed"
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:padding="@dimen/distance_view_10"
+                            android:text="Được tuyển dụng"
+                            android:textColor="@color/green"
+                            android:textSize="18sp" />
+
+                        <Button
+                            android:id="@+id/btn_show_employed_job"
+                            android:background="@drawable/blue_up_narrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:layout_width="@dimen/distance_view_20"
+                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_alignParentRight="true"
+                            style="@style/Widget.AppCompat.Button.Colored"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:layout_below="@+id/rl_employed"
+                        android:background="@drawable/drop_shadow" />
+
+                </RelativeLayout>
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/layout_viewing"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_height="@dimen/distance_view_2"
+                    android:background="@drawable/drop_shadow_up" />
+                <RelativeLayout
+                    android:id="@+id/layout_unemployed"
+                    android:layout_below="@+id/layout_employed"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_unemployed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl_unemployed" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_unemployed"
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:padding="@dimen/distance_view_10"
+                            android:text="Bị từ chối"
+                            android:textColor="@color/red"
+                            android:textSize="18sp" />
+
+                        <Button
+                            android:id="@+id/btn_show_unemployed_job"
+                            android:background="@drawable/blue_up_narrow"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:layout_width="@dimen/distance_view_20"
+                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_alignParentRight="true"
+                            style="@style/Widget.AppCompat.Button.Colored"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:layout_below="@+id/rl_unemployed"
+                        android:background="@drawable/drop_shadow" />
+
+                </RelativeLayout>
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/layout_employed"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_height="@dimen/distance_view_2"
+                    android:background="@drawable/drop_shadow_up" />
+            </RelativeLayout>
+        </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-
-</FrameLayout>
+</RelativeLayout>

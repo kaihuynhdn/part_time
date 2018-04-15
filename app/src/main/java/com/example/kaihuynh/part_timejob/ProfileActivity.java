@@ -229,6 +229,8 @@ public class ProfileActivity extends AppCompatActivity {
                 u.setPhoneNumber(inputPhoneNumber.getText().toString());
                 UserManager.getInstance().updateUser(u);
                 mName.requestFocus();
+                mName.setText(inputName.getText().toString());
+                mPhoneNumber.setText(inputPhoneNumber.getText().toString());
             }
         });
 
@@ -382,6 +384,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 User u = UserManager.getInstance().getUser();
                 u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
+                inputSkill.setText(u.getSkills());
                 UserManager.getInstance().updateUser(u);
                 inputSkill.requestFocus();
             }
@@ -509,6 +512,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 User u = UserManager.getInstance().getUser();
                 u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
+                inputLanguage.setText(u.getForeignLanguages());
                 UserManager.getInstance().updateUser(u);
                 inputLanguage.requestFocus();
             }
@@ -597,6 +601,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 User u = UserManager.getInstance().getUser();
                 u.setEducation(strings[numberPicker.getValue()]);
+                inputEducation.setText(u.getEducation());
                 UserManager.getInstance().updateUser(u);
                 inputEducation.requestFocus();
             }
@@ -678,6 +683,7 @@ public class ProfileActivity extends AppCompatActivity {
                 User u = UserManager.getInstance().getUser();
                 u.setGender(genderChoice);
                 UserManager.getInstance().updateUser(u);
+                inputGender.setText(u.getGender());
                 inputGender.requestFocus();
             }
         });
@@ -721,6 +727,7 @@ public class ProfileActivity extends AppCompatActivity {
                 User u = UserManager.getInstance().getUser();
                 u.setDayOfBirth(calendar.getTime());
                 UserManager.getInstance().updateUser(u);
+                inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
                 inputDOB.requestFocus();
             }
         };

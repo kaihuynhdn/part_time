@@ -66,6 +66,10 @@
         <item name="colorAccent">@color/colorRaiseButton</item>
     </style>
 
+    <style name="RefuseButton" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/google_normal</item>
+    </style>
+
     <style name="SaveButton" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorAccent">@color/SaveButton</item>
     </style>

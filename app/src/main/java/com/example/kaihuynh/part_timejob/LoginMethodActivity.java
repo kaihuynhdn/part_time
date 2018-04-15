@@ -105,7 +105,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             if(documentSnapshot!=null && documentSnapshot.exists()){
                                 User u = documentSnapshot.toObject(User.class);
                                 UserManager.getInstance().load(u);
-                                JobManager.getInstance().loadJobByUser(u.getId());
                                 if (mProgress.isShowing()) {
                                     mProgress.dismiss();
                                 }

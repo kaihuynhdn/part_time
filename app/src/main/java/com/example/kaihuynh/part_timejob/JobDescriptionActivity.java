@@ -20,6 +20,7 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.ApplyJob;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private TabHost mTabHost;
     private TextView mTitle, mDate, mStatus, mStatusSymbol, mSalary, mLocation, mBenefit, mRequirement, mDescription;
     private TextView mRecruiterName, mRecruiterEmail, mRecruiterPhone, mRecruiterAddress;
-    private Button mApplyButton, mSaveButton;
-    private String description="";
+    private Button mApplyButton, mSaveButton, mManageButton;
+    private String description = "";
     private Job job;
 
     @Override
@@ -64,6 +65,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mRecruiterEmail = findViewById(R.id.tv_recruiter_email);
         mApplyButton = findViewById(R.id.btn_apply);
         mSaveButton = findViewById(R.id.btn_save);
+        mManageButton = findViewById(R.id.btn_manage);
     }
 
     private void setWidgets() {
@@ -86,9 +88,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
         job = (Job) intent.getSerializableExtra("job");
         mTitle.setText(job.getName());
         mStatus.setText(job.getStatus());
-        if(job.getStatus().equals("Đang tuyển")){
+        if (job.getStatus().equals("Đang tuyển")) {
             mStatusSymbol.setTextColor(ContextCompat.getColor(this, R.color.green));
-        }else {
+        } else {
             mStatusSymbol.setTextColor(ContextCompat.getColor(this, R.color.red));
         }
         mSalary.setText(job.getSalary());
@@ -101,26 +103,36 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mRecruiterPhone.setText(job.getRecruiter().getPhoneNumber());
         mRecruiterAddress.setText(job.getRecruiter().getAddress());
 
+        if (job.getRecruiter().getId().equals(UserManager.getInstance().getUser().getId())) {
+            mSaveButton.setVisibility(View.GONE);
+            mApplyButton.setVisibility(View.GONE);
+            mManageButton.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void setWidgetListeners(){
+    private void setWidgetListeners() {
         mApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User u = UserManager.getInstance().getUser();
-                ArrayList<Job> applyList = new ArrayList<>();
-                if (u.getAppliedJobList()!=null){
-                    applyList.addAll(u.getAppliedJobList());
-                }
-                if (applyList.size()>0){
-                    for (Job j : applyList){
-                        if(j.getId().equals(job.getId())){
-                            Toast.makeText(JobDescriptionActivity.this, "Công việc này đã ứng tuyển trước đó.", Toast.LENGTH_SHORT).show();
-                            return;
+                if (!UserManager.getInstance().isUpdated()) {
+                    showDialog();
+                } else {
+                    User u = UserManager.getInstance().getUser();
+                    ArrayList<ApplyJob> applyList = new ArrayList<>();
+                    if (u.getAppliedJobList() != null) {
+                        applyList.addAll(u.getAppliedJobList());
+                    }
+                    if (applyList.size() > 0) {
+                        for (ApplyJob j : applyList) {
+                            if (j.getJob().getId().equals(job.getId())) {
+                                Toast.makeText(JobDescriptionActivity.this, "Công việc này đã ứng tuyển trước đó.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                         }
                     }
+
+                    showDescriptionDialog();
                 }
-                showDescriptionDialog();
             }
         });
 
@@ -129,11 +141,11 @@ public class JobDescriptionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 User u = UserManager.getInstance().getUser();
                 ArrayList<Job> arrayList = new ArrayList<>();
-                if (u.getFavouriteJobList()!=null){
+                if (u.getFavouriteJobList() != null) {
                     arrayList.addAll(u.getFavouriteJobList());
                 }
-                for (Job j : arrayList){
-                    if(j.getId().equals(job.getId())){
+                for (Job j : arrayList) {
+                    if (j.getId().equals(job.getId())) {
                         Toast.makeText(JobDescriptionActivity.this, "Công việc này đã được thêm vào danh sách.", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -146,14 +158,37 @@ public class JobDescriptionActivity extends AppCompatActivity {
         });
     }
 
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn cần hoàn thiện hồ sơ cá nhân để ứng tuyển");
+        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(JobDescriptionActivity.this, RegisterPersonalInfoActivity.class);
+                intent.putExtra("activity", "JobDescriptionActivity");
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     private void showDescriptionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater().from(this);
         View view = inflater.inflate(R.layout.description_candidate, null);
         final EditText editText = view.findViewById(R.id.et_candidate_description);
-        if(description.equals("")){
+        if (description.equals("")) {
             editText.setText(UserManager.getInstance().getUser().getPersonalDescription());
-        }else {
+        } else {
             editText.setText(description);
         }
         editText.setSelection(editText.getText().length());
@@ -162,9 +197,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 User u = UserManager.getInstance().getUser();
-                ArrayList<Job> applyList = new ArrayList<>();
-                applyList.add(job);
-                if (u.getAppliedJobList()!=null){
+                ArrayList<ApplyJob> applyList = new ArrayList<>();
+                applyList.add(new ApplyJob(job, ApplyJob.VIEWING_STATUS));
+                if (u.getAppliedJobList() != null) {
                     applyList.addAll(u.getAppliedJobList());
                 }
                 u.setAppliedJobList(applyList);
@@ -186,10 +221,10 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
                 candidate.setUser(user);
                 candidate.setJobExperience(editText.getText().toString());
-                candidate.setStatus("Đang chờ");
+                candidate.setStatus(ApplyJob.VIEWING_STATUS);
                 candidate.setDate(new Date().getTime());
                 candidateList.add(candidate);
-                if (job.getCandidateList()!=null){
+                if (job.getCandidateList() != null) {
                     candidateList.addAll(job.getCandidateList());
                 }
                 job.setCandidateList(candidateList);
@@ -210,25 +245,25 @@ public class JobDescriptionActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private String getTime(Calendar current, Calendar postingDate){
+    private String getTime(Calendar current, Calendar postingDate) {
         String s = "";
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
-        if(minus<2){
-            if (minus == 1){
+        if (minus < 2) {
+            if (minus == 1) {
                 s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
-            }else if(minus == 0){
+            } else if (minus == 0) {
                 int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
-                if (minus1>0){
+                if (minus1 > 0) {
                     s = minus1 + " giờ trước";
-                }else {
-                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                } else {
+                    if (current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) == 0) {
                         s = "1 phút trước";
-                    }else {
+                    } else {
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
             }
-        }else {
+        } else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
         }
 
@@ -236,10 +271,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
         }

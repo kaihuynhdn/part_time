@@ -99,12 +99,12 @@ public class HomePageActivity extends AppCompatActivity
         viewPager.setPagingEnabled(false);
 
         user = UserManager.getInstance().getUser();
-        if(user.getFullName()!=null && user.getEmail()!=null){
+        if (user.getFullName() != null && user.getEmail() != null) {
             mUserName.setText(user.getFullName());
             mUserEmail.setText(user.getEmail());
         }
 
-        toolbar.setTitle("Danh Sách Công Việc");
+        toolbar.setTitle("Việc Làm Part Time");
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -134,7 +134,7 @@ public class HomePageActivity extends AppCompatActivity
         mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if(documentSnapshot!=null && documentSnapshot.exists()){
+                if (documentSnapshot != null && documentSnapshot.exists()) {
                     User u = documentSnapshot.toObject(User.class);
                     mUserEmail.setText(u.getEmail());
                     mUserName.setText(u.getFullName());
@@ -266,7 +266,7 @@ public class HomePageActivity extends AppCompatActivity
         return true;
     }
 
-    private void showDialog(){
+    private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thông báo");
         builder.setMessage("Bạn cần hoàn thiện hồ sơ cá nhân để đăng tuyển");
@@ -313,9 +313,7 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuthStateListener != null) {
-            mAuth.removeAuthStateListener(mAuthStateListener);
-        }
+        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     @SuppressLint("RestrictedApi")

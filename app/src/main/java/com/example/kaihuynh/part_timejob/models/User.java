@@ -1,5 +1,7 @@
 package com.example.kaihuynh.part_timejob.models;
 
+import com.example.kaihuynh.part_timejob.others.ApplyJob;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +24,8 @@ public class User implements Serializable{
     private String email;
     private ArrayList<Notification> mNotificationList;
     private ArrayList<Job> mFavouriteJobList;
-    private ArrayList<Job> mAppliedJobList;
+    private ArrayList<ApplyJob> mAppliedJobList;
+    private ArrayList<Job> mRecruitmentList;
 
     public User(){
 
@@ -34,8 +37,7 @@ public class User implements Serializable{
     }
 
     public User(String id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber,
-                String skills, String education, String foreignLanguages,String personalDescription, String email,
-                String password, ArrayList<Notification> mNotificationList) {
+                String skills, String education, String foreignLanguages,String personalDescription, String email, ArrayList<Notification> mNotificationList) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
@@ -56,6 +58,14 @@ public class User implements Serializable{
 
     public void setPersonalDescription(String personalDescription) {
         this.personalDescription = personalDescription;
+    }
+
+    public ArrayList<Job> getRecruitmentList() {
+        return mRecruitmentList;
+    }
+
+    public void setRecruitmentList(ArrayList<Job> mRecruitmentList) {
+        this.mRecruitmentList = mRecruitmentList;
     }
 
     public String getId() {
@@ -146,11 +156,11 @@ public class User implements Serializable{
         this.mFavouriteJobList = mFavouriteJobList;
     }
 
-    public ArrayList<Job> getAppliedJobList() {
+    public ArrayList<ApplyJob> getAppliedJobList() {
         return mAppliedJobList;
     }
 
-    public void setAppliedJobList(ArrayList<Job> mAppliedJobList) {
+    public void setAppliedJobList(ArrayList<ApplyJob> mAppliedJobList) {
         this.mAppliedJobList = mAppliedJobList;
     }
 

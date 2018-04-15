@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
@@ -29,6 +30,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     private RecyclerView mLikedJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout mEmptyView;
 
     public static JobLikedFragment sInstance = null;
 
@@ -45,7 +47,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
 
         addComponents(view);
         initialize();
-        setWigetListeners();
+        setWidgetListeners();
         return  view;
     }
 
@@ -69,9 +71,10 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     private void addComponents(View view) {
         mLikedJobRecyclerView = view.findViewById(R.id.rv_liked_jobs);
         swipeRefreshLayout = view.findViewById(R.id.sw_like_jobs);
+        mEmptyView = view.findViewById(R.id.rl_empty_like_job);
     }
 
-    private void setWigetListeners() {
+    private void setWidgetListeners() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,13 +110,20 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
         if (UserManager.getInstance().getUser().getFavouriteJobList()!=null){
             mJobArrayList.addAll(UserManager.getInstance().getUser().getFavouriteJobList());
         }
+        if (mJobArrayList.size()<1){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }else {
+            mEmptyView.setVisibility(View.GONE);
+        }
         mAdapter = new JobAdapter(getContext(), R.layout.job_list_item, mJobArrayList, this);
         mLikedJobRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onListItemClick(int clickItemIndex) {
-        startActivity(new Intent(getContext(), JobDescriptionActivity.class));
+        Intent intent = new Intent(getContext(), JobDescriptionActivity.class);
+        intent.putExtra("job", mJobArrayList.get(clickItemIndex));
+        startActivity(intent);
     }
 
     public JobAdapter getAdapter() {

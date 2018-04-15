@@ -10,7 +10,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,8 +27,11 @@ import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +51,8 @@ public class RecruitingActivity extends AppCompatActivity {
     private ForeignLanguageAdapter languageAdapter;
     private SkillAdapter skillAdapter;
     private int edited = 0;
+
+    private CollectionReference mJobReference;
 
 
     @Override
@@ -82,6 +86,8 @@ public class RecruitingActivity extends AppCompatActivity {
     }
 
     private void init() {
+        mJobReference = FirebaseFirestore.getInstance().collection("jobs");
+
         dpi = RecruitingActivity.this.getResources().getDisplayMetrics().density;
         String[] languageArray = getResources().getStringArray(R.array.foreign_language);
         languages = new ArrayList<>();
@@ -128,7 +134,9 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isValid()) {
+                    String id = mJobReference.document().getId();
                     Job job = new Job();
+                    job.setId(id);
                     job.setRecruiter(UserManager.getInstance().getUser());
                     job.setName(mJobTitle.getText().toString());
                     job.setTimestamp(new Date().getTime());
@@ -137,10 +145,27 @@ public class RecruitingActivity extends AppCompatActivity {
                     job.setSalary(inputSalary.getText().toString());
                     job.setLocation(inputLocation.getText().toString());
                     job.setRequirement(requirementToString());
-                    job.setStatus("Đang tuyển");
+                    job.setStatus(Job.RECRUITING);
                     job.setCandidateList(new ArrayList<Candidate>());
-                    JobManager.getInstance().addJob(job);
-                    JobManager.getInstance().loadJobByUser(UserManager.getInstance().getUser().getId());
+                    JobManager.getInstance().updateJob(job);
+
+                    User u = UserManager.getInstance().getUser();
+                    ArrayList<Job> list = new ArrayList<>();
+                    Job job1 = new Job();
+                    job1.setId(id);
+                    job1.setName(mJobTitle.getText().toString());
+                    job1.setTimestamp(new Date().getTime());
+                    job1.setBenefits(mJobBenefits.getText().toString());
+                    job1.setDescription(mJobDescriptionDetail.getText().toString());
+                    job1.setSalary(inputSalary.getText().toString());
+                    job1.setLocation(inputLocation.getText().toString());
+                    job1.setRequirement(requirementToString());
+                    job1.setStatus(Job.RECRUITING);
+                    job1.setCandidateList(new ArrayList<Candidate>());
+                    list.add(job1);
+                    list.addAll(u.getRecruitmentList());
+                    u.setRecruitmentList(list);
+                    UserManager.getInstance().updateUser(u);
                     showSuccessDialog();
                 }
             }
@@ -150,7 +175,6 @@ public class RecruitingActivity extends AppCompatActivity {
     private String requirementToString() {
         String s =  mJobRequirement.getText().toString() + "\n\n";
         if(!inputSkill.getText().toString().equals("")){
-            SpannableString spannableString = new SpannableString("Kĩ năng:" + "\n\t" + inputSkill.getText().toString() + "\n");
             s += "Kĩ năng:" + "\n\t" + inputSkill.getText().toString() + "\n";
         }
         if(!inputLanguage.getText().toString().equals("")){
