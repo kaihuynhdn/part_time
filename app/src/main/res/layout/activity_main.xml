@@ -10,7 +10,7 @@
     android:background="@drawable/splash_background"
     tools:context="com.example.kaihuynh.part_timejob.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_weight="4"
         android:orientation="vertical"
         android:gravity="center"
@@ -20,7 +20,8 @@
         <TextView
             android:id="@+id/txt_title1"
             android:textSize="30sp"
-            android:text="WELCOME TO"
+            android:text="@string/title_main_1"
+            android:layout_centerHorizontal="true"
             android:fontFamily="@font/iciel_cadena"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
@@ -28,30 +29,27 @@
 
         <TextView
             android:id="@+id/txt_title2"
+            android:layout_below="@+id/txt_title1"
             android:layout_marginTop="@dimen/activity_padding"
             android:textSize="32sp"
             android:fontFamily="@font/iciel_cadena"
             android:textColor="@color/white"
-            android:text="Việc Làm Part Time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
-
-            android:progressDrawable="@android:color/transparent"
-            android:layout_marginTop="@dimen/distance_view_30"
-            android:layout_width="@dimen/seekBar_width"
-            android:thumb="@drawable/hurrry"
+            android:text="@string/title_main_2"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <ProgressBar
             android:id="@+id/progressBar"
+            android:layout_below="@id/txt_title2"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyle"
+            android:progress="25"
+            android:layout_marginTop="@dimen/distance_view_30"
             android:progressDrawable="@drawable/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="@dimen/progressBar_width"
             android:layout_height="@dimen/progressBar_height" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

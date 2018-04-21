@@ -158,7 +158,7 @@ public class SkillFragment extends Fragment {
     public String getSkills(){
         String s = "";
         for (Skill f : mSkills){
-            if(f.isChecked()){
+            if(f.isChecked() && !f.getName().equals("Không")){
                 s+=f.getName()+"\n";
             }
         }

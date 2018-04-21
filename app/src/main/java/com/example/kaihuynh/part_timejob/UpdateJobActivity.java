@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -36,12 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RecruitingActivity extends AppCompatActivity {
+public class UpdateJobActivity extends AppCompatActivity {
+
     private final int REQUEST_CODE = 111;
     private float dpi;
     private AlertDialog genderDialog;
-    private TextInputLayout inputSalaryLayout, inputLocationLayout, inputSkillLayout, inputLanguageLayout, inputGenderLayout;
-    private TextInputEditText inputSalary, inputLocation, inputSkill, inputLanguage, inputGender;
+    private TextInputEditText inputSalary, inputLocation, inputSkill, inputLanguage, inputGender, inputStatus;
     private EditText mJobDescriptionDetail, mJobBenefits, mJobRequirement;
     private ImageButton mEditTitleButton;
     private TextView mJobTitle;
@@ -51,6 +50,8 @@ public class RecruitingActivity extends AppCompatActivity {
     private ForeignLanguageAdapter languageAdapter;
     private SkillAdapter skillAdapter;
     private int edited = 0;
+    private boolean isUpdateJob = false;
+    private Job intentJob;
 
     private CollectionReference mJobReference;
 
@@ -58,8 +59,9 @@ public class RecruitingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recruiting);
+        setContentView(R.layout.activity_update_job);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Cập nhật công việc");
 
         addComponents();
         initialize();
@@ -72,11 +74,7 @@ public class RecruitingActivity extends AppCompatActivity {
         inputSkill = findViewById(R.id.input_skill_job);
         inputLanguage = findViewById(R.id.input_language_job);
         inputLocation = findViewById(R.id.input_location_job);
-        inputSalaryLayout = findViewById(R.id.input_salary_job_layout);
-        inputGenderLayout = findViewById(R.id.input_gender_job_layout);
-        inputSkillLayout = findViewById(R.id.input_skill_job_layout);
-        inputLanguageLayout = findViewById(R.id.input_language_job_layout);
-        inputLocationLayout = findViewById(R.id.input_location_job_layout);
+        inputStatus = findViewById(R.id.input_status_job);
         mJobBenefits = findViewById(R.id.et_benefits);
         mJobDescriptionDetail = findViewById(R.id.et_description_detail);
         mJobRequirement = findViewById(R.id.et_job_requirement);
@@ -88,7 +86,7 @@ public class RecruitingActivity extends AppCompatActivity {
     private void initialize() {
         mJobReference = FirebaseFirestore.getInstance().collection("jobs");
 
-        dpi = RecruitingActivity.this.getResources().getDisplayMetrics().density;
+        dpi = UpdateJobActivity.this.getResources().getDisplayMetrics().density;
         String[] languageArray = getResources().getStringArray(R.array.foreign_language);
         languages = new ArrayList<>();
         for (String s : languageArray) {
@@ -100,6 +98,60 @@ public class RecruitingActivity extends AppCompatActivity {
         for (String s : skillArray) {
             skills.add(new Skill(s, false));
         }
+
+        Intent intent = getIntent();
+        intentJob = (Job) intent.getSerializableExtra("job");
+        if (intentJob!=null){
+            isUpdateJob = true;
+            mJobTitle.setText(intentJob.getName());
+            inputSalary.setText(intentJob.getSalary());
+            inputLocation.setText(intentJob.getLocation());
+            mJobBenefits.setText(intentJob.getBenefits());
+            mJobDescriptionDetail.setText(intentJob.getDescription());
+            if (intentJob.getStatus().equals(Job.RECRUITING)){
+                inputStatus.setTextColor(getResources().getColor(R.color.green));
+            }else {
+                inputStatus.setTextColor(getResources().getColor(R.color.red));
+            }
+            inputStatus.setText(intentJob.getStatus());
+
+            String s = intentJob.getRequirement();
+            if (s.contains("\n\n")){
+                mJobRequirement.setText(s.substring(0, s.indexOf("\n\n")));
+            }
+
+            if (s.contains("- Kĩ năng:")){
+                String string = "";
+                String[] splits = s.split("- Kĩ năng:");
+                if (splits[0].contains("- Kĩ năng:")){
+                    string = splits[0];
+                }else {
+                    string = splits[1];
+                }
+                inputSkill.setText(string.substring(2, string.indexOf(".\n")));
+            }
+            if (s.contains("- Ngoại ngữ:")){
+                String string = "";
+                String[] splits = s.split("- Ngoại ngữ:");
+                if (splits[0].contains("- Ngoại ngữ:")){
+                    string = splits[0];
+                }else {
+                    string = splits[1];
+                }
+                inputLanguage.setText(string.substring(2, string.indexOf(".\n")));
+            }
+            if (s.contains("- Giới tính:")){
+                String string = "";
+                String[] splits = s.split("- Giới tính:");
+                if (splits[0].contains("- Giới tính:")){
+                    string = splits[0];
+                }else {
+                    string = splits[1];
+                }
+                inputGender.setText(string.substring(2, string.length()-1));
+            }
+
+        }
     }
 
     private void addEvents() {
@@ -109,6 +161,7 @@ public class RecruitingActivity extends AppCompatActivity {
         inputSkillEvents();
         editTitleEvents();
         recruitButtonEvents();
+        inputStatusEvents();
 
         mJobTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -128,6 +181,8 @@ public class RecruitingActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void recruitButtonEvents() {
         mRecruitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +190,13 @@ public class RecruitingActivity extends AppCompatActivity {
                 if (isValid()) {
                     String id = mJobReference.document().getId();
                     User u = UserManager.getInstance().getUser();
-                    long timeStamp = new Date().getTime();
                     User user = new User(u.getId(), u.getFullName(), u.getGender(), u.getDayOfBirth(), u.getAddress(), u.getPhoneNumber(), u.getSkills(), u.getEducation(), u.getForeignLanguages(), u.getPersonalDescription(), u.getEmail());
+                    long timeStamp = new Date().getTime();
                     Job job = new Job();
+                    if (intentJob!=null){
+                        id = intentJob.getId();
+                        timeStamp = intentJob.getTimestamp();
+                    }
                     job.setId(id);
                     job.setRecruiter(user);
                     job.setName(mJobTitle.getText().toString());
@@ -147,7 +206,7 @@ public class RecruitingActivity extends AppCompatActivity {
                     job.setSalary(inputSalary.getText().toString());
                     job.setLocation(inputLocation.getText().toString());
                     job.setRequirement(requirementToString());
-                    job.setStatus(Job.RECRUITING);
+                    job.setStatus(inputStatus.getText().toString());
                     job.setCandidateList(new ArrayList<Candidate>());
                     JobManager.getInstance().updateJob(job);
 
@@ -161,10 +220,15 @@ public class RecruitingActivity extends AppCompatActivity {
                     job1.setSalary(inputSalary.getText().toString());
                     job1.setLocation(inputLocation.getText().toString());
                     job1.setRequirement(requirementToString());
-                    job1.setStatus(Job.RECRUITING);
+                    job1.setStatus(inputStatus.getText().toString());
                     job1.setCandidateList(new ArrayList<Candidate>());
-                    list.add(job1);
                     list.addAll(u.getRecruitmentList());
+                    for (int i = 0; i< list.size(); i++){
+                        if (list.get(i).getId().equals(job1.getId())){
+                            list.set(i, job1);
+                            break;
+                        }
+                    }
                     u.setRecruitmentList(list);
                     UserManager.getInstance().updateUser(u);
                     showSuccessDialog();
@@ -195,8 +259,8 @@ public class RecruitingActivity extends AppCompatActivity {
     private void showSuccessDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thông báo");
-        builder.setMessage("Đăng tuyển công việc thành công !");
         builder.setIcon(ContextCompat.getDrawable(this, R.drawable.checked));
+        builder.setMessage(intentJob!=null ? "Cập nhật công việc thành công !" : "Đăng tuyển thành công!");
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -211,32 +275,32 @@ public class RecruitingActivity extends AppCompatActivity {
 
     private boolean isValid() {
         if (edited == 0 && mJobTitle.getText().toString().equals("Tên công việc")) {
-            Toast.makeText(RecruitingActivity.this, "Cần thêm tiều đề cho công việc.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần thêm tiều đề cho công việc.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (inputSalary.getText().toString().equals("")) {
-            Toast.makeText(RecruitingActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
             inputSalary.requestFocus();
             return false;
         }
         if (inputLocation.getText().toString().equals("")) {
-            Toast.makeText(RecruitingActivity.this, "Cần nhập thông tin nơi làm việc.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần nhập thông tin nơi làm việc.", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mJobBenefits.getText().toString().equals("")) {
-            Toast.makeText(RecruitingActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
             mJobBenefits.requestFocus();
             return false;
         }
 
         if (mJobDescriptionDetail.getText().toString().equals("")) {
-            Toast.makeText(RecruitingActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
             mJobDescriptionDetail.requestFocus();
             return false;
         }
 
         if (mJobRequirement.getText().toString().equals("") && inputLanguage.getText().toString().equals("") && inputSkill.getText().toString().equals("")) {
-            Toast.makeText(RecruitingActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
             mJobRequirement.requestFocus();
             return false;
         }
@@ -249,10 +313,10 @@ public class RecruitingActivity extends AppCompatActivity {
         mEditTitleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText input = new EditText(RecruitingActivity.this);
+                final EditText input = new EditText(UpdateJobActivity.this);
                 input.setText(mJobTitle.getText().toString().equals("Tên công việc")? "" : mJobTitle.getText().toString());
                 input.setSelection(input.getText().length());
-                AlertDialog dialog = (new AlertDialog.Builder(RecruitingActivity.this))
+                AlertDialog dialog = (new AlertDialog.Builder(UpdateJobActivity.this))
                         .setTitle("Tiêu đề công việc:")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -278,11 +342,49 @@ public class RecruitingActivity extends AppCompatActivity {
         });
     }
 
+    private void inputStatusEvents() {
+        inputStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showStatusDialog();
+            }
+        });
+
+        inputStatus.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    showStatusDialog();
+                }
+            }
+        });
+    }
+
+    private void showStatusDialog() {
+        final String []status = getResources().getStringArray(R.array.status_job);
+        new AlertDialog.Builder(this)
+                .setTitle("Trạng thái")
+                .setItems(status, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        inputStatus.setText(status[which]);
+                        if (inputStatus.getText().toString().equals(Job.RECRUITING)){
+                            inputStatus.setTextColor(getResources().getColor(R.color.green));
+                        }else if (inputStatus.getText().toString().equals(Job.UNAVAILABLE)){
+                            inputStatus.setTextColor(getResources().getColor(R.color.red));
+                        }
+                    }
+                })
+                .create()
+                .show();
+
+    }
+
     private void inputSkillEvents() {
         inputSkill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSkillDialog();
+                showSkillDialog(inputSkill.getText().toString());
             }
         });
 
@@ -290,15 +392,30 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    showSkillDialog();
+                    showSkillDialog(inputSkill.getText().toString());
                 }
             }
         });
     }
 
-    private void showSkillDialog() {
-        ListView listView = new ListView(RecruitingActivity.this);
-        skillAdapter = new SkillAdapter(RecruitingActivity.this, R.layout.skill_item, skills);
+    private void showSkillDialog(String s) {
+        String[] splits = s.split("\n");
+        for (int i = 0; i<splits.length; i++){
+            int j;
+            for (j = 0; j < skills.size(); j++){
+                if (skills.get(j).getName().equals(splits[i])){
+                    skills.get(j).setChecked(true);
+                    break;
+                }
+
+            }
+            if (j == skills.size() && !splits[i].equals("")){
+                skills.add(skills.size()-1, new Skill(splits[i], true));
+            }
+        }
+
+        ListView listView = new ListView(UpdateJobActivity.this);
+        skillAdapter = new SkillAdapter(UpdateJobActivity.this, R.layout.skill_item, skills);
         listView.setAdapter(skillAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -349,9 +466,9 @@ public class RecruitingActivity extends AppCompatActivity {
     }
 
     private void showAddSkillDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RecruitingActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UpdateJobActivity.this);
         builder.setTitle("Thêm kĩ năng:");
-        final EditText editText = new EditText(RecruitingActivity.this);
+        final EditText editText = new EditText(UpdateJobActivity.this);
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -378,21 +495,35 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    showLanguageDialog();
+                    showLanguageDialog(inputLanguage.getText().toString());
                 }
             }
         });
         inputLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLanguageDialog();
+                showLanguageDialog(inputLanguage.getText().toString());
             }
         });
     }
 
-    private void showLanguageDialog() {
-        ListView listView = new ListView(RecruitingActivity.this);
-        languageAdapter = new ForeignLanguageAdapter(RecruitingActivity.this, R.layout.foreign_language_item, languages);
+    private void showLanguageDialog(String s) {
+        String[] splits = s.split("\n");
+        for (int i = 0; i<splits.length; i++){
+            int j;
+            for (j = 0; j < languages.size(); j++){
+                if (languages.get(j).getName().equals(splits[i])){
+                    languages.get(j).setChecked(true);
+                    break;
+                }
+            }
+            if (j == languages.size() && !splits[i].equals("")){
+                languages.add(languages.size()-1, new ForeignLanguage(splits[i], true));
+            }
+        }
+
+        ListView listView = new ListView(UpdateJobActivity.this);
+        languageAdapter = new ForeignLanguageAdapter(UpdateJobActivity.this, R.layout.foreign_language_item, languages);
         listView.setAdapter(languageAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -428,6 +559,7 @@ public class RecruitingActivity extends AppCompatActivity {
                         s += f.getName() + "\n";
                     }
                 }
+
                 inputLanguage.setText(s == "" ? "" : s.substring(0, s.length() - 1));
             }
         });
@@ -443,9 +575,9 @@ public class RecruitingActivity extends AppCompatActivity {
     }
 
     private void showAddLanguageDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RecruitingActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UpdateJobActivity.this);
         builder.setTitle("Thêm ngoại ngữ:");
-        final EditText editText = new EditText(RecruitingActivity.this);
+        final EditText editText = new EditText(UpdateJobActivity.this);
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -506,7 +638,6 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setTitle("Chọn...");
 
         genderDialog = builder.create();
-        genderDialog.setCanceledOnTouchOutside(false);
         genderDialog.show();
     }
 
@@ -514,7 +645,7 @@ public class RecruitingActivity extends AppCompatActivity {
         inputLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(RecruitingActivity.this, PickLocationActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(UpdateJobActivity.this, PickLocationActivity.class), REQUEST_CODE);
             }
         });
 
@@ -522,7 +653,7 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    startActivityForResult(new Intent(RecruitingActivity.this, PickLocationActivity.class), REQUEST_CODE);
+                    startActivityForResult(new Intent(UpdateJobActivity.this, PickLocationActivity.class), REQUEST_CODE);
                 }
             }
         });

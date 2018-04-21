@@ -14,12 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import com.example.kaihuynh.part_timejob.adapters.MyAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
+import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.interfaces.LoadMore;
 import com.example.kaihuynh.part_timejob.models.Job;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
@@ -32,11 +38,14 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     private MyAdapter mAdapter;
     private RecyclerView mJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
-    private RelativeLayout relativeLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Button mLocationButton, mRemoveLocation;
+    private CollectionReference mUserReference;
+    private ListenerRegistration listenerRegistration;
 
     private boolean isLoaded = false;
+
+    public static JobListFragment sInstance = null;
 
     public JobListFragment() {
         // Required empty public constructor
@@ -58,7 +67,6 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
     private void addComponents(View view) {
         mJobRecyclerView = view.findViewById(R.id.rv_jobs);
-        relativeLayout = view.findViewById(R.id.relative_layout);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         mLocationButton = view.findViewById(R.id.btn_location);
         mRemoveLocation = view.findViewById(R.id.btn_remove_location);
@@ -66,6 +74,8 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
 
     private void initialize() {
+        mUserReference = FirebaseFirestore.getInstance().collection("users");
+
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
 
         mJobArrayList = JobManager.getInstance().getJobs();
@@ -126,6 +136,12 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
 
     private void setWidgetListener() {
+        listenerRegistration = mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -256,5 +272,27 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         }else {
             mRemoveLocation.setVisibility(View.VISIBLE);
         }
+
+        listenerRegistration = mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (listenerRegistration!=null){
+            listenerRegistration.remove();
+        }
+    }
+
+    public static JobListFragment getInstance(){
+        if (sInstance == null) {
+            sInstance = new JobListFragment();
+        }
+        return sInstance;
     }
 }

@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.HomeViewPagerAdapter;
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
@@ -40,6 +41,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.lang.reflect.Field;
 
@@ -54,6 +56,7 @@ public class HomePageActivity extends AppCompatActivity
     private CustomViewPager viewPager;
     private View header;
     private User user;
+    private ListenerRegistration listenerRegistration;
 
     //Bottom navigation
     private BottomNavigationView mBottomNavigationView;
@@ -119,8 +122,6 @@ public class HomePageActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
 
-//        mUserRef = FirebaseDatabase.getInstance().getReference().child("users");
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -131,17 +132,6 @@ public class HomePageActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    User u = documentSnapshot.toObject(User.class);
-                    mUserEmail.setText(u.getEmail());
-                    mUserName.setText(u.getFullName());
-                    UserManager.getInstance().load(u);
-                }
-            }
-        });
     }
 
     private void addComponents() {
@@ -308,12 +298,29 @@ public class HomePageActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         mAuth.addAuthStateListener(mAuthStateListener);
+        JobManager.getInstance().loadData();
+
+        listenerRegistration = mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    User u = documentSnapshot.toObject(User.class);
+                    mUserEmail.setText(u.getEmail());
+                    mUserName.setText(u.getFullName());
+                    UserManager.getInstance().load(u);
+                }
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mAuth.removeAuthStateListener(mAuthStateListener);
+        if (listenerRegistration!=null){
+            listenerRegistration.remove();
+        }
+        JobManager.getInstance().removeListener();
     }
 
     @SuppressLint("RestrictedApi")

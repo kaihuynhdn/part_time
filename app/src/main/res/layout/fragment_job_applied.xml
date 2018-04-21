@@ -76,6 +76,17 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/tv_quantity_viewing_job"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey_54"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:layout_toLeftOf="@id/btn_show_viewing_job"
+                            android:padding="@dimen/distance_view_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/linotte_semi_bold"
@@ -122,6 +133,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_quantity_employed_job"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey_54"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:layout_toLeftOf="@id/btn_show_employed_job"
+                            android:padding="@dimen/distance_view_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -180,6 +202,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_quantity_unemployed_job"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey_54"
+                            android:layout_marginRight="@dimen/distance_view_20"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:layout_toLeftOf="@id/btn_show_unemployed_job"
+                            android:padding="@dimen/distance_view_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             android:layout_width="wrap_content"

@@ -8,203 +8,218 @@
     android:focusableInTouchMode="true"
     tools:context="com.example.kaihuynh.part_timejob.JobDescriptionActivity">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:background="@drawable/grey_background"
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sw_job_description"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
+            android:id="@+id/relative_layout"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tv_job_title"
-                android:layout_marginTop="@dimen/distance_view_10"
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:background="@drawable/grey_background"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/distance_view_5"
-                android:text="@string/job_title"
-                android:textColor="@color/back_87"
-                android:textSize="22sp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_job_date"
-                android:text="2 ngày trước"
-                android:fontFamily="@font/roboto_regular"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.CardView
-                android:layout_marginTop="@dimen/distance_view_5"
-                app:cardElevation="@dimen/distance_view_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TabHost
-                    android:id="@+id/tabHost"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_job_title"
+                        android:layout_marginTop="@dimen/distance_view_10"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/distance_view_5"
+                        android:text="@string/job_title"
+                        android:textColor="@color/back_87"
+                        android:textSize="22sp" />
 
-                        <TabWidget
-                            android:id="@android:id/tabs"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_job_date"
+                        android:text="2 ngày trước"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-                        <FrameLayout
-                            android:id="@android:id/tabcontent"
+                    <android.support.v7.widget.CardView
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        app:cardElevation="@dimen/distance_view_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TabHost
+                            android:id="@+id/tabHost"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content">
 
                             <LinearLayout
-                                android:id="@+id/tab1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical">
 
-                                <include layout="@layout/job_detail_tab"/>
-                            </LinearLayout>
+                                <TabWidget
+                                    android:id="@android:id/tabs"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
 
-                            <LinearLayout
-                                android:id="@+id/tab2"
+                                <FrameLayout
+                                    android:id="@android:id/tabcontent"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <LinearLayout
+                                        android:id="@+id/tab1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                        <include layout="@layout/job_detail_tab"/>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/tab2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                        <include layout="@layout/recruiter_detail_tab"/>
+                                    </LinearLayout>
+                                </FrameLayout>
+                            </LinearLayout>
+                        </TabHost>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        app:cardCornerRadius="@dimen/distance_view_2"
+                        app:cardElevation="@dimen/distance_view_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:padding="@dimen/activity_padding"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="@string/job_description"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/back_87"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
+                                android:layout_height="wrap_content" />
 
-                                <include layout="@layout/recruiter_detail_tab"/>
-                            </LinearLayout>
-                        </FrameLayout>
-                    </LinearLayout>
-                </TabHost>
-            </android.support.v7.widget.CardView>
+                            <TextView
+                                android:id="@+id/tv_job_description"
+                                android:layout_marginLeft="@dimen/distance_view_10"
+                                android:textSize="16sp"
+                                android:lineSpacingExtra="5dp"
+                                android:layout_marginTop="@dimen/distance_view_10"
+                                android:textColor="@color/back_87"
+                                android:fontFamily="@font/roboto_regular"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        android:elevation="@dimen/distance_view_20"
+                        android:layout_marginBottom="@dimen/requirement_margin_bottom"
+                        app:cardElevation="@dimen/distance_view_2"
+                        app:cardCornerRadius="@dimen/distance_view_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:padding="@dimen/activity_padding"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="@string/personal_requirement"
+                                android:textColor="@color/back_87"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:textSize="20sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/tv_job_requirement"
+                                android:layout_marginLeft="@dimen/distance_view_10"
+                                android:textSize="16sp"
+                                android:lineSpacingExtra="5dp"
+                                android:layout_marginTop="@dimen/distance_view_10"
+                                android:textColor="@color/back_87"
+                                android:fontFamily="@font/roboto_regular"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </ScrollView>
 
             <android.support.v7.widget.CardView
-                android:layout_marginTop="@dimen/distance_view_5"
-                app:cardCornerRadius="@dimen/distance_view_2"
-                app:cardElevation="@dimen/distance_view_2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:cardElevation="@dimen/distance_view_2"
+                app:contentPaddingRight="@dimen/distance_view_2">
 
                 <LinearLayout
-                    android:padding="@dimen/activity_padding"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/distance_view_5">
 
-                    <TextView
-                        android:text="@string/job_description"
-                        android:fontFamily="@font/linotte_semi_bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/back_87"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <Button
+                        android:id="@+id/btn_save"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:padding="@dimen/distance_view_5"
+                        android:text="@string/save"
+                        android:theme="@style/SaveButton"
+                        style="@style/Widget.AppCompat.Button.Colored"/>
 
-                    <TextView
-                        android:id="@+id/tv_job_description"
-                        android:layout_marginLeft="@dimen/distance_view_10"
-                        android:textSize="16sp"
-                        android:lineSpacingExtra="5dp"
-                        android:layout_marginTop="@dimen/distance_view_10"
-                        android:textColor="@color/back_87"
-                        android:fontFamily="@font/roboto_regular"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <Button
+                        android:id="@+id/btn_apply"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/distance_view_5"
+                        android:text="@string/apply"
+                        android:theme="@style/LocationButton"
+                        style="@style/Widget.AppCompat.Button.Colored"/>
+
+                    <Button
+                        android:id="@+id/btn_manage"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/distance_view_5"
+                        android:text="@string/management"
+                        android:theme="@style/ManagementButton"
+                        style="@style/Widget.AppCompat.Button.Colored"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_marginTop="@dimen/distance_view_5"
-                android:elevation="@dimen/distance_view_20"
-                android:layout_marginBottom="@dimen/requirement_margin_bottom"
-                app:cardElevation="@dimen/distance_view_2"
-                app:cardCornerRadius="@dimen/distance_view_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:padding="@dimen/activity_padding"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="@string/personal_requirement"
-                        android:textColor="@color/back_87"
-                        android:fontFamily="@font/linotte_semi_bold"
-                        android:textSize="20sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/tv_job_requirement"
-                        android:layout_marginLeft="@dimen/distance_view_10"
-                        android:textSize="16sp"
-                        android:lineSpacingExtra="5dp"
-                        android:layout_marginTop="@dimen/distance_view_10"
-                        android:textColor="@color/back_87"
-                        android:fontFamily="@font/roboto_regular"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:cardElevation="@dimen/distance_view_5"
-        app:contentPaddingRight="@dimen/distance_view_2">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="@dimen/distance_view_5">
-
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:padding="@dimen/distance_view_5"
-                android:text="@string/save"
-                android:theme="@style/SaveButton"
-                style="@style/Widget.AppCompat.Button.Colored"/>
-
-            <Button
-                android:id="@+id/btn_apply"
-                android:layout_width="0dp"
-                android:textStyle="bold"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="@dimen/distance_view_5"
-                android:text="@string/apply"
-                android:theme="@style/LocationButton"
-                style="@style/Widget.AppCompat.Button.Colored"/>
-
-            <Button
-                android:id="@+id/btn_manage"
-                android:layout_width="0dp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="@dimen/distance_view_5"
-                android:text="@string/management"
-                style="@style/Widget.AppCompat.Button.Colored"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

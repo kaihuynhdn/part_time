@@ -119,8 +119,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance_view_10"
-                    android:layout_toRightOf="@id/tv_posted_date"
-                    android:text="12/10/2017"
                     android:textSize="14sp" />
 
             </LinearLayout>

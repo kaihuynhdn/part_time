@@ -3,7 +3,9 @@ package com.example.kaihuynh.part_timejob;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private TextView mTitle, mDate, mStatus, mStatusSymbol, mSalary, mLocation, mBenefit, mRequirement, mDescription;
     private TextView mRecruiterName, mRecruiterEmail, mRecruiterPhone, mRecruiterAddress;
     private Button mApplyButton, mSaveButton, mManageButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout relativeLayout;
     private String description = "";
     private Job job;
 
@@ -41,6 +46,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_description);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Mô tả công việc");
 
         getWidgets();
         setWidgets();
@@ -66,6 +72,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mApplyButton = findViewById(R.id.btn_apply);
         mSaveButton = findViewById(R.id.btn_save);
         mManageButton = findViewById(R.id.btn_manage);
+        swipeRefreshLayout = findViewById(R.id.sw_job_description);
+        relativeLayout = findViewById(R.id.relative_layout);
     }
 
     private void setWidgets() {
@@ -84,30 +92,72 @@ public class JobDescriptionActivity extends AppCompatActivity {
     }
 
     private void initial() {
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.lightBlue_700));
         Intent intent = getIntent();
         job = (Job) intent.getSerializableExtra("job");
-        mTitle.setText(job.getName());
-        mStatus.setText(job.getStatus());
-        if (job.getStatus().equals("Đang tuyển")) {
-            mStatusSymbol.setTextColor(ContextCompat.getColor(this, R.color.green));
-        } else {
-            mStatusSymbol.setTextColor(ContextCompat.getColor(this, R.color.red));
-        }
-        mSalary.setText(job.getSalary());
-        mLocation.setText(job.getLocation());
-        mBenefit.setText(job.getBenefits());
-        mDescription.setText(job.getDescription());
-        mRequirement.setText(job.getRequirement());
-        mRecruiterName.setText(job.getRecruiter().getFullName());
-        mRecruiterEmail.setText(job.getRecruiter().getEmail());
-        mRecruiterPhone.setText(job.getRecruiter().getPhoneNumber());
-        mRecruiterAddress.setText(job.getRecruiter().getAddress());
+        JobManager.getInstance().loadJobById(job.getId());
+        swipeRefreshLayout.setRefreshing(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (JobManager.getInstance().getJobById()!=null){
+                    job = JobManager.getInstance().getJobById();
+                }
+                mTitle.setText(job.getName());
+                mStatus.setText(job.getStatus());
+                if (job.getStatus().equals(Job.RECRUITING)) {
+                    mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.green));
+                } else {
+                    mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.red));
+                }
+                mSalary.setText(job.getSalary());
+                mLocation.setText(job.getLocation());
+                mBenefit.setText(job.getBenefits());
+                mDescription.setText(job.getDescription());
+                mRequirement.setText(job.getRequirement());
+                mRecruiterName.setText(job.getRecruiter().getFullName());
+                mRecruiterEmail.setText(job.getRecruiter().getEmail());
+                mRecruiterPhone.setText(job.getRecruiter().getPhoneNumber());
+                mRecruiterAddress.setText(job.getRecruiter().getAddress());
 
-        if (job.getRecruiter().getId().equals(UserManager.getInstance().getUser().getId())) {
-            mSaveButton.setVisibility(View.GONE);
-            mApplyButton.setVisibility(View.GONE);
-            mManageButton.setVisibility(View.VISIBLE);
-        }
+                User u = UserManager.getInstance().getUser();
+
+
+                if (job.getRecruiter().getId().equals(u.getId())) {
+                    mSaveButton.setVisibility(View.GONE);
+                    mApplyButton.setVisibility(View.GONE);
+                    mManageButton.setVisibility(View.VISIBLE);
+                }
+
+                ArrayList<ApplyJob> applyList = new ArrayList<>();
+                if (u.getAppliedJobList() != null) {
+                    applyList.addAll(u.getAppliedJobList());
+                }
+                if (applyList.size() > 0) {
+                    for (ApplyJob j : applyList) {
+                        if (j.getJob().getId().equals(job.getId())) {
+                            mApplyButton.setText("Đã ứng tuyển !");
+                            mApplyButton.setClickable(false);
+                            break;
+                        }
+                    }
+                }
+
+                ArrayList<Job> arrayList = new ArrayList<>();
+                if (u.getFavouriteJobList() != null) {
+                    arrayList.addAll(u.getFavouriteJobList());
+                }
+                for (Job j : arrayList) {
+                    if (j.getId().equals(job.getId())) {
+                        mSaveButton.setText("Hủy Lưu");
+                        break;
+                    }
+                }
+                swipeRefreshLayout.setRefreshing(false);
+                relativeLayout.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setEnabled(false);
+            }
+        }, 800);
     }
 
     private void setWidgetListeners() {
@@ -116,22 +166,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!UserManager.getInstance().isUpdated()) {
                     showDialog();
-                } else {
-                    User u = UserManager.getInstance().getUser();
-                    ArrayList<ApplyJob> applyList = new ArrayList<>();
-                    if (u.getAppliedJobList() != null) {
-                        applyList.addAll(u.getAppliedJobList());
-                    }
-                    if (applyList.size() > 0) {
-                        for (ApplyJob j : applyList) {
-                            if (j.getJob().getId().equals(job.getId())) {
-                                Toast.makeText(JobDescriptionActivity.this, "Công việc này đã ứng tuyển trước đó.", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-                    }
-
+                } else if (!mApplyButton.getText().toString().equals("Đã ứng tuyển !")){
                     showDescriptionDialog();
+                    mApplyButton.setText("Đã ứng tuyển !");
                 }
             }
         });
@@ -139,21 +176,32 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User u = UserManager.getInstance().getUser();
-                ArrayList<Job> arrayList = new ArrayList<>();
-                if (u.getFavouriteJobList() != null) {
-                    arrayList.addAll(u.getFavouriteJobList());
-                }
-                for (Job j : arrayList) {
-                    if (j.getId().equals(job.getId())) {
-                        Toast.makeText(JobDescriptionActivity.this, "Công việc này đã được thêm vào danh sách.", Toast.LENGTH_SHORT).show();
-                        return;
+                if (mSaveButton.getText().toString().equals("Lưu")){
+                    User u = UserManager.getInstance().getUser();
+                    ArrayList<Job> arrayList = new ArrayList<>();
+                    Job j = job;
+                    j.setRecruiter(null);
+                    j.setCandidateList(new ArrayList<Candidate>());
+                    arrayList.add(j);
+                    if (u.getFavouriteJobList() != null) {
+                        arrayList.addAll(u.getFavouriteJobList());
                     }
+                    u.setFavouriteJobList(arrayList);
+                    UserManager.getInstance().updateUser(u);
+                    Toast.makeText(JobDescriptionActivity.this, "Lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+                    mSaveButton.setText("Hủy Lưu");
+                }else if (mSaveButton.getText().toString().equals("Hủy Lưu")){
+                    UserManager.getInstance().removeFavouriteJob(job.getId());
                 }
-                arrayList.add(job);
-                u.setFavouriteJobList(arrayList);
-                UserManager.getInstance().updateUser(u);
-                Toast.makeText(JobDescriptionActivity.this, "Lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        mManageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JobDescriptionActivity.this, ListRecruitmentActivity.class));
+                finish();
             }
         });
     }
@@ -198,7 +246,10 @@ public class JobDescriptionActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 User u = UserManager.getInstance().getUser();
                 ArrayList<ApplyJob> applyList = new ArrayList<>();
-                applyList.add(new ApplyJob(job, ApplyJob.VIEWING_STATUS));
+                Job addJob = job;
+                addJob.setRecruiter(null);
+                addJob.setCandidateList(new ArrayList<Candidate>());
+                applyList.add(new ApplyJob(addJob, ApplyJob.VIEWING_STATUS));
                 if (u.getAppliedJobList() != null) {
                     applyList.addAll(u.getAppliedJobList());
                 }

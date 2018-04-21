@@ -89,7 +89,7 @@
     <string name="option">⋮</string>
     <string name="date_posted">Ngày Đăng:</string>
     <string name="benefit">PHÚC LỢI:</string>
-    <string name="job_title">Job Title</string>
+    <string name="job_title">Tên công việc</string>
     <string name="job_info">THÔNG TIN CÔNG VIỆC</string>
     <string name="text4">Nhập thông tin...</string>
     <string name="job_description">MÔ TẢ CÔNG VIỆC</string>
@@ -102,7 +102,7 @@
     <string name="personal_description">Mô tả cá nhân</string>
     <string name="general">Thông tin chung</string>
     <string name="update">Chỉnh sửa</string>
-    <string name="applied_date">Ngày ứng tuyển:</string>
+    <string name="applied_date">Thời gian ứng tuyển:</string>
     <string name="age">Tuổi</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
@@ -119,6 +119,13 @@
     <string name="viewing">Đang duyệt</string>
     <string name="empty_recruitment">Bạn chưa <b>Đăng tuyển</b> công việc nào.\nHãy đăng tin một công việc mới nào!</string>
     <string name="empty_candidate">Chưa có ứng viên của công việc này !</string>
+    <string name="profile_activity">Thông tin cá nhân</string>
+    <string name="recruiting_activity">Đăng tuyển công việc</string>
+    <string name="title_main_1">WELCOME TO</string>
+    <string name="title_main_2">Việc Làm Part Time</string>
+    <string name="waiting_check">Đang chờ duyệt</string>
+    <string name="update_job">CẬP NHẬT</string>
+    <string name="status">Trạng thái</string>
 
     <string-array name="gender">
         <item>Nam</item>
@@ -135,6 +142,11 @@
         <item>Thạc sĩ</item>
         <item>Tiến sĩ</item>
         <item>Khác</item>
+    </string-array>
+
+    <string-array name="status_job">
+        <item>Đang tuyển</item>
+        <item>Ngưng tuyển</item>
     </string-array>
 
     <string-array name="location">

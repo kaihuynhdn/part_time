@@ -95,7 +95,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
-        mAdapter = new JobAdapter(ListRecruitmentActivity.this, R.layout.job_list_item, mJobArrayList, this);
+        mAdapter = new JobAdapter(ListRecruitmentActivity.this, R.layout.rv_job_item, mJobArrayList, this);
         mListRecruitmentRecyclerView.setAdapter(mAdapter);
     }
 

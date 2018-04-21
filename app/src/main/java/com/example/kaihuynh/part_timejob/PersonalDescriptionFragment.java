@@ -20,9 +20,6 @@ import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.ApplyJob;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,11 +35,6 @@ public class PersonalDescriptionFragment extends Fragment {
     private CustomViewPager mViewPager;
     private EditText mDescription;
     private ProgressDialog mProgress;
-
-    //Firebase instance variables
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserDatabaseReference;
-    private FirebaseAuth mAuth;
 
 
     private static PersonalDescriptionFragment sInstance = null;
@@ -72,12 +64,6 @@ public class PersonalDescriptionFragment extends Fragment {
         mProgress.setMessage("Đang xử lý thông tin...");
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
-
-        mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
-
 
     }
 
@@ -132,12 +118,14 @@ public class PersonalDescriptionFragment extends Fragment {
                 if(getActivity().getIntent().getStringExtra("activity").equals("RegisterAccountInfoActivity")){
                     startActivity(new Intent(getContext(), HomePageActivity.class));
                     LoginMethodActivity.getInstance().finish();
+                    getActivity().finish();
                 }else if(getActivity().getIntent().getStringExtra("activity").equals("HomePageActivity")){
                     startActivity(new Intent(getContext(), ProfileActivity.class));
+                    getActivity().finish();
                 }else if(getActivity().getIntent().getStringExtra("activity").equals("RecruitingActivity")){
                     startActivity(new Intent(getContext(), RecruitingActivity.class));
+                    getActivity().finish();
                 }
-                getActivity().finish();
             }
         });
 

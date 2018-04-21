@@ -157,7 +157,7 @@ public class ForeignLanguageFragment extends Fragment {
     public String getLanguages(){
         String s = "";
         for (ForeignLanguage f : mForeignLanguages){
-            if(f.isChecked()){
+            if(f.isChecked() && !f.getName().equals("Không")){
                 s+=f.getName()+"\n";
             }
         }

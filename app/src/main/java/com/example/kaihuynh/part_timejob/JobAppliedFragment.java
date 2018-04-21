@@ -1,6 +1,7 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.ApplyJobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
@@ -33,6 +35,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     private RelativeLayout mEmptyView, viewingLayout, relativeViewing, employedLayout, relativeEmployed, unemployedLayout, relativeUnemployed;
     private View view1, view2, view3;
     private Button mShowViewing, mShowEmployed, mShowUnemployed;
+    private TextView mQuantityViewingJob, mQuantityEmployedJob, mQuantityUnemployedJob;
 
     public static JobAppliedFragment sInstance = null;
 
@@ -97,6 +100,9 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         mShowViewing = view.findViewById(R.id.btn_show_viewing_job);
         mShowEmployed = view.findViewById(R.id.btn_show_employed_job);
         mShowUnemployed = view.findViewById(R.id.btn_show_unemployed_job);
+        mQuantityViewingJob = view.findViewById(R.id.tv_quantity_viewing_job);
+        mQuantityEmployedJob = view.findViewById(R.id.tv_quantity_employed_job);
+        mQuantityUnemployedJob = view.findViewById(R.id.tv_quantity_unemployed_job);
     }
 
     private void setWidgetListeners() {
@@ -172,7 +178,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
                         public void run() {
                             mShowEmployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.green_up_narrow));
                         }
-                    }, 350);
+                    }, -350);
                 }
             }
         });
@@ -198,7 +204,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
                         public void run() {
                             mShowUnemployed.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.red_up_narrow));
                         }
-                    }, 350);
+                    }, -350);
                 }
             }
         });
@@ -222,20 +228,23 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
                 mViewingJobArrayList.remove(job);
             }
         }
+        mQuantityViewingJob.setText(mViewingJobArrayList.size()+"");
+        mQuantityEmployedJob.setText(mEmployedJobArrayList.size()+"");
+        mQuantityUnemployedJob.setText(mUnemployedJobArrayList.size()+"");
 
-        mAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mViewingJobArrayList, this);
+        mAdapter = new ApplyJobAdapter(getContext(), R.layout.rv_job_item, mViewingJobArrayList, this);
         mViewingRecyclerView.setAdapter(mAdapter);
 
-        mEmployedAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mEmployedJobArrayList, this);
+        mEmployedAdapter = new ApplyJobAdapter(getContext(), R.layout.rv_job_item, mEmployedJobArrayList, this);
         mEmployedRecyclerView.setAdapter(mEmployedAdapter);
 
-        mUnemployedAdapter = new ApplyJobAdapter(getContext(), R.layout.job_list_item, mUnemployedJobArrayList, this);
+        mUnemployedAdapter = new ApplyJobAdapter(getContext(), R.layout.rv_job_item, mUnemployedJobArrayList, this);
         mUnemployedRecyclerView.setAdapter(mUnemployedAdapter);
     }
 
     public void refreshData() {
         loadData();
-        if (mViewingJobArrayList.size() < 1) {
+        if (mViewingJobArrayList.size() < 1 && mEmployedJobArrayList.size()<1 && mUnemployedJobArrayList.size()<1) {
             mEmptyView.setVisibility(View.VISIBLE);
             viewingLayout.setVisibility(View.GONE);
             employedLayout.setVisibility(View.GONE);
@@ -254,11 +263,6 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         }
     }
 
-    @Override
-    public void onListItemClick(int clickItemIndex) {
-        //startActivity(new Intent(getContext(), JobDescriptionActivity.class));
-    }
-
     public static JobAppliedFragment getInstance() {
         if (sInstance == null) {
             sInstance = new JobAppliedFragment();
@@ -270,5 +274,12 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     public void onStart() {
         super.onStart();
         refreshData();
+    }
+
+    @Override
+    public void onListItemClick(int clickItemIndex, ArrayList<ApplyJob> applyJobs) {
+        Intent intent = new Intent(getContext(), JobDescriptionActivity.class);
+        intent.putExtra("job", applyJobs.get(clickItemIndex).getJob());
+        startActivity(intent);
     }
 }

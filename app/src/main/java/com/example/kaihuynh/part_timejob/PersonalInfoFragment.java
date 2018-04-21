@@ -163,7 +163,7 @@ public class PersonalInfoFragment extends Fragment {
         builder.setView(view);
 
         final NumberPicker numberPicker = view.findViewById(R.id.np_education);
-        final String[] strings = {"Trung học", "Trung cấp", "Cao đẳng", "Cử nhân", "Thạc sĩ", "Tiến sĩ", "Khác"};
+        final String[] strings = getResources().getStringArray(R.array.education);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(strings.length-1);
         numberPicker.setDisplayedValues(strings);

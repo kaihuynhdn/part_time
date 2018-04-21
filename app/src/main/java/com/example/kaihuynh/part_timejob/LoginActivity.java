@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,8 +36,6 @@ public class LoginActivity extends AppCompatActivity{
     //Firebase instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-//    private FirebaseDatabase mFirebaseDatabase;
-//    private DatabaseReference mUserRef;
 
     private FirebaseFirestore db;
     private CollectionReference mUserReference;
@@ -61,8 +58,6 @@ public class LoginActivity extends AppCompatActivity{
 
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
-//        mFirebaseDatabase = FirebaseDatabase.getInstance();
-//        mUserRef = mFirebaseDatabase.getReference().child("users");
 
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -70,22 +65,20 @@ public class LoginActivity extends AppCompatActivity{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!= null){
-                    mUserReference.document(user.getUid()).get()
-                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()){
-                                        User u = documentSnapshot.toObject(User.class);
-                                        UserManager.getInstance().load(u);
-                                    }
-                                    if (mProgress.isShowing()){
-                                        mProgress.dismiss();
-                                    }
-                                    startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
-                                    finish();
-                                }
-                            });
-
+                    mUserReference.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful() && task.getResult()!=null){
+                                User u = task.getResult().toObject(User.class);
+                                UserManager.getInstance().load(u);
+                            }
+                            if (mProgress.isShowing()){
+                                mProgress.dismiss();
+                            }
+                            startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
+                            finish();
+                        }
+                    });
                 }
             }
         };
@@ -192,5 +185,10 @@ public class LoginActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         mAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

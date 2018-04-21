@@ -32,13 +32,15 @@
                     android:textColor="@color/back_87"
                     android:textSize="18sp" />
 
-                <ImageView
-                    android:id="@+id/image_like"
-                    android:src="@drawable/like"
+                <TextView
+                    android:id="@+id/tv_job_item_menu"
                     android:paddingHorizontal="@dimen/distance_view_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
+                    android:layout_alignParentRight="true"
+                    android:textStyle="bold"
+                    android:text="@string/option"
+                    android:textAppearance="?android:textAppearanceMedium" />
             </RelativeLayout>
 
             <LinearLayout

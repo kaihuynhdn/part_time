@@ -2,6 +2,7 @@ package com.example.kaihuynh.part_timejob.controllers;
 
 import android.support.annotation.NonNull;
 
+import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -9,6 +10,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * Created by Kai on 2018-02-03.
@@ -53,6 +56,28 @@ public class UserManager {
                 }
             }
         });
+    }
+
+    public boolean isLikeJob(String id){
+        for (Job job : user.getFavouriteJobList()){
+            if (job.getId().equals(id)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void removeFavouriteJob(String id){
+        ArrayList<Job> jobs = user.getFavouriteJobList();
+        for (Job job : jobs){
+            if (job.getId().equals(id)){
+                jobs.remove(job);
+            }
+        }
+        User u = user;
+        u.setFavouriteJobList(jobs);
+        updateUser(u);
     }
 
     public void updateJobStatus(User u){

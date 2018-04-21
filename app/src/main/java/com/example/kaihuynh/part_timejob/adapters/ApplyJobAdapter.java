@@ -24,7 +24,7 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
     final private ApplyJobAdapter.ListItemClickListener mOnClickListener;
 
     public interface ListItemClickListener {
-        void onListItemClick(int clickItemIndex);
+        void onListItemClick(int clickItemIndex, ArrayList<ApplyJob> applyJobs);
     }
 
 
@@ -104,7 +104,7 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPosition);
+            mOnClickListener.onListItemClick(clickedPosition, mJobList);
         }
     }
 }

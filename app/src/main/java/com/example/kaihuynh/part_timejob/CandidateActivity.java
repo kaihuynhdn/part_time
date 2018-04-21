@@ -91,16 +91,20 @@ public class CandidateActivity extends AppCompatActivity {
         mIgnoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
-                setActionButton(ApplyJob.UNEMPLOYED_STATUS);
+                if (mIgnoreButton.getText().equals("Từ chối")){
+                    actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
+                    setActionButton(ApplyJob.UNEMPLOYED_STATUS);
+                }
             }
         });
 
         mAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionToCandidate(ApplyJob.EMPLOYED_STATUS);
-                setActionButton(ApplyJob.EMPLOYED_STATUS);
+                if (mAcceptButton.getText().equals("Đồng ý")){
+                    actionToCandidate(ApplyJob.EMPLOYED_STATUS);
+                    setActionButton(ApplyJob.EMPLOYED_STATUS);
+                }
             }
         });
     }
@@ -144,7 +148,6 @@ public class CandidateActivity extends AppCompatActivity {
                 UserManager.getInstance().updateJobStatus(u);
             }
         }, 1500);
-
     }
 
     private String getTime(Calendar current, Calendar postingDate){

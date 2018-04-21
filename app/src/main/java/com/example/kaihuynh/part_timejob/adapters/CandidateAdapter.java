@@ -29,7 +29,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
 
 
     public interface ListItemClickListener {
-        void onListItemClick(int clickItemIndex);
+        void onListItemClick(int clickItemIndex, ArrayList<Candidate> mCandidates);
     }
 
     public CandidateAdapter(Context context, int layout, ArrayList<Candidate> mCandidateList, ListItemClickListener listener){
@@ -106,7 +106,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPosition);
+            mOnClickListener.onListItemClick(clickedPosition, mCandidateList);
         }
     }
 }

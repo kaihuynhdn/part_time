@@ -31,13 +31,27 @@ public class User implements Serializable{
 
     }
 
-    public User(String fullName, String email, String password) {
+    public User(String fullName, String email) {
         this.fullName = fullName;
         this.email = email;
     }
 
+    public User(String id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber, String skills, String education, String foreignLanguages, String personalDescription, String email) {
+        this.id = id;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.dayOfBirth = dayOfBirth;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.skills = skills;
+        this.education = education;
+        this.foreignLanguages = foreignLanguages;
+        this.personalDescription = personalDescription;
+        this.email = email;
+    }
+
     public User(String id, String fullName, String gender, Date dayOfBirth, String address, String phoneNumber,
-                String skills, String education, String foreignLanguages,String personalDescription, String email, ArrayList<Notification> mNotificationList) {
+                String skills, String education, String foreignLanguages, String personalDescription, String email, ArrayList<Notification> mNotificationList) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;

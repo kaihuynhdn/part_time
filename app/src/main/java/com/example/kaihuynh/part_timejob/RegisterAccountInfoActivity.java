@@ -86,6 +86,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                 intent.putExtra("activity", "RegisterAccountInfoActivity");
                 startActivity(intent);
                 LoginMethodActivity.getInstance().finish();
+                LoginActivity.getInstance().finish();
                 finish();
             }
         });
@@ -94,6 +95,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 startActivity(new Intent(RegisterAccountInfoActivity.this, HomePageActivity.class));
                 LoginMethodActivity.getInstance().finish();
+                LoginActivity.getInstance().finish();
                 finish();
             }
         });

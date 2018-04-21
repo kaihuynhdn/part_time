@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
@@ -35,6 +36,11 @@ import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.Skill;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -64,6 +70,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     //Firebase instance variables
     private CollectionReference mUserReference;
+    private DatabaseReference connectedRef;
+    private ValueEventListener valueEventListener;
+
+    private boolean isConnect = false;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +100,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        checkConnect();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this,R.drawable.back));
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.back));
 
         user = UserManager.getInstance().getUser();
         mName.setText(user.getFullName());
@@ -116,12 +129,12 @@ public class ProfileActivity extends AppCompatActivity {
         skills = new ArrayList<>();
 
         String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        for(String s : languageArray){
+        for (String s : languageArray) {
             languageList.add(s);
         }
 
         String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        for(String s : skillArray){
+        for (String s : skillArray) {
             skillList.add(s);
         }
 
@@ -130,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
         mUserReference.document(user.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful() && task.getResult().exists()){
+                if (task.isSuccessful() && task.getResult().exists()) {
                     User u = task.getResult().toObject(User.class);
                     mName.setText(u.getFullName());
                     mEmail.setText(u.getEmail());
@@ -165,6 +178,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    private void notification(String s) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(ProfileActivity.this, s, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     private void editInfoProfileEvents() {
         mEditInfoProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,12 +209,12 @@ public class ProfileActivity extends AppCompatActivity {
         inputPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
-                    if(inputPhoneNumber.getText().toString().equals("")){
+                if (b) {
+                    if (inputPhoneNumber.getText().toString().equals("")) {
                         inputPhoneNumber.setText("+84 ");
                     }
-                }else {
-                    if(inputPhoneNumber.getText().toString().equals("+84 ")){
+                } else {
+                    if (inputPhoneNumber.getText().toString().equals("+84 ")) {
                         inputPhoneNumber.setText("");
                     }
                 }
@@ -209,7 +230,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String s = inputPhoneNumber.getText().toString();
-                if (s.equals("+84")){
+                if (s.equals("+84")) {
                     inputPhoneNumber.setText("+84 ");
                     inputPhoneNumber.setSelection(inputPhoneNumber.length());
                 }
@@ -224,13 +245,17 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManager.getInstance().getUser();
-                u.setFullName(inputName.getText().toString());
-                u.setPhoneNumber(inputPhoneNumber.getText().toString());
-                UserManager.getInstance().updateUser(u);
-                mName.requestFocus();
-                mName.setText(inputName.getText().toString());
-                mPhoneNumber.setText(inputPhoneNumber.getText().toString());
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setFullName(inputName.getText().toString());
+                    u.setPhoneNumber(inputPhoneNumber.getText().toString());
+                    UserManager.getInstance().updateUser(u);
+                    mName.requestFocus();
+                    mName.setText(inputName.getText().toString());
+                    mPhoneNumber.setText(inputPhoneNumber.getText().toString());
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
             }
         });
 
@@ -259,13 +284,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showEditDescription() {
         final EditText editText = new EditText(this);
-        editText.setBackground(ContextCompat.getDrawable(this,R.drawable.input_template));
+        editText.setBackground(ContextCompat.getDrawable(this, R.drawable.input_template));
         editText.setMinHeight(300);
         editText.setTextSize(16);
         editText.setHint("Nhập thông tin...");
-        editText.setPadding(15,10,10,15);
+        editText.setPadding(15, 10, 10, 15);
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
-        editText.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  getResources().getDisplayMetrics()), 1.0f);
+        editText.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, getResources().getDisplayMetrics()), 1.0f);
         editText.setText(mDescriptionTextView.getText());
         editText.setSelection(mDescriptionTextView.getText().toString().length());
 
@@ -280,17 +305,21 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManager.getInstance().getUser();
-                u.setPersonalDescription(editText.getText().toString());
-                UserManager.getInstance().updateUser(u);
-                mDescriptionTextView.setText(editText.getText().toString());
-                mDescriptionTextView.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setPersonalDescription(editText.getText().toString());
+                    UserManager.getInstance().updateUser(u);
+                    mDescriptionTextView.setText(editText.getText().toString());
+                    mDescriptionTextView.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
             }
         });
 
 
         AlertDialog alertDialog = builder.create();
-        alertDialog.setView(editText, (int)(15*dpi), (int)(20*dpi), (int)(20*dpi), (int)(15*dpi));
+        alertDialog.setView(editText, (int) (15 * dpi), (int) (20 * dpi), (int) (20 * dpi), (int) (15 * dpi));
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
     }
@@ -325,22 +354,22 @@ public class ProfileActivity extends AppCompatActivity {
                     break;
                 }
             }
-            if (!same && skillItem[i].toString()!="") {
+            if (!same && skillItem[i].toString() != "") {
                 skillList.add(skillList.size() - 1, skillItem[i].toString());
             }
         }
 
         skills.clear();
-        for(int i =0 ; i< skillList.size(); i++){
+        for (int i = 0; i < skillList.size(); i++) {
             boolean same = false;
-            for (int j = 0; j<skillItem.length; j++){
-                if (skillItem[j].trim().equals(skillList.get(i).trim())){
+            for (int j = 0; j < skillItem.length; j++) {
+                if (skillItem[j].trim().equals(skillList.get(i).trim())) {
                     skills.add(new Skill(skillList.get(i), true));
                     same = true;
                     break;
                 }
             }
-            if(!same){
+            if (!same) {
                 skills.add(new Skill(skillList.get(i), false));
             }
         }
@@ -382,11 +411,16 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                User u = UserManager.getInstance().getUser();
-                u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
-                inputSkill.setText(u.getSkills());
-                UserManager.getInstance().updateUser(u);
-                inputSkill.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
+                    inputSkill.setText(u.getSkills());
+                    UserManager.getInstance().updateUser(u);
+                    inputSkill.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
+
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -454,22 +488,22 @@ public class ProfileActivity extends AppCompatActivity {
                     break;
                 }
             }
-            if (!same && languageItem[i]!="") {
+            if (!same && languageItem[i] != "") {
                 languageList.add(languageList.size() - 1, languageItem[i]);
             }
         }
 
         languages.clear();
-        for(int i =0 ; i< languageList.size(); i++){
+        for (int i = 0; i < languageList.size(); i++) {
             boolean same = false;
-            for (int j = 0; j<languageItem.length; j++){
-                if (languageItem[j].trim().equals(languageList.get(i).trim())){
+            for (int j = 0; j < languageItem.length; j++) {
+                if (languageItem[j].trim().equals(languageList.get(i).trim())) {
                     languages.add(new ForeignLanguage(languageList.get(i), true));
                     break;
                 }
             }
 
-            if(!same){
+            if (!same) {
                 languages.add(new ForeignLanguage(languageList.get(i), false));
             }
         }
@@ -510,11 +544,16 @@ public class ProfileActivity extends AppCompatActivity {
                         s += f.getName() + "\n";
                     }
                 }
-                User u = UserManager.getInstance().getUser();
-                u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
-                inputLanguage.setText(u.getForeignLanguages());
-                UserManager.getInstance().updateUser(u);
-                inputLanguage.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
+                    inputLanguage.setText(u.getForeignLanguages());
+                    UserManager.getInstance().updateUser(u);
+                    inputLanguage.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
+
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -599,11 +638,17 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManager.getInstance().getUser();
-                u.setEducation(strings[numberPicker.getValue()]);
-                inputEducation.setText(u.getEducation());
-                UserManager.getInstance().updateUser(u);
-                inputEducation.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setEducation(strings[numberPicker.getValue()]);
+                    inputEducation.setText(u.getEducation());
+                    UserManager.getInstance().updateUser(u);
+                    inputEducation.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
+
+
             }
         });
 
@@ -660,7 +705,7 @@ public class ProfileActivity extends AppCompatActivity {
         final String[] strings = getResources().getStringArray(R.array.gender);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        switch (s){
+        switch (s) {
             case "Nam":
                 checkedItem = 0;
                 break;
@@ -680,11 +725,16 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                User u = UserManager.getInstance().getUser();
-                u.setGender(genderChoice);
-                UserManager.getInstance().updateUser(u);
-                inputGender.setText(u.getGender());
-                inputGender.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setGender(genderChoice);
+                    UserManager.getInstance().updateUser(u);
+                    inputGender.setText(u.getGender());
+                    inputGender.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
+
             }
         });
         builder.setNegativeButton("Huỷ", new DialogInterface.OnClickListener() {
@@ -724,11 +774,16 @@ public class ProfileActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 calendar.set(year, month, day);
-                User u = UserManager.getInstance().getUser();
-                u.setDayOfBirth(calendar.getTime());
-                UserManager.getInstance().updateUser(u);
-                inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
-                inputDOB.requestFocus();
+                if (isConnect) {
+                    User u = UserManager.getInstance().getUser();
+                    u.setDayOfBirth(calendar.getTime());
+                    UserManager.getInstance().updateUser(u);
+                    inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
+                    inputDOB.requestFocus();
+                } else {
+                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                }
+
             }
         };
 
@@ -750,13 +805,38 @@ public class ProfileActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void checkConnect() {
+        valueEventListener = connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    isConnect = true;
+                } else {
+                    isConnect = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            User u = UserManager.getInstance().getUser();
-            u.setAddress(data.getStringExtra("location"));
-            UserManager.getInstance().updateUser(u);
-            inputAddress.requestFocus();
+            if (isConnect) {
+                User u = UserManager.getInstance().getUser();
+                u.setAddress(data.getStringExtra("location"));
+                UserManager.getInstance().updateUser(u);
+                inputAddress.setText(u.getAddress());
+                inputAddress.requestFocus();
+            } else {
+                notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+            }
+
         } else {
             inputAddress.setSelection(0);
         }
@@ -767,10 +847,24 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (valueEventListener!=null){
+            connectedRef.removeEventListener(valueEventListener);
+        }
     }
 }

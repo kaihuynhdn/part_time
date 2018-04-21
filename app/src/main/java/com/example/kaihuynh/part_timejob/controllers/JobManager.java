@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,6 +31,7 @@ public class JobManager {
     private ArrayList<Job> mMoreJobListByLocation;
     private Job jobById;
     private int jobCount = 0;
+    private ListenerRegistration listenerRegistration;
 
     private CollectionReference mJobReference;
 
@@ -44,7 +46,7 @@ public class JobManager {
     }
 
     public void loadData() {
-        mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration = mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 jobCount = (int) documentSnapshots.getDocuments().size();
@@ -99,6 +101,7 @@ public class JobManager {
 
 
     public void loadJobById(String id) {
+        jobById = null;
         mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -173,6 +176,12 @@ public class JobManager {
                         }
                     }
                 });
+    }
+
+    public void removeListener(){
+        if (listenerRegistration!=null){
+            listenerRegistration.remove();
+        }
     }
 
     public Job getJobById() {
