@@ -25,6 +25,18 @@ public class Job implements Serializable{
 
     }
 
+    public Job(String id, String name, String salary, String location, long timestamp, String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList, String status) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.location = location;
+        this.timestamp = timestamp;
+        this.description = description;
+        this.requirement = requirement;
+        this.benefits = benefits;
+        this.mCandidateList = mCandidateList;
+        this.status = status;
+    }
 
     public Job(String id, User recruiter, String name, String salary, String location, long postedDate,
                String description, String requirement, String benefits, ArrayList<Candidate> mCandidateList, String status) {

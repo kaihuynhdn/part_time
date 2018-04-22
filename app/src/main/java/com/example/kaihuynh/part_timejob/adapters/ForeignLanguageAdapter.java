@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.R;
-import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
+import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
 
 import java.util.ArrayList;
 

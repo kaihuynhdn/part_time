@@ -15,7 +15,7 @@ import android.widget.EditText;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.example.kaihuynh.part_timejob.others.NonScrollListView;
-import com.example.kaihuynh.part_timejob.others.Skill;
+import com.example.kaihuynh.part_timejob.models.Skill;
 
 import java.util.ArrayList;
 

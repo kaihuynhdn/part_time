@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.Common;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -44,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginMethodActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -108,6 +110,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                                 if (mProgress.isShowing()) {
                                     mProgress.dismiss();
                                 }
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
                                 if (u != null) {
                                     startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
                                     finish();

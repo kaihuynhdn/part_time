@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity {
     private boolean interrupt, isLoaded;
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 User u = task.getResult().toObject(User.class);
                                 UserManager.getInstance().load(u);
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {

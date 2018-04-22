@@ -18,7 +18,7 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 
 import java.util.ArrayList;

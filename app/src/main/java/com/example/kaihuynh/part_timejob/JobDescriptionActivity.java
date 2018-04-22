@@ -20,15 +20,24 @@ import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.MyResponse;
+import com.example.kaihuynh.part_timejob.models.NotificationFCM;
+import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.others.Common;
+import com.example.kaihuynh.part_timejob.remote.APIService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class JobDescriptionActivity extends AppCompatActivity {
 
@@ -40,6 +49,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private String description = "";
     private Job job;
+
+    private APIService mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +103,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
     }
 
     private void initial() {
+        mService = Common.getClientFCM();
+
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.lightBlue_700));
         Intent intent = getIntent();
         job = (Job) intent.getSerializableExtra("job");
@@ -192,6 +205,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                     mSaveButton.setText("Hủy Lưu");
                 }else if (mSaveButton.getText().toString().equals("Hủy Lưu")){
                     UserManager.getInstance().removeFavouriteJob(job.getId());
+                    mSaveButton.setText("Lưu");
                 }
 
             }
@@ -246,9 +260,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 User u = UserManager.getInstance().getUser();
                 ArrayList<ApplyJob> applyList = new ArrayList<>();
-                Job addJob = job;
+                Job addJob = new Job(job.getId(), job.getName(), job.getSalary(), job.getLocation(), job.getTimestamp(), job.getDescription(), job.getRequirement(), job.getBenefits(),new ArrayList<Candidate>(), job.getStatus());
                 addJob.setRecruiter(null);
-                addJob.setCandidateList(new ArrayList<Candidate>());
                 applyList.add(new ApplyJob(addJob, ApplyJob.VIEWING_STATUS));
                 if (u.getAppliedJobList() != null) {
                     applyList.addAll(u.getAppliedJobList());
@@ -281,6 +294,26 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 job.setCandidateList(candidateList);
                 JobManager.getInstance().updateJob(job);
                 Toast.makeText(JobDescriptionActivity.this, "Ứng tuyển thành công.", Toast.LENGTH_SHORT).show();
+
+                NotificationFCM notificationFCM = new NotificationFCM("A đã ứng tuyển vào cv","Thông báo");
+                Sender sender = new Sender(notificationFCM, Common.currentToken);
+                mService.sendNotification(sender)
+                        .enqueue(new Callback<MyResponse>() {
+                            @Override
+                            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                if(response.isSuccessful()){
+
+                                }else {
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                            }
+                        });
+
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {

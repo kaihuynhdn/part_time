@@ -16,7 +16,7 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

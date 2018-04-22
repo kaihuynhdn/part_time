@@ -1,7 +1,5 @@
 package com.example.kaihuynh.part_timejob.models;
 
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;

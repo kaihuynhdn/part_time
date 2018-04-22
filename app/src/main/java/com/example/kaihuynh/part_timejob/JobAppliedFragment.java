@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.ApplyJobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 
 import java.util.ArrayList;
 

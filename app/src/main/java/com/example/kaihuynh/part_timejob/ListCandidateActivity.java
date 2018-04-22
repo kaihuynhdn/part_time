@@ -20,7 +20,7 @@ import com.example.kaihuynh.part_timejob.adapters.CandidateAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob.others;
+package com.example.kaihuynh.part_timejob.models;
 
 import com.example.kaihuynh.part_timejob.models.Job;
 

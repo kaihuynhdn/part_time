@@ -1,20 +1,18 @@
-package com.example.kaihuynh.part_timejob.others;
-
-import java.io.Serializable;
+package com.example.kaihuynh.part_timejob.models;
 
 /**
  * Created by Kai on 2018-02-08.
  */
 
-public class ForeignLanguage implements Serializable{
+public class Skill {
     private String name;
     private boolean isChecked;
 
-    public ForeignLanguage(){
+    public Skill(){
 
     }
 
-    public ForeignLanguage(String name, boolean isChecked) {
+    public Skill(String name, boolean isChecked) {
         this.name = name;
         this.isChecked = isChecked;
     }

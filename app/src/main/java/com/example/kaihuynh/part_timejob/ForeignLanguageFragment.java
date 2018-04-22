@@ -14,7 +14,7 @@ import android.widget.EditText;
 
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
-import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
+import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.others.NonScrollListView;
 
 import java.util.ArrayList;

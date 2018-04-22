@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,6 +29,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterAccountInfoActivity extends AppCompatActivity {
 
@@ -126,6 +128,8 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
                                 UserManager.getInstance().load(user);
                                 UserManager.getInstance().updateUser(user);
+
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
 
                                 mProgress.dismiss();
                                 showAlertDialog();

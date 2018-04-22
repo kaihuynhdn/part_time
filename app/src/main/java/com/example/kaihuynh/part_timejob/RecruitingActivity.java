@@ -28,8 +28,8 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.others.ForeignLanguage;
-import com.example.kaihuynh.part_timejob.others.Skill;
+import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
+import com.example.kaihuynh.part_timejob.models.Skill;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 

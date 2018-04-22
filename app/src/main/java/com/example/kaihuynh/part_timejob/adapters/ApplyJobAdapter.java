@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.HomePageActivity;
 import com.example.kaihuynh.part_timejob.R;
-import com.example.kaihuynh.part_timejob.others.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
