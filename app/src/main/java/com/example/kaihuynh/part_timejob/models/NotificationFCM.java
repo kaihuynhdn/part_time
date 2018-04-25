@@ -13,6 +13,8 @@ public class NotificationFCM {
         this.title = title;
     }
 
+
+
     public String getBody() {
         return body;
     }

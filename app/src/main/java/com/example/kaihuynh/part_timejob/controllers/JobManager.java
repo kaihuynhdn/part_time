@@ -30,8 +30,10 @@ public class JobManager {
     private ArrayList<Job> mJobListByLocation;
     private ArrayList<Job> mMoreJobListByLocation;
     private Job jobById;
-    private int jobCount = 0;
+    private int jobQuantity = 0;
     private ListenerRegistration listenerRegistration;
+    public static boolean isRefreshed = false;
+    public static boolean isLoadedJobQuantity = false;
 
     private CollectionReference mJobReference;
 
@@ -46,16 +48,18 @@ public class JobManager {
     }
 
     public void loadData() {
+        isLoadedJobQuantity = false;
         listenerRegistration = mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                jobCount = (int) documentSnapshots.getDocuments().size();
+                jobQuantity = documentSnapshots.getDocuments().size();
+                isLoadedJobQuantity = true;
             }
         });
     }
 
     public void loadMoreJob(long timestamp) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount == 0 ? 1 : jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -79,7 +83,8 @@ public class JobManager {
     }
 
     public void refreshData() {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount == 0 ? 1 : jobCount).get()
+        isRefreshed = false;
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -94,6 +99,7 @@ public class JobManager {
                                     break;
                                 }
                             }
+                            isRefreshed = true;
                         }
                     }
                 });
@@ -134,7 +140,7 @@ public class JobManager {
     }
 
     public void loadJobByLocation(final String location) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobCount == 0 ? 1 : jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -155,7 +161,7 @@ public class JobManager {
     }
 
     public void loadMoreJobByLocation(long timestamp, final String location) {
-        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobCount == 0 ? 1 : jobCount).get()
+        mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -208,8 +214,8 @@ public class JobManager {
         return this.mLoadMoreList;
     }
 
-    public int getJobCount() {
-        return this.jobCount;
+    public int getJobQuantity() {
+        return this.jobQuantity;
     }
 
     public static JobManager getInstance() {

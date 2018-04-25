@@ -2,11 +2,13 @@ package com.example.kaihuynh.part_timejob;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -26,10 +28,10 @@ import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Candidate;
-import com.example.kaihuynh.part_timejob.models.Job;
-import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
+import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.Skill;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,7 +42,6 @@ public class RecruitingActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 111;
     private float dpi;
     private AlertDialog genderDialog;
-    private TextInputLayout inputSalaryLayout, inputLocationLayout, inputSkillLayout, inputLanguageLayout, inputGenderLayout;
     private TextInputEditText inputSalary, inputLocation, inputSkill, inputLanguage, inputGender;
     private EditText mJobDescriptionDetail, mJobBenefits, mJobRequirement;
     private ImageButton mEditTitleButton;
@@ -53,7 +54,6 @@ public class RecruitingActivity extends AppCompatActivity {
     private int edited = 0;
 
     private CollectionReference mJobReference;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +72,6 @@ public class RecruitingActivity extends AppCompatActivity {
         inputSkill = findViewById(R.id.input_skill_job);
         inputLanguage = findViewById(R.id.input_language_job);
         inputLocation = findViewById(R.id.input_location_job);
-        inputSalaryLayout = findViewById(R.id.input_salary_job_layout);
-        inputGenderLayout = findViewById(R.id.input_gender_job_layout);
-        inputSkillLayout = findViewById(R.id.input_skill_job_layout);
-        inputLanguageLayout = findViewById(R.id.input_language_job_layout);
-        inputLocationLayout = findViewById(R.id.input_location_job_layout);
         mJobBenefits = findViewById(R.id.et_benefits);
         mJobDescriptionDetail = findViewById(R.id.et_description_detail);
         mJobRequirement = findViewById(R.id.et_job_requirement);
@@ -128,47 +123,67 @@ public class RecruitingActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) RecruitingActivity.this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private void recruitButtonEvents() {
         mRecruitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isValid()) {
-                    String id = mJobReference.document().getId();
-                    User u = UserManager.getInstance().getUser();
-                    long timeStamp = new Date().getTime();
-                    User user = new User(u.getId(), u.getFullName(), u.getGender(), u.getDayOfBirth(), u.getAddress(), u.getPhoneNumber(), u.getSkills(), u.getEducation(), u.getForeignLanguages(), u.getPersonalDescription(), u.getEmail());
-                    Job job = new Job();
-                    job.setId(id);
-                    job.setRecruiter(user);
-                    job.setName(mJobTitle.getText().toString());
-                    job.setTimestamp(timeStamp);
-                    job.setBenefits(mJobBenefits.getText().toString());
-                    job.setDescription(mJobDescriptionDetail.getText().toString());
-                    job.setSalary(inputSalary.getText().toString());
-                    job.setLocation(inputLocation.getText().toString());
-                    job.setRequirement(requirementToString());
-                    job.setStatus(Job.RECRUITING);
-                    job.setCandidateList(new ArrayList<Candidate>());
-                    JobManager.getInstance().updateJob(job);
+                if (isConnect()){
+                    if (isValid()) {
+                        String id = mJobReference.document().getId();
+                        User u = UserManager.getInstance().getUser();
+                        long timeStamp = new Date().getTime();
+                        User user = new User(u.getId(), u.getFullName(), u.getGender(), u.getDayOfBirth(), u.getAddress(), u.getPhoneNumber(), u.getSkills(), u.getEducation(), u.getForeignLanguages(), u.getPersonalDescription(), u.getEmail());
+                        Job job = new Job();
+                        job.setId(id);
+                        job.setRecruiter(user);
+                        job.setName(mJobTitle.getText().toString());
+                        job.setTimestamp(timeStamp);
+                        job.setBenefits(mJobBenefits.getText().toString());
+                        job.setDescription(mJobDescriptionDetail.getText().toString());
+                        job.setSalary(inputSalary.getText().toString());
+                        job.setLocation(inputLocation.getText().toString());
+                        job.setRequirement(requirementToString());
+                        job.setStatus(Job.RECRUITING);
+                        job.setCandidateList(new ArrayList<Candidate>());
+                        JobManager.getInstance().updateJob(job);
 
-                    ArrayList<Job> list = new ArrayList<>();
-                    Job job1 = new Job();
-                    job1.setId(id);
-                    job1.setName(mJobTitle.getText().toString());
-                    job1.setTimestamp(timeStamp);
-                    job1.setBenefits(mJobBenefits.getText().toString());
-                    job1.setDescription(mJobDescriptionDetail.getText().toString());
-                    job1.setSalary(inputSalary.getText().toString());
-                    job1.setLocation(inputLocation.getText().toString());
-                    job1.setRequirement(requirementToString());
-                    job1.setStatus(Job.RECRUITING);
-                    job1.setCandidateList(new ArrayList<Candidate>());
-                    list.add(job1);
-                    list.addAll(u.getRecruitmentList());
-                    u.setRecruitmentList(list);
-                    UserManager.getInstance().updateUser(u);
-                    showSuccessDialog();
+                        ArrayList<Job> list = new ArrayList<>();
+                        Job job1 = new Job();
+                        job1.setId(id);
+                        job1.setName(mJobTitle.getText().toString());
+                        job1.setTimestamp(timeStamp);
+                        job1.setBenefits(mJobBenefits.getText().toString());
+                        job1.setDescription(mJobDescriptionDetail.getText().toString());
+                        job1.setSalary(inputSalary.getText().toString());
+                        job1.setLocation(inputLocation.getText().toString());
+                        job1.setRequirement(requirementToString());
+                        job1.setStatus(Job.RECRUITING);
+                        job1.setCandidateList(new ArrayList<Candidate>());
+                        list.add(job1);
+                        list.addAll(u.getRecruitmentList());
+                        u.setRecruitmentList(list);
+                        UserManager.getInstance().updateUser(u);
+                        showSuccessDialog();
+                    }
+                }else {
+                    Toast.makeText(RecruitingActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }

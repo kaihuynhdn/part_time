@@ -3,8 +3,11 @@ package com.example.kaihuynh.part_timejob;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -31,16 +34,11 @@ import android.widget.Toast;
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
-import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.models.Skill;
+import com.example.kaihuynh.part_timejob.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,10 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //Firebase instance variables
     private CollectionReference mUserReference;
-    private DatabaseReference connectedRef;
-    private ValueEventListener valueEventListener;
 
-    private boolean isConnect = false;
     private Toast toast;
 
     @Override
@@ -100,14 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        checkConnect();
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.back));
-
         user = UserManager.getInstance().getUser();
         mName.setText(user.getFullName());
         mEmail.setText(user.getEmail());
@@ -162,7 +149,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void addComponents() {
-        toolbar = findViewById(R.id.toolbar_profile);
         inputDOB = findViewById(R.id.input_dob_profile);
         inputGender = findViewById(R.id.input_gender_profile);
         inputAddress = findViewById(R.id.input_address_profile);
@@ -245,7 +231,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setFullName(inputName.getText().toString());
                     u.setPhoneNumber(inputPhoneNumber.getText().toString());
@@ -305,7 +291,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setPersonalDescription(editText.getText().toString());
                     UserManager.getInstance().updateUser(u);
@@ -411,7 +397,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
                     inputSkill.setText(u.getSkills());
@@ -544,7 +530,7 @@ public class ProfileActivity extends AppCompatActivity {
                         s += f.getName() + "\n";
                     }
                 }
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
                     inputLanguage.setText(u.getForeignLanguages());
@@ -638,7 +624,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setEducation(strings[numberPicker.getValue()]);
                     inputEducation.setText(u.getEducation());
@@ -725,7 +711,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setGender(genderChoice);
                     UserManager.getInstance().updateUser(u);
@@ -745,7 +731,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         AlertDialog genderDialog = builder.create();
-        genderDialog.setCanceledOnTouchOutside(false);
         genderDialog.show();
     }
 
@@ -774,7 +759,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 calendar.set(year, month, day);
-                if (isConnect) {
+                if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
                     u.setDayOfBirth(calendar.getTime());
                     UserManager.getInstance().updateUser(u);
@@ -805,29 +790,25 @@ public class ProfileActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void checkConnect() {
-        valueEventListener = connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    isConnect = true;
-                } else {
-                    isConnect = false;
-                }
-            }
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) ProfileActivity.this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            if (isConnect) {
+            if (isConnect()) {
                 User u = UserManager.getInstance().getUser();
                 u.setAddress(data.getStringExtra("location"));
                 UserManager.getInstance().updateUser(u);
@@ -858,13 +839,5 @@ public class ProfileActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (valueEventListener!=null){
-            connectedRef.removeEventListener(valueEventListener);
-        }
     }
 }

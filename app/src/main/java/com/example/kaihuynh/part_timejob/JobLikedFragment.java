@@ -25,14 +25,13 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class JobLikedFragment extends Fragment implements JobAdapter.ListItemClickListener{
-
+    private static JobLikedFragment sInstance = null;
     private JobAdapter mAdapter;
     private RecyclerView mLikedJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RelativeLayout mEmptyView;
 
-    public static JobLikedFragment sInstance = null;
 
     public JobLikedFragment() {
         // Required empty public constructor

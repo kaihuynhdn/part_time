@@ -1,7 +1,10 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +27,7 @@ import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.MyResponse;
+import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.NotificationFCM;
 import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
@@ -49,7 +53,6 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private String description = "";
     private Job job;
-
     private APIService mService;
 
     @Override
@@ -177,36 +180,45 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!UserManager.getInstance().isUpdated()) {
-                    showDialog();
-                } else if (!mApplyButton.getText().toString().equals("Đã ứng tuyển !")){
-                    showDescriptionDialog();
-                    mApplyButton.setText("Đã ứng tuyển !");
+                if (isConnect()){
+                    if (!UserManager.getInstance().isUpdated()) {
+                        showDialog();
+                    } else if (!mApplyButton.getText().toString().equals("Đã ứng tuyển !")){
+                        showDescriptionDialog();
+                    }
+                }else {
+                    Toast.makeText(JobDescriptionActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mSaveButton.getText().toString().equals("Lưu")){
-                    User u = UserManager.getInstance().getUser();
-                    ArrayList<Job> arrayList = new ArrayList<>();
-                    Job j = job;
-                    j.setRecruiter(null);
-                    j.setCandidateList(new ArrayList<Candidate>());
-                    arrayList.add(j);
-                    if (u.getFavouriteJobList() != null) {
-                        arrayList.addAll(u.getFavouriteJobList());
+                if (isConnect()){
+                    if (mSaveButton.getText().toString().equals("Lưu")){
+                        User u = UserManager.getInstance().getUser();
+                        ArrayList<Job> arrayList = new ArrayList<>();
+                        Job j = job;
+                        j.setRecruiter(null);
+                        j.setCandidateList(new ArrayList<Candidate>());
+                        arrayList.add(j);
+                        if (u.getFavouriteJobList() != null) {
+                            arrayList.addAll(u.getFavouriteJobList());
+                        }
+                        u.setFavouriteJobList(arrayList);
+                        UserManager.getInstance().updateUser(u);
+                        Toast.makeText(JobDescriptionActivity.this, "Lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+                        mSaveButton.setText("Hủy Lưu");
+                    }else if (mSaveButton.getText().toString().equals("Hủy Lưu")){
+                        UserManager.getInstance().removeFavouriteJob(job.getId());
+                        mSaveButton.setText("Lưu");
                     }
-                    u.setFavouriteJobList(arrayList);
-                    UserManager.getInstance().updateUser(u);
-                    Toast.makeText(JobDescriptionActivity.this, "Lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
-                    mSaveButton.setText("Hủy Lưu");
-                }else if (mSaveButton.getText().toString().equals("Hủy Lưu")){
-                    UserManager.getInstance().removeFavouriteJob(job.getId());
-                    mSaveButton.setText("Lưu");
+                }else {
+                    Toast.makeText(JobDescriptionActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
@@ -218,6 +230,21 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) JobDescriptionActivity.this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void showDialog() {
@@ -258,9 +285,10 @@ public class JobDescriptionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ứng tuyển", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                mApplyButton.setText("Đã ứng tuyển !");
                 User u = UserManager.getInstance().getUser();
                 ArrayList<ApplyJob> applyList = new ArrayList<>();
-                Job addJob = new Job(job.getId(), job.getName(), job.getSalary(), job.getLocation(), job.getTimestamp(), job.getDescription(), job.getRequirement(), job.getBenefits(),new ArrayList<Candidate>(), job.getStatus());
+                final Job addJob = new Job(job.getId(), job.getName(), job.getSalary(), job.getLocation(), job.getTimestamp(), job.getDescription(), job.getRequirement(), job.getBenefits(),new ArrayList<Candidate>(), job.getStatus());
                 addJob.setRecruiter(null);
                 applyList.add(new ApplyJob(addJob, ApplyJob.VIEWING_STATUS));
                 if (u.getAppliedJobList() != null) {
@@ -271,7 +299,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
                 ArrayList<Candidate> candidateList = new ArrayList<>();
                 Candidate candidate = new Candidate();
-                User user = new User();
+                final User user = new User();
                 user.setId(u.getId());
                 user.setFullName(u.getFullName());
                 user.setGender(u.getGender());
@@ -282,7 +310,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 user.setPhoneNumber(u.getPhoneNumber());
                 user.setSkills(u.getSkills());
                 user.setEducation(u.getEducation());
+                user.setToken(u.getToken());
 
+                // update candidate list of job
                 candidate.setUser(user);
                 candidate.setJobExperience(editText.getText().toString());
                 candidate.setStatus(ApplyJob.VIEWING_STATUS);
@@ -295,24 +325,30 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 JobManager.getInstance().updateJob(job);
                 Toast.makeText(JobDescriptionActivity.this, "Ứng tuyển thành công.", Toast.LENGTH_SHORT).show();
 
-                NotificationFCM notificationFCM = new NotificationFCM("A đã ứng tuyển vào cv","Thông báo");
-                Sender sender = new Sender(notificationFCM, Common.currentToken);
-                mService.sendNotification(sender)
-                        .enqueue(new Callback<MyResponse>() {
-                            @Override
-                            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                if(response.isSuccessful()){
+                // Notification
+                final NotificationFCM notificationFCM = new NotificationFCM(user.getFullName() + " đã ứng tuyển vào công việc " + job.getName() + ".","Thông báo");
+                UserManager.getInstance().loadUserByID(job.getRecruiter().getId());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        User recruiter = UserManager.getInstance().getUserById();
+                        Notification notification = new Notification(Notification.TO_RECRUITER, Notification.STATUS_NOT_SEEN, new Date().getTime(), notificationFCM.getBody());
+                        notification.setJob(addJob);
+                        ArrayList<Notification> notifications = new ArrayList<>();
+                        notifications.add(notification);
+                        if (recruiter.getNotificationList()==null){
+                            recruiter.setNotificationList(notifications);
+                        }else {
+                            notifications.addAll(recruiter.getNotificationList());
+                            recruiter.setNotificationList(notifications);
+                        }
 
-                                }else {
+                        notification(notificationFCM , recruiter.getToken());
+                        UserManager.getInstance().updateSpecificUser(recruiter);
 
-                                }
-                            }
 
-                            @Override
-                            public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                            }
-                        });
+                    }
+                }, 1500);
 
             }
         });
@@ -327,6 +363,26 @@ public class JobDescriptionActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+    }
+
+    private void notification(NotificationFCM notificationFCM, String token) {
+        Sender sender = new Sender(notificationFCM, token);
+        mService.sendNotification(sender)
+                .enqueue(new Callback<MyResponse>() {
+                    @Override
+                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                        if(response.isSuccessful()){
+
+                        }else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                    }
+                });
     }
 
     private String getTime(Calendar current, Calendar postingDate) {
@@ -373,4 +429,5 @@ public class JobDescriptionActivity extends AppCompatActivity {
         postingDate.setTime(date);
         mDate.setText(getTime(current, postingDate));
     }
+
 }

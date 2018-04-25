@@ -58,7 +58,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
     private ProgressDialog mProgress;
     private ListenerRegistration listenerRegistration;
 
-    public static LoginMethodActivity sInstance = null;
+    private static LoginMethodActivity sInstance = null;
 
     //Firebase instance variables
     private FirebaseAuth mAuth;
@@ -105,12 +105,13 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                         @Override
                         public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
                             if(documentSnapshot!=null && documentSnapshot.exists()){
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
                                 User u = documentSnapshot.toObject(User.class);
-                                UserManager.getInstance().load(u);
+                                u.setToken(Common.currentToken);
+                                UserManager.getInstance().updateUser(u);
                                 if (mProgress.isShowing()) {
                                     mProgress.dismiss();
                                 }
-                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
                                 if (u != null) {
                                     startActivity(new Intent(LoginMethodActivity.this, HomePageActivity.class));
                                     finish();
@@ -147,7 +148,9 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
             @Override
             public void onCancel() {
-
+                if (mProgress.isShowing()) {
+                    mProgress.dismiss();
+                }
             }
 
             @Override

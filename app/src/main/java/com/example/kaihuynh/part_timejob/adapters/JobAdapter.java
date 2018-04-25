@@ -2,6 +2,7 @@ package com.example.kaihuynh.part_timejob.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,6 +50,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
         this.layout = layout;
     }
 
+    @NonNull
     @Override
     public JobItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
@@ -56,7 +58,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
     }
 
     @Override
-    public void onBindViewHolder(final JobItemViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final JobItemViewHolder holder, final int position) {
         final Job job = mJobList.get(position);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(job.getTimestamp()));

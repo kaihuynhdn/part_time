@@ -20,6 +20,7 @@ public class User implements Serializable{
     private String foreignLanguages;
     private String personalDescription;
     private String email;
+    private String token;
     private ArrayList<Notification> mNotificationList;
     private ArrayList<Job> mFavouriteJobList;
     private ArrayList<ApplyJob> mAppliedJobList;
@@ -62,6 +63,14 @@ public class User implements Serializable{
         this.personalDescription = personalDescription;
         this.email = email;
         this.mNotificationList = mNotificationList;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPersonalDescription() {

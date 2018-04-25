@@ -1,6 +1,9 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
@@ -10,18 +13,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.MyResponse;
+import com.example.kaihuynh.part_timejob.models.Notification;
+import com.example.kaihuynh.part_timejob.models.NotificationFCM;
+import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.models.ApplyJob;
+import com.example.kaihuynh.part_timejob.others.Common;
+import com.example.kaihuynh.part_timejob.remote.APIService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CandidateActivity extends AppCompatActivity {
 
@@ -32,10 +46,13 @@ public class CandidateActivity extends AppCompatActivity {
     private Candidate candidate;
     private Job job;
 
+    private APIService mService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_candidate);
+
 
         addComponents();
         initialize();
@@ -47,6 +64,7 @@ public class CandidateActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mService = Common.getClientFCM();
 
         Intent intent = getIntent();
         candidate = (Candidate) intent.getSerializableExtra("candidate");
@@ -65,7 +83,7 @@ public class CandidateActivity extends AppCompatActivity {
         mDate.setText(getTime(Calendar.getInstance(), calendar));
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(candidate.getUser().getDayOfBirth());
-        mDOB.setText(Calendar.getInstance().get(Calendar.YEAR) - calendar1.get(Calendar.YEAR) + " tuổi");
+        mDOB.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - calendar1.get(Calendar.YEAR) + " tuổi"));
 
         setActionButton(candidate.getStatus());
     }
@@ -91,9 +109,13 @@ public class CandidateActivity extends AppCompatActivity {
         mIgnoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mIgnoreButton.getText().equals("Từ chối")){
-                    actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
-                    setActionButton(ApplyJob.UNEMPLOYED_STATUS);
+                if (isConnect()){
+                    if (mIgnoreButton.getText().equals("Từ chối")){
+                        actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
+                        setActionButton(ApplyJob.UNEMPLOYED_STATUS);
+                    }
+                }else {
+                    Toast.makeText(CandidateActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -107,6 +129,21 @@ public class CandidateActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) CandidateActivity.this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void setActionButton(String action){
@@ -145,10 +182,53 @@ public class CandidateActivity extends AppCompatActivity {
                     applyJobs.add(a);
                 }
                 u.setAppliedJobList(applyJobs);
-                UserManager.getInstance().updateJobStatus(u);
+
+                // Notification
+                NotificationFCM notificationFCM = new NotificationFCM("", "");
+
+                if (action.equals(ApplyJob.EMPLOYED_STATUS)){
+                    notificationFCM = new NotificationFCM("Bạn đã trúng tuyển vào công việc " + job.getName() + ".","Chúc mừng");
+                }else if(action.equals(ApplyJob.UNEMPLOYED_STATUS)){
+                    notificationFCM = new NotificationFCM("Bạn đã bị từ chối khi ứng tuyển vào công việc " + job.getName() + ".","Thông báo");
+                }
+
+                Notification notification = new Notification(Notification.TO_CANDIDATE, Notification.STATUS_NOT_SEEN, new Date().getTime(), notificationFCM.getBody());
+                ArrayList<Notification> notifications = new ArrayList<>();
+                notifications.add(notification);
+                if (u.getNotificationList()==null){
+                    u.setNotificationList(notifications);
+                }else {
+                    notifications.addAll(u.getNotificationList());
+                    u.setNotificationList(notifications);
+                }
+
+                UserManager.getInstance().updateSpecificUser(u);
+
+                notification(u, notificationFCM);
             }
         }, 1500);
     }
+
+    private void notification(User user, NotificationFCM notificationFCM) {
+        Sender sender = new Sender(notificationFCM, user.getToken());
+        mService.sendNotification(sender)
+                .enqueue(new Callback<MyResponse>() {
+                    @Override
+                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                        if(response.isSuccessful()){
+
+                        }else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                    }
+                });
+    }
+
 
     private String getTime(Calendar current, Calendar postingDate){
         String s = "";
@@ -184,4 +264,5 @@ public class CandidateActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

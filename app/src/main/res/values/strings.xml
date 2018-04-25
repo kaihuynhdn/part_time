@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Part-time Job</string>
+    <string name="app_name">Việc làm Part Time</string>
     <string name="title">Việc Làm Part Time</string>
     <string name="fb_button">ĐĂNG NHẬP BẰNG FACEBOOK</string>
     <string name="google_button">ĐĂNG NHẬP BẰNG GOOGLE</string>
@@ -126,6 +126,7 @@
     <string name="waiting_check">Đang chờ duyệt</string>
     <string name="update_job">CẬP NHẬT</string>
     <string name="status">Trạng thái</string>
+    <string name="empty_notification">Bạn chưa có thông báo !</string>
 
     <string-array name="gender">
         <item>Nam</item>

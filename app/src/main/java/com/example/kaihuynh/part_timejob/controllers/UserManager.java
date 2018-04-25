@@ -46,6 +46,7 @@ public class UserManager {
     }
 
     public void loadUserByID(String id){
+        userById=null;
         mUserReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -80,7 +81,7 @@ public class UserManager {
         updateUser(u);
     }
 
-    public void updateJobStatus(User u){
+    public void updateSpecificUser(User u){
         mUserReference.document(u.getId()).set(u);
     }
 

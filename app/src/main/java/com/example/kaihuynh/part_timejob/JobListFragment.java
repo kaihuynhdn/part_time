@@ -45,7 +45,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
     private boolean isLoaded = false;
 
-    public static JobListFragment sInstance = null;
+    private static JobListFragment sInstance = null;
 
     public JobListFragment() {
         // Required empty public constructor
@@ -91,7 +91,16 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         mJobRecyclerView.setAdapter(mAdapter);
 
         if (!isLoaded){
-            refresh();
+            mJobArrayList = JobManager.getInstance().getJobs();
+            mAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                @Override
+                public boolean canScrollVertically() {
+                    return true;
+                }
+            });
+            isLoaded = true;
         }
 
         enableLoadMore();
@@ -102,7 +111,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         mAdapter.setLoadMore(new LoadMore() {
             @Override
             public void onLoadMore() {
-                if(mJobArrayList.size() <= JobManager.getInstance().getJobCount() && mJobArrayList.size()>=10){
+                if(mJobArrayList.size() <= JobManager.getInstance().getJobQuantity() && mJobArrayList.size()>=10){
                     if (mJobArrayList.size()>0 && mJobArrayList.get(mJobArrayList.size()-1)!= null){
                         mJobArrayList.add(null);
                     }

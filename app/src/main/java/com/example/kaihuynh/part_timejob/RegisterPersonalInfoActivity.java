@@ -18,7 +18,7 @@ public class RegisterPersonalInfoActivity extends AppCompatActivity {
     private CustomViewPager mRegisterViewPager;
     private PagerAdapter mPagerAdapter;
 
-    public static RegisterPersonalInfoActivity sInstance = null;
+    private static RegisterPersonalInfoActivity sInstance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

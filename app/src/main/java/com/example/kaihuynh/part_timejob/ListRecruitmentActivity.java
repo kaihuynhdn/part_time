@@ -26,7 +26,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
     private SwipeRefreshLayout swipeRefreshLayout;
     private RelativeLayout mEmptyView;
 
-    public static ListRecruitmentActivity sInstance = null;
+    private static ListRecruitmentActivity sInstance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

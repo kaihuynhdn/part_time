@@ -116,6 +116,8 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
+
                                 FirebaseUser userFirebase = mAuth.getCurrentUser();
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(mFullName.getText().toString()).build();
@@ -125,11 +127,10 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 user.setId(userFirebase.getUid().toString());
                                 user.setEmail(userFirebase.getEmail());
                                 user.setFullName(mFullName.getText().toString());
+                                user.setToken(Common.currentToken);
 
-                                UserManager.getInstance().load(user);
                                 UserManager.getInstance().updateUser(user);
 
-                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
 
                                 mProgress.dismiss();
                                 showAlertDialog();

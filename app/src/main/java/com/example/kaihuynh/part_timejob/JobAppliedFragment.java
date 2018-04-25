@@ -37,7 +37,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     private Button mShowViewing, mShowEmployed, mShowUnemployed;
     private TextView mQuantityViewingJob, mQuantityEmployedJob, mQuantityUnemployedJob;
 
-    public static JobAppliedFragment sInstance = null;
+    private static JobAppliedFragment sInstance = null;
 
     public JobAppliedFragment() {
         // Required empty public constructor
@@ -59,7 +59,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     private void initialize() {
         sInstance = this;
 
-        loadData();
+        //loadData();
 
         mViewingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewingRecyclerView.setHasFixedSize(true);
@@ -131,7 +131,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
             }
         });
 
-        mShowViewing.setOnClickListener(new View.OnClickListener() {
+        relativeViewing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowViewing.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.blue_up_narrow).getConstantState())) {
@@ -157,7 +157,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
             }
         });
 
-        mShowEmployed.setOnClickListener(new View.OnClickListener() {
+        relativeEmployed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowEmployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.green_up_narrow).getConstantState())) {
@@ -183,7 +183,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
             }
         });
 
-        mShowUnemployed.setOnClickListener(new View.OnClickListener() {
+        relativeUnemployed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowUnemployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(getContext(), R.drawable.red_up_narrow).getConstantState())) {
@@ -214,23 +214,24 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         mViewingJobArrayList = new ArrayList<>();
         mEmployedJobArrayList = new ArrayList<>();
         mUnemployedJobArrayList = new ArrayList<>();
+        ArrayList<ApplyJob> list = new ArrayList<>();
 
         if (UserManager.getInstance().getUser().getAppliedJobList() != null) {
-            mViewingJobArrayList.addAll(UserManager.getInstance().getUser().getAppliedJobList());
+            list.addAll(UserManager.getInstance().getUser().getAppliedJobList());
         }
 
-        for (ApplyJob job : mViewingJobArrayList) {
+        for (ApplyJob job : list) {
             if (job.getStatus().equals(ApplyJob.EMPLOYED_STATUS)) {
                 mEmployedJobArrayList.add(job);
-                mViewingJobArrayList.remove(job);
             } else if (job.getStatus().equals(ApplyJob.UNEMPLOYED_STATUS)) {
                 mUnemployedJobArrayList.add(job);
-                mViewingJobArrayList.remove(job);
+            }else {
+                mViewingJobArrayList.add(job);
             }
         }
-        mQuantityViewingJob.setText(mViewingJobArrayList.size()+"");
-        mQuantityEmployedJob.setText(mEmployedJobArrayList.size()+"");
-        mQuantityUnemployedJob.setText(mUnemployedJobArrayList.size()+"");
+        mQuantityViewingJob.setText(String.valueOf(mViewingJobArrayList.size()));
+        mQuantityEmployedJob.setText(String.valueOf(mEmployedJobArrayList.size()));
+        mQuantityUnemployedJob.setText(String.valueOf(mUnemployedJobArrayList.size()));
 
         mAdapter = new ApplyJobAdapter(getContext(), R.layout.rv_job_item, mViewingJobArrayList, this);
         mViewingRecyclerView.setAdapter(mAdapter);

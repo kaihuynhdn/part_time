@@ -1,7 +1,10 @@
 package com.example.kaihuynh.part_timejob;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +36,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mEmail, mPassword;
     private ProgressDialog mProgress;
 
-    public static LoginActivity sInstance = null;
+    private static LoginActivity sInstance = null;
 
     //Firebase instance variables
     private FirebaseAuth mAuth;
@@ -71,13 +74,15 @@ public class LoginActivity extends AppCompatActivity{
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful() && task.getResult()!=null){
+                                Common.currentToken = FirebaseInstanceId.getInstance().getToken();
                                 User u = task.getResult().toObject(User.class);
-                                UserManager.getInstance().load(u);
+                                u.setToken(Common.currentToken);
+                                UserManager.getInstance().updateUser(u);
                             }
                             if (mProgress.isShowing()){
                                 mProgress.dismiss();
                             }
-                            Common.currentToken = FirebaseInstanceId.getInstance().getToken();
+
                             startActivity(new Intent(LoginActivity.this, HomePageActivity.class));
                             finish();
                         }
@@ -91,24 +96,29 @@ public class LoginActivity extends AppCompatActivity{
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mProgress.show();
-                mAuth.signInWithEmailAndPassword(mEmail.getText().toString(), mPassword.getText().toString())
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                } else {
-                                    mProgress.dismiss();
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "Thông tin đăng nhập không chính xác.",
-                                            Toast.LENGTH_SHORT).show();
-                                    mEmail.requestFocus();
-                                }
+                if (isConnect()){
+                    mProgress.show();
+                    mAuth.signInWithEmailAndPassword(mEmail.getText().toString(), mPassword.getText().toString())
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                    } else {
+                                        mProgress.dismiss();
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(LoginActivity.this, "Thông tin đăng nhập không chính xác.",
+                                                Toast.LENGTH_SHORT).show();
+                                        mEmail.requestFocus();
+                                    }
 
-                                // ...
-                            }
-                        });
+                                    // ...
+                                }
+                            });
+                }else {
+                    Toast.makeText(LoginActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -176,6 +186,21 @@ public class LoginActivity extends AppCompatActivity{
             sInstance = new LoginActivity();
         }
         return sInstance;
+    }
+
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) LoginActivity.this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

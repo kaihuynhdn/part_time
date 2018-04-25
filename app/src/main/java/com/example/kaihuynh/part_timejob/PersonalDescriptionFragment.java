@@ -2,8 +2,11 @@ package com.example.kaihuynh.part_timejob;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,12 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Job;
 import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
-import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 
 import java.util.ArrayList;
@@ -35,8 +39,6 @@ public class PersonalDescriptionFragment extends Fragment {
     private CustomViewPager mViewPager;
     private EditText mDescription;
     private ProgressDialog mProgress;
-
-
     private static PersonalDescriptionFragment sInstance = null;
 
     public PersonalDescriptionFragment() {
@@ -72,33 +74,53 @@ public class PersonalDescriptionFragment extends Fragment {
         doneButtonEvents();
     }
 
+    private boolean isConnect() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getContext()
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private void doneButtonEvents() {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dob = PersonalInfoFragment.getInstance().getPersonalInfo().get("dob");
-                String[] dateSplit = dob.split("-");
-                int dayOfMonth = Integer.parseInt(dateSplit[0]);
-                int month = Integer.parseInt(dateSplit[1]) - 1;
-                int year = Integer.parseInt(dateSplit[2]);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
-                calendar.set(year, month, dayOfMonth);
-                User user = UserManager.getInstance().getUser();
-                user.setAddress(PersonalInfoFragment.getInstance().getPersonalInfo().get("address"));
-                user.setGender(PersonalInfoFragment.getInstance().getPersonalInfo().get("gender"));
-                user.setDayOfBirth(calendar.getTime());
-                user.setEducation(PersonalInfoFragment.getInstance().getPersonalInfo().get("education"));
-                user.setPhoneNumber(PersonalInfoFragment.getInstance().getPersonalInfo().get("phone"));
-                user.setForeignLanguages(ForeignLanguageFragment.getInstance().getLanguages());
-                user.setSkills(SkillFragment.getInstance().getSkills());
-                user.setPersonalDescription(mDescription.getText().toString());
-                user.setFavouriteJobList(new ArrayList<Job>());
-                user.setRecruitmentList(new ArrayList<Job>());
-                user.setAppliedJobList(new ArrayList<ApplyJob>());
-                user.setNotificationList(new ArrayList<Notification>());
-                UserManager.getInstance().updateUser(user);
-                showAlertDialog();
+                if (isConnect()){
+                    String dob = PersonalInfoFragment.getInstance().getPersonalInfo().get("dob");
+                    String[] dateSplit = dob.split("-");
+                    int dayOfMonth = Integer.parseInt(dateSplit[0]);
+                    int month = Integer.parseInt(dateSplit[1]) - 1;
+                    int year = Integer.parseInt(dateSplit[2]);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+                    calendar.set(year, month, dayOfMonth);
+                    User user = UserManager.getInstance().getUser();
+                    user.setAddress(PersonalInfoFragment.getInstance().getPersonalInfo().get("address"));
+                    user.setGender(PersonalInfoFragment.getInstance().getPersonalInfo().get("gender"));
+                    user.setDayOfBirth(calendar.getTime());
+                    user.setEducation(PersonalInfoFragment.getInstance().getPersonalInfo().get("education"));
+                    user.setPhoneNumber(PersonalInfoFragment.getInstance().getPersonalInfo().get("phone"));
+                    user.setForeignLanguages(ForeignLanguageFragment.getInstance().getLanguages());
+                    user.setSkills(SkillFragment.getInstance().getSkills());
+                    user.setPersonalDescription(mDescription.getText().toString());
+                    user.setFavouriteJobList(new ArrayList<Job>());
+                    user.setRecruitmentList(new ArrayList<Job>());
+                    user.setAppliedJobList(new ArrayList<ApplyJob>());
+                    user.setNotificationList(new ArrayList<Notification>());
+                    UserManager.getInstance().updateUser(user);
+                    showAlertDialog();
+                }else {
+                    Toast.makeText(getContext(), "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

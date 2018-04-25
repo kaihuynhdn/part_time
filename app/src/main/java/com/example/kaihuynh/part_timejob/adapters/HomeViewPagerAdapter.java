@@ -1,59 +1,42 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.SparseArray;
-import android.view.ViewGroup;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.kaihuynh.part_timejob.JobAppliedFragment;
+import com.example.kaihuynh.part_timejob.JobLikedFragment;
+import com.example.kaihuynh.part_timejob.JobListFragment;
+import com.example.kaihuynh.part_timejob.NotificationFragment;
 
 public class HomeViewPagerAdapter extends FragmentPagerAdapter {
-    private final SparseArray<WeakReference<Fragment>> instantiatedFragments = new SparseArray<>();
-    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private int mNoOfTabs;
 
-    public HomeViewPagerAdapter(FragmentManager manager) {
-        super(manager);
+    public HomeViewPagerAdapter(FragmentManager fm, int numberOfTabs){
+        super(fm);
+        this.mNoOfTabs = numberOfTabs;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return mFragmentList.get(position);
+        switch (position){
+            case 0:
+                return new JobListFragment();
+            case 1:
+                return new JobLikedFragment();
+            case 2:
+                return new JobAppliedFragment();
+            case 3:
+                return new NotificationFragment();
+            default:
+                return new Fragment();
+        }
     }
+
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
-    }
-
-    public void addFragment(Fragment fragment) {
-        mFragmentList.add(fragment);
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        final Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        instantiatedFragments.put(position, new WeakReference<>(fragment));
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        instantiatedFragments.remove(position);
-        super.destroyItem(container, position, object);
-    }
-
-    @Nullable
-    Fragment getFragment(final int position) {
-        final WeakReference<Fragment> wr = instantiatedFragments.get(position);
-        if (wr != null) {
-            return wr.get();
-        } else {
-            return null;
-        }
+        return mNoOfTabs;
     }
 
 }

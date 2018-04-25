@@ -10,7 +10,6 @@ import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,6 +46,7 @@ import java.lang.reflect.Field;
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
+    private final int NUM_TABS = 4;
 
     //Navigation drawer
     private DrawerLayout drawer;
@@ -54,18 +54,20 @@ public class HomePageActivity extends AppCompatActivity
     private NavigationView navigationView;
     private TextView mUserName, mUserEmail;
     private CustomViewPager viewPager;
+    private HomeViewPagerAdapter adapter;
     private View header;
     private User user;
     private ListenerRegistration listenerRegistration;
 
+    public static boolean isDestroyed = false;
+
     //Bottom navigation
     private BottomNavigationView mBottomNavigationView;
-    public static HomePageActivity sInstance = null;
+    private static HomePageActivity sInstance = null;
 
     //Firebase Instance variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    //private DatabaseReference mUserRef;
     private FirebaseFirestore db;
     private CollectionReference mUserReference;
 
@@ -93,13 +95,10 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initialize() {
-        HomeViewPagerAdapter adapter = new HomeViewPagerAdapter(HomePageActivity.this.getSupportFragmentManager());
-        adapter.addFragment(new JobListFragment());
-        adapter.addFragment(new JobLikedFragment());
-        adapter.addFragment(new JobAppliedFragment());
-        adapter.addFragment(new Fragment());
+        adapter = new HomeViewPagerAdapter(getSupportFragmentManager(), NUM_TABS);
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
+        viewPager.setOffscreenPageLimit(3);
 
         user = UserManager.getInstance().getUser();
         if (user.getFullName() != null && user.getEmail() != null) {
@@ -162,22 +161,26 @@ public class HomePageActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_home:
                 viewPager.setCurrentItem(0);
+                toolbar.setTitle("Việc Làm Part Time");
                 break;
             case R.id.action_like_jobs:
                 viewPager.setCurrentItem(1);
+                toolbar.setTitle("Công việc yêu thích");
                 break;
             case R.id.action_applied_jobs:
                 viewPager.setCurrentItem(2);
+                toolbar.setTitle("Công việc ứng tuyển");
                 break;
             case R.id.action_notification:
                 viewPager.setCurrentItem(3);
+                toolbar.setTitle("Thông báo");
                 break;
         }
 
     }
 
-    public BottomNavigationView getmBottomNavigationView() {
-        return mBottomNavigationView;
+    public CustomViewPager getViewPager() {
+        return viewPager;
     }
 
     @Override
@@ -244,6 +247,9 @@ public class HomePageActivity extends AppCompatActivity
                         } else if (id == R.id.manage_recruitment_post_menu) {
                             startActivity(new Intent(HomePageActivity.this, ListRecruitmentActivity.class));
                         } else if (id == R.id.log_out_menu) {
+                            User u = UserManager.getInstance().getUser();
+                            u.setToken("");
+                            UserManager.getInstance().updateUser(u);
                             signOut();
                         } else if (id == R.id.contact_menu) {
 
@@ -292,6 +298,7 @@ public class HomePageActivity extends AppCompatActivity
         });
 
         LoginManager.getInstance().logOut();
+
     }
 
     @Override
@@ -353,6 +360,12 @@ public class HomePageActivity extends AppCompatActivity
             sInstance = new HomePageActivity();
         }
         return sInstance;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isDestroyed = true;
     }
 
     @Override
