@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.Common;
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity{
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
+        JobManager.getInstance().refreshData();
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
 
@@ -79,6 +81,11 @@ public class LoginActivity extends AppCompatActivity{
                                 u.setToken(Common.currentToken);
                                 UserManager.getInstance().updateUser(u);
                             }
+
+                            while (!JobManager.isRefreshed){
+
+                            }
+
                             if (mProgress.isShowing()){
                                 mProgress.dismiss();
                             }

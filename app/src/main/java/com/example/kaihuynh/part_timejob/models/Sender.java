@@ -8,7 +8,7 @@ public class Sender {
 
     }
 
-    public Sender(NotificationFCM notification, String to) {
+    public Sender(String to, NotificationFCM notification) {
         this.notification = notification;
         this.to = to;
     }

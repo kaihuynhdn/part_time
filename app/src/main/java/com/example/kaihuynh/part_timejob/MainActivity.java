@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -29,6 +29,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 public class MainActivity extends AppCompatActivity {
     private boolean interrupt, isLoaded;
     private ProgressBar mProgressBar;
+    private ImageView mRefresh;
     private Handler mHandler;
     private Runnable runnable;
     private int FINISH_LOADED;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         addComponents();
         initialize();
-
+        addWidgetListener();
     }
 
     private void initialize() {
@@ -56,51 +57,10 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
         FINISH_LOADED = 0;
         mAuth = FirebaseAuth.getInstance();
-
+        loadFunction();
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
         JobManager.getInstance().loadData();
-
-        t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!JobManager.isLoadedJobQuantity) {
-
-                }
-                JobManager.getInstance().refreshData();
-
-                while ((!isLoaded || FINISH_LOADED == 0) || !JobManager.isRefreshed) {
-                    Log.v("AAA", String.valueOf(isLoaded));
-                    Log.v("BBB", String.valueOf(FINISH_LOADED));
-                    Log.v("CCC", String.valueOf(JobManager.isRefreshed));
-                    Log.v("DDD", String.valueOf(interrupt));
-                    if (isConnect()) {
-                        isLoaded = true;
-                    }
-                }
-                if (isLoaded && FINISH_LOADED != 0) {
-                    if (FINISH_LOADED == 1) {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
-                    } else if (FINISH_LOADED == 2){
-                        startActivity(new Intent(MainActivity.this, HomePageActivity.class));
-                        finish();
-                    }
-                }
-            }
-        });
-
-        mHandler.postDelayed(runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (t.isAlive() || !t.isInterrupted()) {
-                    t.interrupt();
-                }
-                Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-        }, 10000);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -128,6 +88,57 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void addWidgetListener() {
+        mRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRefresh.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+                loadFunction();
+            }
+        });
+    }
+
+    private void loadFunction(){
+        t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!JobManager.isLoadedJobQuantity) {
+
+                }
+                JobManager.getInstance().refreshData();
+
+                while ((!isConnect() || FINISH_LOADED == 0) || !JobManager.isRefreshed) {
+
+                }
+                if (FINISH_LOADED != 0) {
+                    if (FINISH_LOADED == 1) {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    } else if (FINISH_LOADED == 2){
+                        Intent toHomePage = new Intent(MainActivity.this, HomePageActivity.class);
+                        Intent intent = getIntent();
+                        if (intent.getStringExtra("notification") != null){
+                            toHomePage.putExtra("notification", "true");
+                        }
+                        startActivity(toHomePage);
+                        finish();
+                    }
+                }
+            }
+        });
+
+        mHandler.postDelayed(runnable = new Runnable() {
+            @Override
+            public void run() {
+                t.interrupt();
+                Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+                mRefresh.setVisibility(View.VISIBLE);
+            }
+        }, 10000);
+    }
+
     private boolean isConnect() {
         try {
             ConnectivityManager cm = (ConnectivityManager) MainActivity.this
@@ -145,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addComponents() {
         mProgressBar = findViewById(R.id.progressBar);
+        mRefresh = findViewById(R.id.img_refresh);
     }
 
     @Override
@@ -158,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mHandler.removeCallbacks(runnable);
         mAuth.removeAuthStateListener(mAuthStateListener);
-        JobManager.getInstance().removeListener();
     }
 
     @Override
@@ -167,5 +178,7 @@ public class MainActivity extends AppCompatActivity {
         if (Thread.currentThread().isAlive()) {
             t.interrupt();
         }
+        JobManager.getInstance().removeListener();
+
     }
 }

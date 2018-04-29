@@ -3,6 +3,7 @@ package com.example.kaihuynh.part_timejob;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -15,25 +16,32 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.HomeViewPagerAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.CircleTransform;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.facebook.login.LoginManager;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.plus.PlusShare;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,24 +49,27 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
     private final int NUM_TABS = 4;
+    private final int REQUEST_FOR_GOOGLE_PLUS = 123;
 
     //Navigation drawer
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView mUserName, mUserEmail;
+    private ImageView imageView, share;
     private CustomViewPager viewPager;
     private HomeViewPagerAdapter adapter;
     private View header;
     private User user;
     private ListenerRegistration listenerRegistration;
-
     public static boolean isDestroyed = false;
 
     //Bottom navigation
@@ -73,6 +84,7 @@ public class HomePageActivity extends AppCompatActivity
 
     //Google Instance variables
     private GoogleApiClient mGoogleApiClient;
+    private ShareActionProvider mShareActionProvider;
 
 
     @Override
@@ -80,9 +92,9 @@ public class HomePageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        addComponents();
+        getWidgets();
         initialize();
-        addEvents();
+        setWidgetListeners();
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,6 +104,19 @@ public class HomePageActivity extends AppCompatActivity
 
         disableShiftMode(mBottomNavigationView);
 
+    }
+
+    private void getWidgets() {
+        drawer = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
+        header = navigationView.getHeaderView(0);
+        mUserEmail = header.findViewById(R.id.tv_user_email);
+        mUserName = header.findViewById(R.id.tv_user_name);
+        imageView = header.findViewById(R.id.imageView);
+        mBottomNavigationView = findViewById(R.id.bottom_nav);
+        viewPager = findViewById(R.id.view_pager_home);
+        sInstance = this;
     }
 
     private void initialize() {
@@ -104,6 +129,9 @@ public class HomePageActivity extends AppCompatActivity
         if (user.getFullName() != null && user.getEmail() != null) {
             mUserName.setText(user.getFullName());
             mUserEmail.setText(user.getEmail());
+        }
+        if (!user.getImageURL().equals("")) {
+            Picasso.get().load(user.getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(imageView);
         }
 
         toolbar.setTitle("Việc Làm Part Time");
@@ -131,21 +159,14 @@ public class HomePageActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        Intent intent = getIntent();
+        if (intent.getStringExtra("notification") != null) {
+            viewPager.setCurrentItem(3);
+            mBottomNavigationView.setSelectedItemId(R.id.action_notification);
+        }
     }
 
-    private void addComponents() {
-        drawer = findViewById(R.id.drawer_layout);
-        toolbar = findViewById(R.id.toolbar);
-        navigationView = findViewById(R.id.nav_view);
-        header = navigationView.getHeaderView(0);
-        mUserEmail = header.findViewById(R.id.tv_user_email);
-        mUserName = header.findViewById(R.id.tv_user_name);
-        mBottomNavigationView = findViewById(R.id.bottom_nav);
-        viewPager = findViewById(R.id.view_pager_home);
-        sInstance = this;
-    }
-
-    private void addEvents() {
+    private void setWidgetListeners() {
         navigationView.setNavigationItemSelectedListener(this);
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -155,6 +176,54 @@ public class HomePageActivity extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    private void showPopupWindow(View view, int menu) {
+        PopupMenu popup = new PopupMenu(this, view);
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        popup.getMenuInflater().inflate(menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_share_fb:
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setQuote("http://play.google.com/store/apps/details?id=com.example.kaihuynh.part_timejob")
+                                .setContentUrl(Uri.parse("https://play.google.com/store"))
+                                .build();
+                        ShareDialog.show(HomePageActivity.this, content);
+                        break;
+                    case R.id.action_share_google:
+                        Intent shareIntent = new PlusShare.Builder(HomePageActivity.this)
+                                .setType("text/plain")
+                                .setText("Link: \nhttp://play.google.com/store/apps/details?id=com.example.kaihuynh.part_timejob")
+                                .setContentUrl(Uri.parse("https://play.google.com/store"))
+                                .getIntent();
+                        startActivity(shareIntent);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        popup.show();
     }
 
     private void bottomNavigationEvents(MenuItem item) {
@@ -192,22 +261,28 @@ public class HomePageActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_page_menu, menu);
+        share  = (ImageView) menu.findItem(R.id.action_share).getActionView();
+        share.setImageResource(R.drawable.share);
+        share.setPadding(0,0,20,0);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupWindow(share, R.menu.share_menu);
+
+            }
+        });
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -315,6 +390,8 @@ public class HomePageActivity extends AppCompatActivity
                     mUserEmail.setText(u.getEmail());
                     mUserName.setText(u.getFullName());
                     UserManager.getInstance().load(u);
+                    NotificationFragment.getInstance().refreshData();
+                    JobAppliedFragment.getInstance().refreshData();
                 }
             }
         });
@@ -324,7 +401,7 @@ public class HomePageActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         mAuth.removeAuthStateListener(mAuthStateListener);
-        if (listenerRegistration!=null){
+        if (listenerRegistration != null) {
             listenerRegistration.remove();
         }
         JobManager.getInstance().removeListener();
@@ -371,5 +448,10 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

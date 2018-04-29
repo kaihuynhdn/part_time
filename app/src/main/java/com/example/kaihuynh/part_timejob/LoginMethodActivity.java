@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.Common;
@@ -91,6 +92,8 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
+        JobManager.getInstance().refreshData();
+
         db = FirebaseFirestore.getInstance();
         mUserReference = db.collection("users");
 
@@ -109,6 +112,10 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                                 User u = documentSnapshot.toObject(User.class);
                                 u.setToken(Common.currentToken);
                                 UserManager.getInstance().updateUser(u);
+                                while (!JobManager.isRefreshed){
+
+                                }
+
                                 if (mProgress.isShowing()) {
                                     mProgress.dismiss();
                                 }
@@ -292,24 +299,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             final FirebaseUser userFirebase = mAuth.getCurrentUser();
-//                            mUserReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                                    if (documentSnapshots != null) {
-//                                        for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
-//                                            User u = document.getDocument().toObject(User.class);
-//                                            if (u.getId().equals(userFirebase.getUid())) {
-//                                                return;
-//                                            }
-//                                        }
-//                                    }
-//                                    User user = new User();
-//                                    user.setId(userFirebase.getUid().toString());
-//                                    user.setEmail(userFirebase.getEmail());
-//                                    user.setFullName(userFirebase.getDisplayName());
-//                                    mUserReference.document(userFirebase.getUid()).set(user);
-//                                }
-//                            });
 
                             mUserReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -347,24 +336,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             final FirebaseUser userFirebase = mAuth.getCurrentUser();
-//                            mUserReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                                    if (documentSnapshots != null) {
-//                                        for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
-//                                            User u = document.getDocument().toObject(User.class);
-//                                            if (u.getId().equals(userFirebase.getUid())) {
-//                                                return;
-//                                            }
-//                                        }
-//                                    }
-//                                    User user = new User();
-//                                    user.setId(userFirebase.getUid().toString());
-//                                    user.setEmail(userFirebase.getEmail());
-//                                    user.setFullName(userFirebase.getDisplayName());
-//                                    mUserReference.document(userFirebase.getUid()).set(user);
-//                                }
-//                            });
 
                             mUserReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -382,7 +353,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                                     user.setEmail(userFirebase.getEmail());
                                     user.setFullName(userFirebase.getDisplayName());
                                     UserManager.getInstance().updateUser(user);
-//                                    mUserReference.document(userFirebase.getUid()).set(user);
                                 }
                             });
 

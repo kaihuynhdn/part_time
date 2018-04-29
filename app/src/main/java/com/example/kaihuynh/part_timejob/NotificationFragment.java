@@ -47,6 +47,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         addComponents(view);
         initialize();
         setWidgetListeners();
+
         return  view;
     }
 
@@ -71,6 +72,9 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         mNotificationRecyclerView.setHasFixedSize(true);
 
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
+
+        refreshData();
+
     }
 
     private void setWidgetListeners() {
@@ -132,11 +136,27 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
             intent.putExtra("job", notification.getJob());
             startActivity(intent);
         }
+
+        if (notification.getStatus() == Notification.STATUS_NOT_SEEN){
+            mNotificationArrayList.get(clickItemIndex).setStatus(Notification.STATUS_SEEN);
+            mAdapter.notifyDataSetChanged();
+            UserManager.getInstance().getUser().setNotificationList(mNotificationArrayList);
+            UserManager.getInstance().updateUser(UserManager.getInstance().getUser());
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        refreshData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

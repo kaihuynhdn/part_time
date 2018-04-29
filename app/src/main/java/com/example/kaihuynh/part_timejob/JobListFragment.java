@@ -125,6 +125,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            while (!JobManager.isLoadMoreJob && !JobManager.isLoadMoreJobByLocation){
+
+                            }
                             if(mJobArrayList.size()>0 && mJobArrayList.get(mJobArrayList.size()-1) == null){
                                 mJobArrayList.remove(mJobArrayList.size()-1);
                                 mAdapter.notifyItemRemoved(mJobArrayList.size());
@@ -137,7 +140,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                             mAdapter.notifyDataSetChanged();
                             mAdapter.setLoaded();
                         }
-                    }, 2000);
+                    }, 1000);
                 }
             }
         });
@@ -170,6 +173,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        while (!JobManager.isRefreshed && !JobManager.isLoadJobByLoaction){
+
+                        }
                         if (s.equals("Địa điểm")){
                             mJobArrayList = JobManager.getInstance().getJobs();
                         }else {
@@ -185,7 +191,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                         });
                         mAdapter.setLoaded();
                     }
-                }, 2000);
+                }, 1000);
             }
         });
 
@@ -219,6 +225,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                while (!JobManager.isRefreshed);
                 mJobArrayList = JobManager.getInstance().getJobs();
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
@@ -230,7 +237,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 });
                 isLoaded = true;
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override
@@ -250,6 +257,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    while (!JobManager.isLoadJobByLoaction){
+
+                    }
                     mJobArrayList.clear();
                     mJobArrayList.addAll(JobManager.getInstance().getJobListByLocation());
                     mAdapter.notifyDataSetChanged();
@@ -262,7 +272,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     });
                     mAdapter.setLoaded();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 

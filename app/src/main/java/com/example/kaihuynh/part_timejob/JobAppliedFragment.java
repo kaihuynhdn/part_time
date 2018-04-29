@@ -53,6 +53,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         addComponents(view);
         initialize();
         setWidgetListeners();
+
         return view;
     }
 
@@ -80,6 +81,9 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         mUnemployedRecyclerView.setVisibility(View.GONE);
 
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
+
+        refreshData();
+
     }
 
     private void addComponents(View view) {
@@ -274,7 +278,6 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     @Override
     public void onStart() {
         super.onStart();
-        refreshData();
     }
 
     @Override

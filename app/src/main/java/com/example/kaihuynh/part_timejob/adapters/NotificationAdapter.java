@@ -3,6 +3,8 @@ package com.example.kaihuynh.part_timejob.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -60,6 +62,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(notification.getDate()));
         holder.mTime.setText(getTime(Calendar.getInstance(), calendar));
+
+        if (notification.getStatus() == Notification.STATUS_NOT_SEEN){
+            holder.mCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.notificationUnSeen));
+        }else if (notification.getStatus() == Notification.STATUS_SEEN){
+            holder.mCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
     }
 
 
@@ -97,6 +105,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     class NotificationItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mContent, mTime;
         ImageView imageView;
+        CardView mCardView;
 
         public NotificationItemViewHolder(View itemView) {
             super(itemView);
@@ -104,6 +113,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             mContent = itemView.findViewById(R.id.tv_content_notification_item);
             mTime = itemView.findViewById(R.id.tv_time_notification_item);
             imageView = itemView.findViewById(R.id.img_notification_item);
+            mCardView = itemView.findViewById(R.id.cardview_notification_item);
 
             itemView.setOnClickListener(this);
         }

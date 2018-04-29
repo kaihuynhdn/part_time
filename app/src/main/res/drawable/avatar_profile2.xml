@@ -3,13 +3,13 @@
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="ring"
-            android:innerRadiusRatio="2.4"
-            android:thicknessRatio="20"
+            android:innerRadiusRatio="10"
+            android:thicknessRatio="2.7"
             android:useLevel="false">
 
             <gradient
-                android:endColor="#23ffffff"
-                android:startColor="#58ffffff"
+                android:endColor="@color/background_avatar_end"
+                android:startColor="@color/background_avatar_start"
                 android:gradientRadius="@dimen/distance_view_15"
                 android:centerX="0.5"
                 android:centerY="0.5"

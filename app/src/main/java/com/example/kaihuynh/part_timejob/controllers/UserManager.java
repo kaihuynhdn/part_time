@@ -60,12 +60,13 @@ public class UserManager {
     }
 
     public boolean isLikeJob(String id){
-        for (Job job : user.getFavouriteJobList()){
-            if (job.getId().equals(id)){
-                return true;
+        if (user.getFavouriteJobList()!= null){
+            for (Job job : user.getFavouriteJobList()){
+                if (job.getId().equals(id)){
+                    return true;
+                }
             }
         }
-
         return false;
     }
 

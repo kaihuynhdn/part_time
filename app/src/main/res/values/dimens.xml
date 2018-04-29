@@ -2,8 +2,8 @@
 <resources>
     <dimen name="activity_padding">16dp</dimen>
     <dimen name="seekBar_width">230dp</dimen>
-    <dimen name="progressBar_width">55dp</dimen>
-    <dimen name="progressBar_height">55dp</dimen>
+    <dimen name="progressBar_width">40dp</dimen>
+    <dimen name="progressBar_height">40dp</dimen>
     <dimen name="distance_view_1">1dp</dimen>
     <dimen name="distance_view_2">2dp</dimen>
     <dimen name="distance_view_5">5dp</dimen>

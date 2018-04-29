@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_custom"
     android:clickable="true"
+    android:layout_marginBottom="@dimen/distance_view_2"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardElevation="@dimen/distance_view_2">
 

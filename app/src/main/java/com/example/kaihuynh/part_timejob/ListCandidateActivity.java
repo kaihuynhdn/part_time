@@ -63,10 +63,13 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                while (!JobManager.isLoadCandidateList){
+
+                }
                 refreshData();
                 swipeRefreshLayout.setRefreshing(false);
             }
-        }, 1500);
+        }, 500);
 
         mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mListCandidateRecyclerView.setHasFixedSize(true);
@@ -97,7 +100,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         swipeRefreshLayout = findViewById(R.id.sw_list_candidate);
         mEmptyView = findViewById(R.id.rl_empty_candidate);
         waitingLayout = findViewById(R.id.layout_waiting);
-        relativeViewing = findViewById(R.id.rl_viewing);
+        relativeViewing = findViewById(R.id.rl_waiting);
         employedLayout = findViewById(R.id.layout_employed);
         relativeEmployed = findViewById(R.id.rl_employed);
         unemployedLayout = findViewById(R.id.layout_unemployed);
@@ -128,6 +131,9 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        while (!JobManager.isLoadCandidateList){
+
+                        }
                         refreshData();
                         swipeRefreshLayout.setRefreshing(false);
                         mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(ListCandidateActivity.this));
@@ -136,7 +142,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
             }
         });
 
-        mShowWaiting.setOnClickListener(new View.OnClickListener() {
+        relativeViewing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowWaiting.getBackground().getConstantState().equals(ContextCompat.getDrawable(ListCandidateActivity.this, R.drawable.blue_up_narrow).getConstantState())) {
@@ -162,7 +168,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
             }
         });
 
-        mShowEmployed.setOnClickListener(new View.OnClickListener() {
+        relativeEmployed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowEmployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(ListCandidateActivity.this, R.drawable.green_up_narrow).getConstantState())) {
@@ -188,7 +194,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
             }
         });
 
-        mShowUnemployed.setOnClickListener(new View.OnClickListener() {
+        relativeUnemployed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowUnemployed.getBackground().getConstantState().equals(ContextCompat.getDrawable(ListCandidateActivity.this, R.drawable.red_up_narrow).getConstantState())) {
@@ -287,9 +293,12 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                while (!JobManager.isLoadCandidateList){
+
+                }
                 refreshData();
             }
-        }, 1300);
+        }, 1000);
     }
 
     @Override
@@ -297,6 +306,9 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         Intent intent = new Intent(ListCandidateActivity.this, CandidateActivity.class);
         intent.putExtra("candidate", mCandidates.get(clickItemIndex));
         intent.putExtra("job", JobManager.getInstance().getJobById());
+        while (!JobManager.isLoadJobById){
+
+        }
         startActivity(intent);
     }
 }

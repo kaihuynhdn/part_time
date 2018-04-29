@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/facebook"
+        android:id="@+id/action_share_fb"
+        app:showAsAction="never"
+        android:icon="@drawable/fb_icon"/>
+
+    <item
+        android:title="@string/google_plus"
+        app:showAsAction="never"
+        android:id="@+id/action_share_google"
+        android:icon="@drawable/google_plus"/>
+</menu>

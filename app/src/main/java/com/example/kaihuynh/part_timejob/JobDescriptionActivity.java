@@ -116,6 +116,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                while (!JobManager.isLoadJobById){
+
+                }
                 if (JobManager.getInstance().getJobById()!=null){
                     job = JobManager.getInstance().getJobById();
                 }
@@ -310,6 +313,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 user.setPhoneNumber(u.getPhoneNumber());
                 user.setSkills(u.getSkills());
                 user.setEducation(u.getEducation());
+                user.setImageURL(u.getImageURL());
                 user.setToken(u.getToken());
 
                 // update candidate list of job
@@ -336,12 +340,10 @@ public class JobDescriptionActivity extends AppCompatActivity {
                         notification.setJob(addJob);
                         ArrayList<Notification> notifications = new ArrayList<>();
                         notifications.add(notification);
-                        if (recruiter.getNotificationList()==null){
-                            recruiter.setNotificationList(notifications);
-                        }else {
+                        if (recruiter.getNotificationList() != null && !recruiter.getNotificationList().isEmpty()){
                             notifications.addAll(recruiter.getNotificationList());
-                            recruiter.setNotificationList(notifications);
                         }
+                        recruiter.setNotificationList(notifications);
 
                         notification(notificationFCM , recruiter.getToken());
                         UserManager.getInstance().updateSpecificUser(recruiter);
@@ -366,7 +368,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
     }
 
     private void notification(NotificationFCM notificationFCM, String token) {
-        Sender sender = new Sender(notificationFCM, token);
+        Sender sender = new Sender(token, notificationFCM);
         mService.sendNotification(sender)
                 .enqueue(new Callback<MyResponse>() {
                     @Override

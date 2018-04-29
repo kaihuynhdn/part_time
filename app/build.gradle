@@ -33,16 +33,22 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'com.google.firebase:firebase-storage:15.0.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.google.android.gms:play-services-plus:15.0.0'
     implementation 'com.google.firebase:firebase-firestore:15.0.0'
     implementation 'com.google.firebase:firebase-firestore:15.0.0'
     implementation 'com.google.firebase:firebase-messaging:15.0.0'
+    implementation 'com.google.firebase:firebase-storage:15.0.0'
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    //fb login
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //fb
     implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
     implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-share:[4,5)'
+
     //add step view library
     implementation 'com.shuhart.stepview:stepview:1.2.0'
     //add RecyclerView dependency

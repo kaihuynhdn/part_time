@@ -110,6 +110,7 @@ public class PersonalDescriptionFragment extends Fragment {
                     user.setPhoneNumber(PersonalInfoFragment.getInstance().getPersonalInfo().get("phone"));
                     user.setForeignLanguages(ForeignLanguageFragment.getInstance().getLanguages());
                     user.setSkills(SkillFragment.getInstance().getSkills());
+                    user.setImageURL("");
                     user.setPersonalDescription(mDescription.getText().toString());
                     user.setFavouriteJobList(new ArrayList<Job>());
                     user.setRecruitmentList(new ArrayList<Job>());
@@ -146,6 +147,8 @@ public class PersonalDescriptionFragment extends Fragment {
                     getActivity().finish();
                 }else if(getActivity().getIntent().getStringExtra("activity").equals("RecruitingActivity")){
                     startActivity(new Intent(getContext(), RecruitingActivity.class));
+                    getActivity().finish();
+                }else if (getActivity().getIntent().getStringExtra("activity").equals("JobDescriptionActivity")){
                     getActivity().finish();
                 }
             }

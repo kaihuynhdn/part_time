@@ -6,8 +6,11 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -26,6 +29,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -37,12 +41,22 @@ import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
 import com.example.kaihuynh.part_timejob.models.Skill;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.CircleTransform;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,11 +65,13 @@ import java.util.TimeZone;
 public class ProfileActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 1000;
+    private final int PICK_PICTURE_CODE = 123;
     private float dpi;
     private TextInputEditText inputDOB, inputGender, inputAddress, inputEducation, inputLanguage, inputSkill;
     private Toolbar toolbar;
     private Button mEditPersonalDescription;
-    private ImageButton mEditInfoProfile;
+    private ImageButton mEditInfoProfile, mPickPicture;
+    private ImageView mAvatar;
     private TextView mDescriptionTextView, mName, mPhoneNumber, mEmail;
     private User user;
 
@@ -68,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //Firebase instance variables
     private CollectionReference mUserReference;
+    private StorageReference storageReference;
 
     private Toast toast;
 
@@ -76,23 +93,29 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        addComponents();
+        getWidgets();
         initialize();
-        addEvents();
+        setWidgetListeners();
 
     }
 
-    private void addEvents() {
-        inputDobEvents();
-        inputGenderEvents();
-        inputLocationEvents();
-        inputEducationEvents();
-        inputLanguageEvents();
-        inputSkillEvents();
-
-        editDescriptionEvents();
-        editInfoProfileEvents();
+    private void getWidgets() {
+        inputDOB = findViewById(R.id.input_dob_profile);
+        inputGender = findViewById(R.id.input_gender_profile);
+        inputAddress = findViewById(R.id.input_address_profile);
+        inputEducation = findViewById(R.id.input_education_profile);
+        inputLanguage = findViewById(R.id.input_language_profile);
+        inputSkill = findViewById(R.id.input_skill_profile);
+        mEditPersonalDescription = findViewById(R.id.btn_edit_personal_description);
+        mDescriptionTextView = findViewById(R.id.tv_personal_description);
+        mName = findViewById(R.id.tv_name_profile);
+        mEmail = findViewById(R.id.tv_email_profile);
+        mPhoneNumber = findViewById(R.id.tv_phone_number_profile);
+        mEditInfoProfile = findViewById(R.id.btn_edit_info_profile);
+        mPickPicture = findViewById(R.id.img_pick_picture);
+        mAvatar = findViewById(R.id.img_profile);
     }
+
 
     private void initialize() {
         user = UserManager.getInstance().getUser();
@@ -106,6 +129,9 @@ public class ProfileActivity extends AppCompatActivity {
         inputLanguage.setText(user.getForeignLanguages());
         inputSkill.setText(user.getSkills());
         mDescriptionTextView.setText(user.getPersonalDescription());
+        if (!user.getImageURL().equals("")){
+            Picasso.get().load(user.getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(mAvatar);
+        }
 
 
         dpi = ProfileActivity.this.getResources().getDisplayMetrics().density;
@@ -127,6 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         genderChoice = "";
         mUserReference = FirebaseFirestore.getInstance().collection("users");
+        storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://parttimejob-8fe4f.appspot.com");
         mUserReference.document(user.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -148,20 +175,28 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void addComponents() {
-        inputDOB = findViewById(R.id.input_dob_profile);
-        inputGender = findViewById(R.id.input_gender_profile);
-        inputAddress = findViewById(R.id.input_address_profile);
-        inputEducation = findViewById(R.id.input_education_profile);
-        inputLanguage = findViewById(R.id.input_language_profile);
-        inputSkill = findViewById(R.id.input_skill_profile);
-        mEditPersonalDescription = findViewById(R.id.btn_edit_personal_description);
-        mDescriptionTextView = findViewById(R.id.tv_personal_description);
-        mName = findViewById(R.id.tv_name_profile);
-        mEmail = findViewById(R.id.tv_email_profile);
-        mPhoneNumber = findViewById(R.id.tv_phone_number_profile);
-        mEditInfoProfile = findViewById(R.id.btn_edit_info_profile);
+    private void setWidgetListeners() {
+        pickPictureEvents();
+        inputDobEvents();
+        inputGenderEvents();
+        inputLocationEvents();
+        inputEducationEvents();
+        inputLanguageEvents();
+        inputSkillEvents();
 
+        editDescriptionEvents();
+        editInfoProfileEvents();
+    }
+
+    private void pickPictureEvents() {
+        mPickPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, PICK_PICTURE_CODE);
+            }
+        });
     }
 
     private void notification(String s) {
@@ -818,8 +853,46 @@ public class ProfileActivity extends AppCompatActivity {
                 notification("Lỗi! Vui lòng kiểm tra lại kết nối");
             }
 
-        } else {
-            inputAddress.setSelection(0);
+        } else if (requestCode == PICK_PICTURE_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            if (!isConnect()){
+                notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                return;
+            }
+            final Uri imageUri = data.getData();
+            Picasso.get().load(imageUri).transform(new CircleTransform()).into(mAvatar);
+
+
+            StorageReference avatarRef = storageReference.child(UserManager.getInstance().getUser().getId() + ".png");
+            mAvatar.setDrawingCacheEnabled(true);
+            mAvatar.buildDrawingCache();
+            InputStream imageStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return;
+            }
+            Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] dataImage = baos.toByteArray();
+
+            UploadTask uploadTask = avatarRef.putBytes(dataImage);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    user.setImageURL(downloadUrl.toString());
+                    UserManager.getInstance().updateUser(user);
+                }
+            });
         }
         super.onActivityResult(requestCode, resultCode, data);
 

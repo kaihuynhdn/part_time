@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +26,10 @@ import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.NotificationFCM;
 import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
+import com.example.kaihuynh.part_timejob.others.CircleTransform;
 import com.example.kaihuynh.part_timejob.others.Common;
 import com.example.kaihuynh.part_timejob.remote.APIService;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class CandidateActivity extends AppCompatActivity {
 
     private TextView mName, mEmail, mDate, mDescription;
     private TextInputEditText mDOB, mGender, mEducation, mAddress, mLanguage, mSkill, mPhone;
+    private ImageView imageView;
     private Toolbar toolbar;
     private Button mIgnoreButton, mAcceptButton;
     private Candidate candidate;
@@ -54,9 +58,27 @@ public class CandidateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_candidate);
 
 
-        addComponents();
+        getWidgets();
         initialize();
         setWidgetListeners();
+    }
+
+    private void getWidgets() {
+        toolbar = findViewById(R.id.toolbar_candidate);
+        mName = findViewById(R.id.tv_name_candidate);
+        mEmail = findViewById(R.id.tv_email_candidate);
+        mPhone = findViewById(R.id.tv_phone_number_candidate);
+        mDOB = findViewById(R.id.input_age_candidate);
+        mGender = findViewById(R.id.input_gender_candidate);
+        mEducation = findViewById(R.id.input_education_candidate);
+        mAddress = findViewById(R.id.input_address_candidate);
+        mLanguage = findViewById(R.id.input_language_candidate);
+        mSkill = findViewById(R.id.input_skill_candidate);
+        mDescription = findViewById(R.id.tv_description_candidate);
+        mDate = findViewById(R.id.tv_date_candidate);
+        mIgnoreButton = findViewById(R.id.btn_ignore);
+        mAcceptButton = findViewById(R.id.btn_accept);
+        imageView = findViewById(R.id.img_profile);
     }
 
     private void initialize() {
@@ -84,25 +106,11 @@ public class CandidateActivity extends AppCompatActivity {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(candidate.getUser().getDayOfBirth());
         mDOB.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - calendar1.get(Calendar.YEAR) + " tuổi"));
+        if (!candidate.getUser().getImageURL().equals("")){
+            Picasso.get().load(candidate.getUser().getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(imageView);
+        }
 
         setActionButton(candidate.getStatus());
-    }
-
-    private void addComponents() {
-        toolbar = findViewById(R.id.toolbar_candidate);
-        mName = findViewById(R.id.tv_name_candidate);
-        mEmail = findViewById(R.id.tv_email_candidate);
-        mPhone = findViewById(R.id.tv_phone_number_candidate);
-        mDOB = findViewById(R.id.input_age_candidate);
-        mGender = findViewById(R.id.input_gender_candidate);
-        mEducation = findViewById(R.id.input_education_candidate);
-        mAddress = findViewById(R.id.input_address_candidate);
-        mLanguage = findViewById(R.id.input_language_candidate);
-        mSkill = findViewById(R.id.input_skill_candidate);
-        mDescription = findViewById(R.id.tv_description_candidate);
-        mDate = findViewById(R.id.tv_date_candidate);
-        mIgnoreButton = findViewById(R.id.btn_ignore);
-        mAcceptButton = findViewById(R.id.btn_accept);
     }
 
     private void setWidgetListeners() {
@@ -210,7 +218,7 @@ public class CandidateActivity extends AppCompatActivity {
     }
 
     private void notification(User user, NotificationFCM notificationFCM) {
-        Sender sender = new Sender(notificationFCM, user.getToken());
+        Sender sender = new Sender(user.getToken(), notificationFCM);
         mService.sendNotification(sender)
                 .enqueue(new Callback<MyResponse>() {
                     @Override

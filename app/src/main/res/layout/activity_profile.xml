@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:fitsSystemWindows="true"
@@ -37,57 +38,66 @@
                         android:id="@+id/img_profile"
                         android:layout_width="@dimen/distance_view_100"
                         android:layout_height="@dimen/distance_view_100"
+                        android:scaleType="fitCenter"
                         android:background="@drawable/avatar_profile"
                         android:padding="2dp"
-                        android:src="@drawable/user_profile" />
+                        android:src="@drawable/loading_img" />
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_name_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
                     android:layout_below="@id/relative_layout1"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/distance_view_5"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:background="#4bffffff"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_name_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/back_87"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/tv_email_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name_profile"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/distance_view_5"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/text_mail"
-                    android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/tv_email_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_name_profile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/text_mail"
+                        android:textColor="@color/back_87" />
 
-                <TextView
-                    android:id="@+id/tv_phone_number_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_email_profile"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/distance_view_5"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="0935432632"
-                    android:textColor="@color/white" />
+                    <TextView
+                        android:id="@+id/tv_phone_number_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_email_profile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/distance_view_5"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="0935432632"
+                        android:textColor="@color/back_87" />
+
+                    <ImageButton
+                        android:id="@+id/btn_edit_info_profile"
+                        android:padding="@dimen/distance_view_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/tv_name_profile"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/distance_view_20"
+                        android:background="@null"
+                        android:src="@drawable/edit_job_title_button" />
+
+                </RelativeLayout>
 
                 <ImageButton
-                    android:id="@+id/btn_edit_info_profile"
-                    android:padding="@dimen/distance_view_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tv_name_profile"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/distance_view_20"
-                    android:background="@null"
-                    android:src="@drawable/edit_job_title_button" />
-
-                <ImageButton
+                    android:id="@+id/img_pick_picture"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"

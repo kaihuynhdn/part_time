@@ -31,7 +31,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_TYPE_LOADING = 1, VIEW_TYPE_ITEM = 0;
     boolean isLoading;
-    int visibleThreshold = 4;
+    int visibleThreshold = 5;
     int lastVisibleItem, totalItemCount;
     LoadMore loadMore;
 

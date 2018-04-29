@@ -33,6 +33,11 @@ public class JobManager {
     private int jobQuantity = 0;
     private ListenerRegistration listenerRegistration;
     public static boolean isRefreshed = false;
+    public static boolean isLoadJobById = false;
+    public static boolean isLoadJobByLoaction = false;
+    public static boolean isLoadCandidateList = false;
+    public static boolean isLoadMoreJob = false;
+    public static boolean isLoadMoreJobByLocation = false;
     public static boolean isLoadedJobQuantity = false;
 
     private CollectionReference mJobReference;
@@ -59,6 +64,7 @@ public class JobManager {
     }
 
     public void loadMoreJob(long timestamp) {
+        isLoadMoreJob = false;
         mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -77,6 +83,7 @@ public class JobManager {
                             if (mLoadMoreList.size() > 0) {
                                 mLoadMoreList.remove(0);
                             }
+                            isLoadMoreJob = true;
                         }
                     }
                 });
@@ -108,6 +115,7 @@ public class JobManager {
 
     public void loadJobById(String id) {
         jobById = null;
+        isLoadJobById = false;
         mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -115,6 +123,7 @@ public class JobManager {
                     for (DocumentSnapshot d : task.getResult()) {
                         jobById = d.toObject(Job.class);
                     }
+                    isLoadJobById = true;
                 }
             }
         });
@@ -125,6 +134,7 @@ public class JobManager {
     }
 
     public void loadCandidateList(String id) {
+        isLoadCandidateList = false;
         mJobReference.whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -134,12 +144,14 @@ public class JobManager {
                         Job job = d.toObject(Job.class);
                         mCandidateList.addAll(job.getCandidateList());
                     }
+                    isLoadCandidateList = true;
                 }
             }
         });
     }
 
     public void loadJobByLocation(final String location) {
+        isLoadJobByLoaction = false;
         mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -155,12 +167,14 @@ public class JobManager {
                                     break;
                                 }
                             }
+                            isLoadJobByLoaction = true;
                         }
                     }
                 });
     }
 
     public void loadMoreJobByLocation(long timestamp, final String location) {
+        isLoadMoreJobByLocation = false;
         mJobReference.orderBy("timestamp", Direction.DESCENDING).startAt(timestamp).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -179,6 +193,7 @@ public class JobManager {
                             if (mMoreJobListByLocation.size() > 0) {
                                 mMoreJobListByLocation.remove(0);
                             }
+                            isLoadMoreJobByLocation = true;
                         }
                     }
                 });

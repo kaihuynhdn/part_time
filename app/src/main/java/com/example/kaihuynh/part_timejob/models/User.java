@@ -21,6 +21,7 @@ public class User implements Serializable{
     private String personalDescription;
     private String email;
     private String token;
+    private String imageURL;
     private ArrayList<Notification> mNotificationList;
     private ArrayList<Job> mFavouriteJobList;
     private ArrayList<ApplyJob> mAppliedJobList;
@@ -63,6 +64,14 @@ public class User implements Serializable{
         this.personalDescription = personalDescription;
         this.email = email;
         this.mNotificationList = mNotificationList;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getToken() {

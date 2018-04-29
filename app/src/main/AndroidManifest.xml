@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/SplashStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -91,6 +91,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider108585286650544"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

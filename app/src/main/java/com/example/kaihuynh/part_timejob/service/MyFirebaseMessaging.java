@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.kaihuynh.part_timejob.HomePageActivity;
 import com.example.kaihuynh.part_timejob.MainActivity;
+import com.example.kaihuynh.part_timejob.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -24,6 +25,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.small_icon_app)
                 .setSound(alarmSound)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -31,20 +33,22 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 .setContentText(notification.getBody())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notification.getBody()));
 
-        Intent intent =  new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("notification", "true");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        PendingIntent pendingIntent;
+
         if (HomePageActivity.isDestroyed){
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_ONE_SHOT);
-            builder.setContentIntent(pendingIntent);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.notify(id, builder.build());
+            pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_ONE_SHOT);
         }else {
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.notify(id, builder.build());
-            HomePageActivity.getInstance().getViewPager().setCurrentItem(3);
+            pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(), 0);
         }
 
+
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(id, builder.build());
 
 
     }

@@ -127,6 +127,8 @@
     <string name="update_job">CẬP NHẬT</string>
     <string name="status">Trạng thái</string>
     <string name="empty_notification">Bạn chưa có thông báo !</string>
+    <string name="facebook">Facebook</string>
+    <string name="google_plus">Google +</string>
 
     <string-array name="gender">
         <item>Nam</item>

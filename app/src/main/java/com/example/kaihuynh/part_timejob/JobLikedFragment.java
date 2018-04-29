@@ -47,6 +47,8 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
         addComponents(view);
         initialize();
         setWidgetListeners();
+
+
         return  view;
     }
 
@@ -65,6 +67,9 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
         mLikedJobRecyclerView.setHasFixedSize(true);
 
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
+
+        refreshData();
+
     }
 
     private void addComponents(View view) {
@@ -132,6 +137,10 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
     @Override
     public void onStart() {
         super.onStart();
-        refreshData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
