@@ -11,6 +11,7 @@ public class Notification implements Serializable{
     private long date;
     private String content;
     private Job job;
+    private String avatarSender;
 
     public Notification(){
 
@@ -21,6 +22,14 @@ public class Notification implements Serializable{
         this.status = status;
         this.date = date;
         this.content = content;
+    }
+
+    public String getAvatarSender() {
+        return avatarSender;
+    }
+
+    public void setAvatarSender(String avatarSender) {
+        this.avatarSender = avatarSender;
     }
 
     public Job getJob() {

@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.models.Notification;
+import com.example.kaihuynh.part_timejob.others.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +64,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(notification.getDate()));
         holder.mTime.setText(getTime(Calendar.getInstance(), calendar));
+        Picasso.get().load(notification.getAvatarSender()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(holder.imageView);
 
         if (notification.getStatus() == Notification.STATUS_NOT_SEEN){
             holder.mCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.notificationUnSeen));

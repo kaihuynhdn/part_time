@@ -337,6 +337,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                     public void run() {
                         User recruiter = UserManager.getInstance().getUserById();
                         Notification notification = new Notification(Notification.TO_RECRUITER, Notification.STATUS_NOT_SEEN, new Date().getTime(), notificationFCM.getBody());
+                        notification.setAvatarSender(user.getImageURL());
                         notification.setJob(addJob);
                         ArrayList<Notification> notifications = new ArrayList<>();
                         notifications.add(notification);

@@ -19,8 +19,11 @@
 
         <ImageView
             android:id="@+id/img_notification_item"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:background="@drawable/avatar_notification"
+            android:padding="@dimen/distance_view_2"
+            android:scaleType="fitCenter"
+            android:layout_width="@dimen/avatar_notification_size"
+            android:layout_height="@dimen/avatar_notification_size"
             android:src="@drawable/user_profile" />
 
         <LinearLayout

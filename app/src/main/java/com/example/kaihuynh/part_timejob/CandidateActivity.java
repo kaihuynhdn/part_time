@@ -201,6 +201,7 @@ public class CandidateActivity extends AppCompatActivity {
                 }
 
                 Notification notification = new Notification(Notification.TO_CANDIDATE, Notification.STATUS_NOT_SEEN, new Date().getTime(), notificationFCM.getBody());
+                notification.setAvatarSender(UserManager.getInstance().getUser().getImageURL());
                 ArrayList<Notification> notifications = new ArrayList<>();
                 notifications.add(notification);
                 if (u.getNotificationList()==null){

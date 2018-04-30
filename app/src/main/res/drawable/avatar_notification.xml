@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <stroke
+                android:width="@dimen/distance_view_2"
+                android:color="@color/white"/>
+            <size android:width="@dimen/avatar_notification_size"
+                android:height="@dimen/avatar_notification_size"/>
+        </shape>
+    </item>
+</layer-list>
