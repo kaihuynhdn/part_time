@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob.others;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -17,22 +18,17 @@ public class CustomViewPager extends ViewPager {
         this.enabled = true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onTouchEvent(event);
-        }
+        return this.enabled && super.onTouchEvent(event);
 
-        return false;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onInterceptTouchEvent(event);
-        }
+        return this.enabled && super.onInterceptTouchEvent(event);
 
-        return false;
     }
 
     public void setPagingEnabled(boolean enabled) {

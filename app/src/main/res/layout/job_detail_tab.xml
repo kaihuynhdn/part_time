@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/activity_padding"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -19,13 +20,14 @@
             android:fontFamily="@font/roboto_regular"
             android:layout_marginLeft="@dimen/distance_view_5"
             android:textColor="@color/green"
-            android:text="&#9679;"
+            android:text="@string/dot_symbol"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/distance_view_23"
+            android:layout_marginStart="@dimen/distance_view_5" />
 
         <TextView
             android:id="@+id/tv_job_status"
-            android:text="Đang tuyển"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/back_87"
             android:textSize="16sp"
@@ -43,13 +45,16 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:src="@drawable/salary"
             android:layout_marginRight="@dimen/distance_view_20"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/img_description"
+            android:layout_marginEnd="@dimen/distance_view_20" />
 
         <TextView
             android:id="@+id/tv_job_salary"
@@ -71,13 +76,16 @@
         android:layout_marginTop="@dimen/distance_view_15"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:src="@drawable/address"
             android:layout_marginRight="@dimen/distance_view_20"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/img_description"
+            android:layout_marginEnd="@dimen/distance_view_20" />
 
         <TextView
             android:id="@+id/tv_job_location"
@@ -111,5 +119,6 @@
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/back_87"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/distance_view_10" />
 </LinearLayout>

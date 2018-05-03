@@ -1,12 +1,14 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -40,6 +42,7 @@ public class PersonalInfoFragment extends Fragment {
     private TextInputEditText inputDob, inputGender, inputAddress, inputPhoneNumber, inputEducation;
     private AlertDialog genderDialog;
 
+    @SuppressLint("StaticFieldLeak")
     private static PersonalInfoFragment sInstance = null;
 
 
@@ -51,7 +54,7 @@ public class PersonalInfoFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_info, container, false);
@@ -93,7 +96,7 @@ public class PersonalInfoFragment extends Fragment {
             public void onFocusChange(View view, boolean b) {
                 if(b){
                     if(inputPhoneNumber.getText().toString().equals("")){
-                        inputPhoneNumber.setText("+84 ");
+                        inputPhoneNumber.setText(String.valueOf("+84 "));
                     }
                 }else {
                     if(inputPhoneNumber.getText().toString().equals("+84 ")){
@@ -113,7 +116,7 @@ public class PersonalInfoFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String s = inputPhoneNumber.getText().toString();
                 if (s.equals("+84")){
-                    inputPhoneNumber.setText("+84 ");
+                    inputPhoneNumber.setText(String.valueOf("+84 "));
                     inputPhoneNumber.setSelection(inputPhoneNumber.length());
                 }
             }
@@ -237,13 +240,13 @@ public class PersonalInfoFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i){
                     case 0:
-                        inputGender.setText("Nam");
+                        inputGender.setText(String.valueOf("Nam"));
                         break;
                     case 1:
-                        inputGender.setText("Nữ");
+                        inputGender.setText(String.valueOf("Nữ"));
                         break;
                     case 2:
-                        inputGender.setText("Khác");
+                        inputGender.setText(String.valueOf("Khác"));
                         break;
                 }
                 genderDialog.dismiss();
@@ -278,7 +281,7 @@ public class PersonalInfoFragment extends Fragment {
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                inputDob.setText(day + "-" + (month+1) + "-" + year);
+                inputDob.setText(String.valueOf(day + "-" + (month+1) + "-" + year));
             }
         };
 
@@ -363,7 +366,7 @@ public class PersonalInfoFragment extends Fragment {
     }
 
     public Map<String, String> getPersonalInfo(){
-        Map<String, String> hashMap = new HashMap<String, String>();
+        Map<String, String> hashMap = new HashMap<>();
         hashMap.put("dob", inputDob.getText().toString());
         hashMap.put("gender", inputGender.getText().toString());
         hashMap.put("address", inputAddress.getText().toString());

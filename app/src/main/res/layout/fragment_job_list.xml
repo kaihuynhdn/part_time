@@ -9,7 +9,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -24,10 +25,10 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/tv_job_quantity"
                         android:fontFamily="@font/iciel_cadena"
                         android:textSize="16sp"
                         android:layout_centerVertical="true"
-                        android:text="1,111 việc làm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -42,19 +43,36 @@
                         android:textColor="@color/white"
                         android:layout_height="wrap_content"
                         android:theme="@style/LocationButton"
-                        style="@style/Widget.AppCompat.Button.Colored"/>
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_alignParentEnd="true" />
+
+                    <Button
+                        android:id="@+id/btn_search"
+                        android:layout_toLeftOf="@id/btn_location"
+                        android:layout_centerVertical="true"
+                        android:text="@string/search"
+                        android:textAllCaps="false"
+                        android:layout_width="wrap_content"
+                        android:fontFamily="@font/iciel_cadena"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/LocationButton"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_toStartOf="@id/btn_location"
+                        tools:ignore="RelativeOverlap" />
 
                     <Button
                         android:id="@+id/btn_remove_location"
                         android:layout_marginTop="@dimen/distance_view_2"
                         android:layout_alignRight="@+id/btn_location"
                         android:background="@drawable/remove_button"
-                        android:text="x"
+                        android:text="@string/x"
                         android:textSize="14sp"
                         android:fontFamily="@font/linotte_semi_bold"
                         android:textColor="@color/white"
                         android:layout_width="@dimen/distance_view_20"
-                        android:layout_height="@dimen/distance_view_20" />
+                        android:layout_height="@dimen/distance_view_20"
+                        android:layout_alignEnd="@+id/btn_location" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 

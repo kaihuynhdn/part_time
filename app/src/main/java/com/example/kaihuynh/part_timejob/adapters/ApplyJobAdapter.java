@@ -1,6 +1,8 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,14 +37,15 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
         this.layout = layout;
     }
 
+    @NonNull
     @Override
-    public ApplyJobAdapter.JobItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ApplyJobAdapter.JobItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new ApplyJobAdapter.JobItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ApplyJobAdapter.JobItemViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ApplyJobAdapter.JobItemViewHolder holder, final int position) {
         ApplyJob job = mJobList.get(position);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(job.getJob().getTimestamp()));
@@ -56,8 +59,9 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate){
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if(minus<2){
             if (minus == 1){
@@ -73,6 +77,8 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
@@ -87,13 +93,12 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
     }
 
     class JobItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView mJobTitle, mItemMenu, mJobLocation, mJobSalary, mJobPostedDate, mOption;
+        TextView mJobTitle, mJobLocation, mJobSalary, mJobPostedDate, mOption;
 
         public JobItemViewHolder(View itemView) {
             super(itemView);
 
             mJobTitle = itemView.findViewById(R.id.tv_job_item_title);
-            mItemMenu = itemView.findViewById(R.id.tv_job_item_menu);
             mJobSalary = itemView.findViewById(R.id.tv_job_item_salary);
             mJobLocation = itemView.findViewById(R.id.tv_job_item_location);
             mJobPostedDate = itemView.findViewById(R.id.tv_job_item_date);

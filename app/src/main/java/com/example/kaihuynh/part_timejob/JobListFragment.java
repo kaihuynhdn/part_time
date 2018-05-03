@@ -1,10 +1,12 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.MyAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
@@ -39,12 +42,14 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     private RecyclerView mJobRecyclerView;
     private ArrayList<Job> mJobArrayList;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Button mLocationButton, mRemoveLocation;
+    private Button mLocationButton, mRemoveLocation, mSearchButton;
     private CollectionReference mUserReference;
     private ListenerRegistration listenerRegistration;
+    private TextView mJobQuantity;
 
     private boolean isLoaded = false;
 
+    @SuppressLint("StaticFieldLeak")
     private static JobListFragment sInstance = null;
 
     public JobListFragment() {
@@ -53,7 +58,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_job_list, container, false);
@@ -70,12 +75,14 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         mLocationButton = view.findViewById(R.id.btn_location);
         mRemoveLocation = view.findViewById(R.id.btn_remove_location);
+        mJobQuantity = view.findViewById(R.id.tv_job_quantity);
+        mSearchButton = view.findViewById(R.id.btn_search);
     }
 
 
     private void initialize() {
         mUserReference = FirebaseFirestore.getInstance().collection("users");
-
+        mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
 
         mJobArrayList = JobManager.getInstance().getJobs();
@@ -173,7 +180,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        while (!JobManager.isRefreshed && !JobManager.isLoadJobByLoaction){
+                        mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
+
+                        while (!JobManager.isRefreshed && !JobManager.isLoadJobByLocation){
 
                         }
                         if (s.equals("Địa điểm")){
@@ -211,6 +220,13 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 mRemoveLocation.setVisibility(View.GONE);
             }
         });
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), SearchActivity.class));
+            }
+        });
     }
 
     private void refresh(){
@@ -226,6 +242,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             @Override
             public void run() {
                 while (!JobManager.isRefreshed);
+                mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
                 mJobArrayList = JobManager.getInstance().getJobs();
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
@@ -257,7 +274,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    while (!JobManager.isLoadJobByLoaction){
+                    while (!JobManager.isLoadJobByLocation){
 
                     }
                     mJobArrayList.clear();

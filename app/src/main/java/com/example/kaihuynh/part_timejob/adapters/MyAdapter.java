@@ -1,6 +1,8 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +32,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int layout;
 
     private final int VIEW_TYPE_LOADING = 1, VIEW_TYPE_ITEM = 0;
-    boolean isLoading;
-    int visibleThreshold = 5;
-    int lastVisibleItem, totalItemCount;
-    LoadMore loadMore;
+    private boolean isLoading;
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+    private LoadMore loadMore;
 
     final private MyAdapter.ListItemClickListener mOnClickListener;
 
@@ -74,8 +76,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.loadMore = loadMore;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
             return new MyAdapter.ItemViewHolder(view);
@@ -88,7 +91,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             final Job job = mJobList.get(position);
@@ -142,8 +145,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         isLoading = false;
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate) {
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if (minus < 2) {
             if (minus == 1) {
@@ -159,6 +163,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         } else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());

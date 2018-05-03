@@ -1,9 +1,11 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ public class ForeignLanguageFragment extends Fragment {
     private ArrayList<ForeignLanguage> mForeignLanguages;
     private ForeignLanguageAdapter mForeignLanguageAdapter;
 
+    @SuppressLint("StaticFieldLeak")
     private static ForeignLanguageFragment sInstance = null;
 
     public ForeignLanguageFragment() {
@@ -40,19 +43,19 @@ public class ForeignLanguageFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_foreign_language, container, false);
 
-        addComponents(view);
+        getWidgets(view);
         initialize();
-        addEvents();
+        setWidgetListeners();
 
         return view;
     }
 
-    private void addComponents(View view) {
+    private void getWidgets(View view) {
         mNextButton = view.findViewById(R.id.btn_next_foreignLanguage);
         mPreviousButton = view.findViewById(R.id.btn_previous_foreignLanguage);
         mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
@@ -73,7 +76,7 @@ public class ForeignLanguageFragment extends Fragment {
         mForeignLanguageListView.setAdapter(mForeignLanguageAdapter);
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         listViewEvents();
         nextButtonEvents();
         previousButtonEvents();
@@ -129,7 +132,7 @@ public class ForeignLanguageFragment extends Fragment {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (editText.getText().toString() != "" && editText.getText().toString() != null) {
+                if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
                     mForeignLanguages.add(mForeignLanguages.size() - 1, new ForeignLanguage(editText.getText().toString(), true));
                     mForeignLanguageAdapter.notifyDataSetChanged();
                 }
@@ -155,13 +158,13 @@ public class ForeignLanguageFragment extends Fragment {
     }
 
     public String getLanguages(){
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (ForeignLanguage f : mForeignLanguages){
             if(f.isChecked() && !f.getName().equals("Không")){
-                s+=f.getName()+"\n";
+                s.append(f.getName()).append("\n");
             }
         }
-        return s == "" ? "" : s.substring(0, s.length() - 1);
+        return s.toString().equals("") ? "" : s.substring(0, s.length() - 1);
     }
 
 }

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:ignore="UselessParent">
 
         <RelativeLayout
             android:id="@+id/rl_empty_candidate"
@@ -25,7 +25,8 @@
                 android:layout_height="@dimen/size_empty_img"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/distance_view_40"
-                android:src="@drawable/empty_candidate" />
+                android:src="@drawable/empty_candidate"
+                android:contentDescription="@string/img_description" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,7 +96,10 @@
                                 android:layout_toLeftOf="@id/btn_show_waiting_job"
                                 android:padding="@dimen/distance_view_10"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_waiting_job"
+                                tools:ignore="RelativeOverlap" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -115,7 +119,8 @@
                                 android:layout_width="@dimen/distance_view_20"
                                 android:layout_height="@dimen/distance_view_20"
                                 android:layout_alignParentRight="true"
-                                style="@style/Widget.AppCompat.Button.Colored"/>
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
 
                         </RelativeLayout>
 
@@ -153,14 +158,17 @@
                                 android:layout_toLeftOf="@id/btn_show_employed_job"
                                 android:padding="@dimen/distance_view_10"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_employed_job"
+                                tools:ignore="RelativeOverlap" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/linotte_semi_bold"
                                 android:padding="@dimen/distance_view_10"
-                                android:text="Được tuyển dụng"
+                                android:text="@string/employed_text"
                                 android:textColor="@color/green"
                                 android:textSize="18sp" />
 
@@ -173,7 +181,8 @@
                                 android:layout_width="@dimen/distance_view_20"
                                 android:layout_height="@dimen/distance_view_20"
                                 android:layout_alignParentRight="true"
-                                style="@style/Widget.AppCompat.Button.Colored"/>
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
 
                         </RelativeLayout>
 
@@ -222,14 +231,17 @@
                                 android:layout_toLeftOf="@id/btn_show_unemployed_job"
                                 android:padding="@dimen/distance_view_10"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_unemployed_job"
+                                tools:ignore="RelativeOverlap" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/linotte_semi_bold"
                                 android:padding="@dimen/distance_view_10"
-                                android:text="Bị từ chối"
+                                android:text="@string/unemployed_text"
                                 android:textColor="@color/red"
                                 android:textSize="18sp" />
 
@@ -242,7 +254,8 @@
                                 android:layout_width="@dimen/distance_view_20"
                                 android:layout_height="@dimen/distance_view_20"
                                 android:layout_alignParentRight="true"
-                                style="@style/Widget.AppCompat.Button.Colored"/>
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
 
                         </RelativeLayout>
 

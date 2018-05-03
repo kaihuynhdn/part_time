@@ -45,7 +45,8 @@
             android:drawablePadding="@dimen/distance_view_10"
             android:background="@drawable/edit_text_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/user" />
 
         <EditText
             android:id="@+id/editText_password_login"
@@ -61,7 +62,8 @@
             android:drawablePadding="@dimen/distance_view_10"
             android:background="@drawable/edit_text_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/password" />
 
         <Button
             android:id="@+id/btn_login"
@@ -96,12 +98,15 @@
             android:id="@+id/tv_to_register"
             android:text="@string/toRegister"
             android:paddingLeft="@dimen/distance_view_5"
-            android:paddingVertical="@dimen/distance_view_10"
+            android:paddingTop="@dimen/distance_view_10"
+            android:paddingBottom="@dimen/distance_view_10"
             android:textSize="18sp"
             android:textColor="@color/lightBlue_700"
             android:fontFamily="@font/linotte_semi_bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:ignore="RtlSymmetry"
+            android:paddingStart="@dimen/distance_view_5" />
 
     </LinearLayout>
 

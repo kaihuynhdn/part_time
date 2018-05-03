@@ -1,9 +1,11 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class JobLikedFragment extends Fragment implements JobAdapter.ListItemClickListener{
+    @SuppressLint("StaticFieldLeak")
     private static JobLikedFragment sInstance = null;
     private JobAdapter mAdapter;
     private RecyclerView mLikedJobRecyclerView;
@@ -39,7 +42,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_job_liked, container, false);

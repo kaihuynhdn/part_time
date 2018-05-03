@@ -56,7 +56,9 @@
                         android:fontFamily="@font/linotte_semi_bold"
                         android:hint="@string/hint_dob"
                         android:textColor="@color/grey_600"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:drawableStart="@drawable/dob"
+                        tools:ignore="Deprecated" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -78,7 +80,9 @@
                         android:fontFamily="@font/linotte_semi_bold"
                         android:hint="@string/hint_gender"
                         android:textColor="@color/grey_600"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:drawableStart="@drawable/gender"
+                        tools:ignore="Deprecated" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -100,7 +104,9 @@
                         android:fontFamily="@font/linotte_semi_bold"
                         android:hint="@string/hint_address"
                         android:textColor="@color/grey_600"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:drawableStart="@drawable/address"
+                        tools:ignore="Deprecated" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -123,7 +129,8 @@
                         android:hint="@string/hint_phone_number"
                         android:inputType="number"
                         android:textColor="@color/grey_600"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:drawableStart="@drawable/phone_number" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -145,7 +152,9 @@
                         android:fontFamily="@font/linotte_semi_bold"
                         android:hint="@string/hint_education"
                         android:textColor="@color/grey_600"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:drawableStart="@drawable/education"
+                        tools:ignore="Deprecated" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -170,7 +179,8 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     style="@style/Widget.AppCompat.Button.Colored"
-                    android:theme="@style/RegisterButton"/>
+                    android:theme="@style/RegisterButton"
+                    tools:ignore="RtlHardcoded" />
             </LinearLayout>
 
         </LinearLayout>

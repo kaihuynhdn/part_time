@@ -29,16 +29,18 @@ public class JobManager {
     private ArrayList<Job> mLoadMoreList;
     private ArrayList<Job> mJobListByLocation;
     private ArrayList<Job> mMoreJobListByLocation;
+    private ArrayList<Job> mAllJob;
     private Job jobById;
-    private int jobQuantity = 0;
+    private int jobQuantity = 1;
     private ListenerRegistration listenerRegistration;
     public static boolean isRefreshed = false;
     public static boolean isLoadJobById = false;
-    public static boolean isLoadJobByLoaction = false;
+    public static boolean isLoadJobByLocation = false;
     public static boolean isLoadCandidateList = false;
     public static boolean isLoadMoreJob = false;
     public static boolean isLoadMoreJobByLocation = false;
     public static boolean isLoadedJobQuantity = false;
+    public static boolean isLoadedAllJob = false;
 
     private CollectionReference mJobReference;
 
@@ -49,6 +51,7 @@ public class JobManager {
         this.mCandidateList = new ArrayList<>();
         this.mJobListByLocation = new ArrayList<>();
         this.mMoreJobListByLocation = new ArrayList<>();
+        this.mAllJob = new ArrayList<>();
         mJobReference = FirebaseFirestore.getInstance().collection("jobs");
     }
 
@@ -57,7 +60,11 @@ public class JobManager {
         listenerRegistration = mJobReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                jobQuantity = documentSnapshots.getDocuments().size();
+                if (documentSnapshots == null || documentSnapshots.isEmpty()){
+                    jobQuantity = 1;
+                }else {
+                    jobQuantity = documentSnapshots.getDocuments().size();
+                }
                 isLoadedJobQuantity = true;
             }
         });
@@ -129,8 +136,29 @@ public class JobManager {
         });
     }
 
+    public void loadALlJob(){
+        isLoadedAllJob = false;
+        mJobReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    mAllJob.clear();
+                    for (DocumentSnapshot d : task.getResult()) {
+                        Job job = d.toObject(Job.class);
+                        mAllJob.add(job);
+                    }
+                    isLoadedAllJob = true;
+                }
+            }
+        });
+    }
+
     public void updateJob(Job job) {
         mJobReference.document(job.getId()).set(job);
+    }
+
+    public void deleteJob(String id){
+        mJobReference.document(id).delete();
     }
 
     public void loadCandidateList(String id) {
@@ -151,7 +179,7 @@ public class JobManager {
     }
 
     public void loadJobByLocation(final String location) {
-        isLoadJobByLoaction = false;
+        isLoadJobByLocation = false;
         mJobReference.orderBy("timestamp", Direction.DESCENDING).limit(jobQuantity == 0 ? 1 : jobQuantity).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -167,7 +195,7 @@ public class JobManager {
                                     break;
                                 }
                             }
-                            isLoadJobByLoaction = true;
+                            isLoadJobByLocation = true;
                         }
                     }
                 });

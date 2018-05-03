@@ -16,7 +16,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -63,6 +62,7 @@ public class HomePageActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
+
     private TextView mUserName, mUserEmail;
     private ImageView imageView, share;
     private CustomViewPager viewPager;
@@ -74,6 +74,7 @@ public class HomePageActivity extends AppCompatActivity
 
     //Bottom navigation
     private BottomNavigationView mBottomNavigationView;
+    @SuppressLint("StaticFieldLeak")
     private static HomePageActivity sInstance = null;
 
     //Firebase Instance variables
@@ -84,7 +85,6 @@ public class HomePageActivity extends AppCompatActivity
 
     //Google Instance variables
     private GoogleApiClient mGoogleApiClient;
-    private ShareActionProvider mShareActionProvider;
 
 
     @Override
@@ -120,6 +120,8 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initialize() {
+        JobManager.getInstance().loadData();
+
         adapter = new HomeViewPagerAdapter(getSupportFragmentManager(), NUM_TABS);
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
@@ -130,7 +132,7 @@ public class HomePageActivity extends AppCompatActivity
             mUserName.setText(user.getFullName());
             mUserEmail.setText(user.getEmail());
         }
-        if (!user.getImageURL().equals("")) {
+    if (user.getImageURL() != null && !user.getImageURL().equals("")) {
             Picasso.get().load(user.getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(imageView);
         }
 
@@ -230,7 +232,7 @@ public class HomePageActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_home:
                 viewPager.setCurrentItem(0);
-                toolbar.setTitle("Việc Làm Part Time");
+                toolbar.setTitle("Việc làm Part Time");
                 break;
             case R.id.action_like_jobs:
                 viewPager.setCurrentItem(1);
@@ -276,6 +278,8 @@ public class HomePageActivity extends AppCompatActivity
 
             }
         });
+
+
         return true;
     }
 
@@ -290,7 +294,7 @@ public class HomePageActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
 
@@ -380,7 +384,6 @@ public class HomePageActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         mAuth.addAuthStateListener(mAuthStateListener);
-        JobManager.getInstance().loadData();
 
         listenerRegistration = mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -404,7 +407,6 @@ public class HomePageActivity extends AppCompatActivity
         if (listenerRegistration != null) {
             listenerRegistration.remove();
         }
-        JobManager.getInstance().removeListener();
     }
 
     @SuppressLint("RestrictedApi")
@@ -443,6 +445,8 @@ public class HomePageActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         isDestroyed = true;
+        JobManager.getInstance().removeListener();
+
     }
 
     @Override

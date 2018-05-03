@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mEmail, mPassword;
     private ProgressDialog mProgress;
 
+    @SuppressLint("StaticFieldLeak")
     private static LoginActivity sInstance = null;
 
     //Firebase instance variables
@@ -51,9 +53,17 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        addComponents();
+        getWidgets();
         initialize();
-        addEvents();
+        setWidgetListeners();
+    }
+
+    private void getWidgets() {
+        mEmail = findViewById(R.id.editText_email_login);
+        mPassword = findViewById(R.id.editText_password_login);
+        mLoginButton = findViewById(R.id.btn_login);
+        mToRegisterTextView = findViewById(R.id.tv_to_register);
+        sInstance = this;
     }
 
     private void initialize() {
@@ -99,7 +109,7 @@ public class LoginActivity extends AppCompatActivity{
         };
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,15 +187,6 @@ public class LoginActivity extends AppCompatActivity{
                 startActivity(new Intent(LoginActivity.this, LoginMethodActivity.class));
             }
         });
-    }
-
-
-    private void addComponents() {
-        mEmail = findViewById(R.id.editText_email_login);
-        mPassword = findViewById(R.id.editText_password_login);
-        mLoginButton = findViewById(R.id.btn_login);
-        mToRegisterTextView = findViewById(R.id.tv_to_register);
-        sInstance = this;
     }
 
     public static LoginActivity getInstance(){

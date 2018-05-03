@@ -12,12 +12,13 @@
     <ScrollView
         android:background="@drawable/grey_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:gravity="center"
@@ -36,18 +37,9 @@
                     android:padding="@dimen/distance_view_5"
                     android:text="@string/job_title"
                     android:textColor="@color/back_87"
-                    android:textSize="22sp" />
+                    android:textSize="22sp"
+                    android:layout_marginStart="@dimen/distance_view_23" />
 
-                <ImageButton
-                    android:id="@+id/btn_edit_job_title"
-                    android:layout_toRightOf="@id/tv_job_title"
-                    android:layout_alignBottom="@id/tv_job_title"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="@dimen/distance_view_5"
-                    android:layout_marginBottom="@dimen/distance_view_10"
-                    android:background="@drawable/edit_job_title_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
 
@@ -79,7 +71,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_status_job"
@@ -91,7 +84,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/status"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +97,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_salary_job"
@@ -115,7 +110,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/salary"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/salary" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -127,7 +123,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_location_job"
@@ -139,7 +136,9 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/location"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/address"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -160,15 +159,18 @@
                         android:gravity="top|left"
                         android:minHeight="@dimen/distance_view_90"
                         android:lineSpacingExtra="@dimen/distance_view_5"
-                        android:paddingHorizontal="@dimen/distance_view_10"
-                        android:paddingVertical="@dimen/distance_view_5"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
                         android:background="@drawable/input_template"
                         android:layout_marginLeft="@dimen/distance_view_10"
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/back_87"
                         android:hint="@string/text4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
 
                 </LinearLayout>
 
@@ -201,8 +203,10 @@
                         android:textSize="16sp"
                         android:lineSpacingExtra="@dimen/distance_view_5"
                         android:inputType="textMultiLine"
-                        android:paddingHorizontal="@dimen/distance_view_10"
-                        android:paddingVertical="@dimen/distance_view_5"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
                         android:background="@drawable/input_template"
                         android:gravity="top|left"
                         android:minHeight="@dimen/distance_view_90"
@@ -211,7 +215,8 @@
                         android:textColor="@color/back_87"
                         android:hint="@string/text4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -243,7 +248,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_skill_job"
@@ -255,7 +261,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/skill_title"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -266,7 +273,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_language_job"
@@ -278,7 +286,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/foreign_language_title"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -289,7 +298,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/back_87"
-                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob">
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_gender_job"
@@ -300,7 +310,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_gender"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -311,7 +322,8 @@
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:text="@string/other"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/distance_view_10" />
 
                     <EditText
                         android:id="@+id/et_job_requirement"
@@ -322,14 +334,17 @@
                         android:gravity="top|left"
                         android:lineSpacingExtra="@dimen/distance_view_5"
                         android:minHeight="@dimen/distance_view_90"
-                        android:paddingHorizontal="@dimen/distance_view_10"
-                        android:paddingVertical="@dimen/distance_view_5"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
                         android:layout_marginLeft="@dimen/distance_view_15"
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/back_87"
                         android:hint="@string/text4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

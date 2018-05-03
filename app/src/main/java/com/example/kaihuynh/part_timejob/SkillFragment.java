@@ -1,9 +1,11 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ public class SkillFragment extends Fragment {
     private ArrayList<Skill> mSkills;
     private SkillAdapter mSkillAdapter;
 
+    @SuppressLint("StaticFieldLeak")
     private static SkillFragment sInstance = null;
 
     public SkillFragment() {
@@ -40,25 +43,25 @@ public class SkillFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skill, container, false);
 
-        addComponents(view);
-        init();
-        addEvents();
+        getWidgets(view);
+        initialize();
+        setWidgetListeners();
 
         return view;
     }
 
-    private void addComponents(View view) {
+    private void getWidgets(View view) {
         mDoneButton = view.findViewById(R.id.btn_next_skill);
         mPreviousButton = view.findViewById(R.id.btn_previous_skill);
         mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
         mSkillListView = view.findViewById(R.id.lv_skill);
     }
 
-    private void init() {
+    private void initialize() {
         dpi = getContext().getResources().getDisplayMetrics().density;
         mSkills = new ArrayList<>();
 
@@ -72,7 +75,7 @@ public class SkillFragment extends Fragment {
         mSkillListView.setAdapter(mSkillAdapter);
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         listViewEvents();
         previousButtonEvents();
         nextButtonEvents();
@@ -130,7 +133,7 @@ public class SkillFragment extends Fragment {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(editText.getText().toString()!="" && editText.getText().toString()!= null){
+                if(!editText.getText().toString().equals("") && editText.getText().toString()!= null){
                     mSkills.add(mSkills.size()-1, new Skill(editText.getText().toString(), true));
                     mSkillAdapter.notifyDataSetChanged();
                 }
@@ -156,12 +159,12 @@ public class SkillFragment extends Fragment {
     }
 
     public String getSkills(){
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (Skill f : mSkills){
             if(f.isChecked() && !f.getName().equals("Không")){
-                s+=f.getName()+"\n";
+                s.append(f.getName()).append("\n");
             }
         }
-        return s == "" ? "" : s.substring(0, s.length() - 1);
+        return s.toString().equals("") ? "" : s.substring(0, s.length() - 1);
     }
 }

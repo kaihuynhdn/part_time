@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +17,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
+import com.example.kaihuynh.part_timejob.models.Job;
+import com.example.kaihuynh.part_timejob.models.Notification;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,10 +28,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.ArrayList;
 
 public class RegisterAccountInfoActivity extends AppCompatActivity {
 
@@ -37,22 +39,31 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
     private TextInputLayout inputNameLayout, inputEmailLayout, inputPasswordLayout, inputConfirmPasswordLayout;
     private TextInputEditText mFullName, mEmail, mPassword, mConfirmPassword;
     private ProgressDialog mProgress;
-    private Handler mHandler;
 
     //Firebase instance variables
     private FirebaseAuth mAuth;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserDatabaseReference;
-    private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_account_info);
 
-        addComponents();
+        getWidgets();
         initialize();
-        addEvents();
+        setWidgetListeners();
+    }
+
+    private void getWidgets() {
+        mFullName = findViewById(R.id.input_fullName);
+        mEmail = findViewById(R.id.input_email);
+        mPassword = findViewById(R.id.input_password);
+        mConfirmPassword = findViewById(R.id.input_confirm_password);
+        mRegisterButton = findViewById(R.id.btn_register_account);
+        inputNameLayout = findViewById(R.id.input_fullName_layout);
+        inputEmailLayout = findViewById(R.id.input_layout_email);
+        inputPasswordLayout = findViewById(R.id.input_layout_password);
+        inputConfirmPasswordLayout = findViewById(R.id.input_layout_confirm_password);
     }
 
     private void initialize() {
@@ -63,11 +74,10 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users");
 
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +88,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater().from(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.register_notification_dialog, null);
         builder.setView(view);
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
@@ -124,9 +134,13 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 userFirebase.updateProfile(profileUpdates);
 
                                 User user = new User();
-                                user.setId(userFirebase.getUid().toString());
+                                user.setId(userFirebase.getUid());
                                 user.setEmail(userFirebase.getEmail());
                                 user.setFullName(mFullName.getText().toString());
+                                user.setNotificationList(new ArrayList<Notification>());
+                                user.setFavouriteJobList(new ArrayList<Job>());
+                                user.setAppliedJobList(new ArrayList<ApplyJob>());
+                                user.setRecruitmentList(new ArrayList<Job>());
                                 user.setToken(Common.currentToken);
 
                                 UserManager.getInstance().updateUser(user);
@@ -135,15 +149,12 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 mProgress.dismiss();
                                 showAlertDialog();
                                 signIn();
-                                //updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 inputEmailLayout.setError("Địa chỉ email đã tồn tại.");
                                 mProgress.dismiss();
-                                //updateUI(null);
                             }
 
-                            // ...
                         }
                     });
 
@@ -160,15 +171,12 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterAccountInfoActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
-                        // ...
                     }
                 });
     }
@@ -211,18 +219,5 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-
-    private void addComponents() {
-        mFullName = findViewById(R.id.input_fullName);
-        mEmail = findViewById(R.id.input_email);
-        mPassword = findViewById(R.id.input_password);
-        mConfirmPassword = findViewById(R.id.input_confirm_password);
-        mRegisterButton = findViewById(R.id.btn_register_account);
-        inputNameLayout = findViewById(R.id.input_fullName_layout);
-        inputEmailLayout = findViewById(R.id.input_layout_email);
-        inputPasswordLayout = findViewById(R.id.input_layout_password);
-        inputConfirmPasswordLayout = findViewById(R.id.input_layout_confirm_password);
     }
 }

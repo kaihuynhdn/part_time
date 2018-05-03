@@ -240,9 +240,9 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
             }
         }
 
-        mQuantityWaitingJob.setText(mCandidateList.size()+"");
-        mQuantityEmployedJob.setText(mEmployedJobArrayList.size()+"");
-        mQuantityUnemployedJob.setText(mUnemployedJobArrayList.size()+"");
+        mQuantityWaitingJob.setText(String.valueOf(mCandidateList.size()+""));
+        mQuantityEmployedJob.setText(String.valueOf(mEmployedJobArrayList.size()+""));
+        mQuantityUnemployedJob.setText(String.valueOf(mUnemployedJobArrayList.size()+""));
 
         mAdapter = new CandidateAdapter(ListCandidateActivity.this, R.layout.candidate_rv_item, mCandidateList, this);
         mListCandidateRecyclerView.setAdapter(mAdapter);

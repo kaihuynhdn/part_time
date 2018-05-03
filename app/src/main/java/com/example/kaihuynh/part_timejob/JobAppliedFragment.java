@@ -1,9 +1,11 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +39,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
     private Button mShowViewing, mShowEmployed, mShowUnemployed;
     private TextView mQuantityViewingJob, mQuantityEmployedJob, mQuantityUnemployedJob;
 
+    @SuppressLint("StaticFieldLeak")
     private static JobAppliedFragment sInstance = null;
 
     public JobAppliedFragment() {
@@ -45,7 +48,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_job_applied, container, false);
@@ -225,12 +228,16 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         }
 
         for (ApplyJob job : list) {
-            if (job.getStatus().equals(ApplyJob.EMPLOYED_STATUS)) {
-                mEmployedJobArrayList.add(job);
-            } else if (job.getStatus().equals(ApplyJob.UNEMPLOYED_STATUS)) {
-                mUnemployedJobArrayList.add(job);
-            }else {
-                mViewingJobArrayList.add(job);
+            switch (job.getStatus()) {
+                case ApplyJob.EMPLOYED_STATUS:
+                    mEmployedJobArrayList.add(job);
+                    break;
+                case ApplyJob.UNEMPLOYED_STATUS:
+                    mUnemployedJobArrayList.add(job);
+                    break;
+                default:
+                    mViewingJobArrayList.add(job);
+                    break;
             }
         }
         mQuantityViewingJob.setText(String.valueOf(mViewingJobArrayList.size()));

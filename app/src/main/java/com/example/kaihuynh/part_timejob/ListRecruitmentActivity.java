@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
     private SwipeRefreshLayout swipeRefreshLayout;
     private RelativeLayout mEmptyView;
 
+    @SuppressLint("StaticFieldLeak")
     private static ListRecruitmentActivity sInstance = null;
 
     @Override
@@ -86,7 +88,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
         });
     }
 
-    private void refresh(){
+    public void refresh(){
         mJobArrayList = new ArrayList<>();
         if (UserManager.getInstance().getUser().getRecruitmentList()!=null && UserManager.getInstance().getUser().getRecruitmentList().size()>0){
             mJobArrayList.addAll(UserManager.getInstance().getUser().getRecruitmentList());

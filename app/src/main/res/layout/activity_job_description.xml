@@ -29,7 +29,7 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/tv_job_title"
@@ -45,7 +45,6 @@
 
                     <TextView
                         android:id="@+id/tv_job_date"
-                        android:text="2 ngày trước"
                         android:fontFamily="@font/roboto_regular"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="wrap_content"
@@ -81,7 +80,8 @@
                                         android:id="@+id/tab1"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="TooDeepLayout">
 
                                         <include layout="@layout/job_detail_tab"/>
                                     </LinearLayout>
@@ -124,18 +124,18 @@
                                 android:id="@+id/tv_job_description"
                                 android:layout_marginLeft="@dimen/distance_view_10"
                                 android:textSize="16sp"
-                                android:lineSpacingExtra="5dp"
+                                android:lineSpacingExtra="@dimen/distance_view_5"
                                 android:layout_marginTop="@dimen/distance_view_10"
                                 android:textColor="@color/back_87"
                                 android:fontFamily="@font/roboto_regular"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/distance_view_10" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
                         android:layout_marginTop="@dimen/distance_view_5"
-                        android:elevation="@dimen/distance_view_20"
                         android:layout_marginBottom="@dimen/requirement_margin_bottom"
                         app:cardElevation="@dimen/distance_view_2"
                         app:cardCornerRadius="@dimen/distance_view_2"
@@ -165,7 +165,8 @@
                                 android:textColor="@color/back_87"
                                 android:fontFamily="@font/roboto_regular"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/distance_view_10" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                 </LinearLayout>

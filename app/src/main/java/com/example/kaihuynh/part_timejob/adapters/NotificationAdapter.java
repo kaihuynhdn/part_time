@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -74,8 +75,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate){
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if(minus<2){
             if (minus == 1){
@@ -91,6 +93,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());

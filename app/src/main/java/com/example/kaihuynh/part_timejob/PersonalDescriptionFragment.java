@@ -1,6 +1,7 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ public class PersonalDescriptionFragment extends Fragment {
     private CustomViewPager mViewPager;
     private EditText mDescription;
     private ProgressDialog mProgress;
+    @SuppressLint("StaticFieldLeak")
     private static PersonalDescriptionFragment sInstance = null;
 
     public PersonalDescriptionFragment() {
@@ -49,16 +52,23 @@ public class PersonalDescriptionFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_description, container, false);
 
-        addComponents(view);
+        getWidgets(view);
         initialize();
-        addEvents();
+        setWidgetListeners();
 
         return view;
+    }
+
+    private void getWidgets(View view) {
+        mDescription = view.findViewById(R.id.et_personal_description);
+        mPreviousButton = view.findViewById(R.id.btn_previous_description);
+        mDoneButton = view.findViewById(R.id.btn_done_description);
+        mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
     }
 
     private void initialize() {
@@ -69,7 +79,7 @@ public class PersonalDescriptionFragment extends Fragment {
 
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         previousButtonEvents();
         doneButtonEvents();
     }
@@ -128,28 +138,33 @@ public class PersonalDescriptionFragment extends Fragment {
 
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater().from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.register_notification_dialog, null);
         TextView t1 = view.findViewById(R.id.tv_success);
         TextView t2 = view.findViewById(R.id.tv_content_success);
-        t1.setText("Đăng ký thông tin thành công");
+        t1.setText(String.valueOf("Đăng ký thông tin thành công"));
         t2.setVisibility(View.GONE);
         builder.setView(view);
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(getActivity().getIntent().getStringExtra("activity").equals("RegisterAccountInfoActivity")){
-                    startActivity(new Intent(getContext(), HomePageActivity.class));
-                    LoginMethodActivity.getInstance().finish();
-                    getActivity().finish();
-                }else if(getActivity().getIntent().getStringExtra("activity").equals("HomePageActivity")){
-                    startActivity(new Intent(getContext(), ProfileActivity.class));
-                    getActivity().finish();
-                }else if(getActivity().getIntent().getStringExtra("activity").equals("RecruitingActivity")){
-                    startActivity(new Intent(getContext(), RecruitingActivity.class));
-                    getActivity().finish();
-                }else if (getActivity().getIntent().getStringExtra("activity").equals("JobDescriptionActivity")){
-                    getActivity().finish();
+                switch (getActivity().getIntent().getStringExtra("activity")) {
+                    case "RegisterAccountInfoActivity":
+                        startActivity(new Intent(getContext(), HomePageActivity.class));
+                        LoginMethodActivity.getInstance().finish();
+                        getActivity().finish();
+                        break;
+                    case "HomePageActivity":
+                        startActivity(new Intent(getContext(), ProfileActivity.class));
+                        getActivity().finish();
+                        break;
+                    case "RecruitingActivity":
+                        startActivity(new Intent(getContext(), RecruitingActivity.class));
+                        getActivity().finish();
+                        break;
+                    case "JobDescriptionActivity":
+                        getActivity().finish();
+                        break;
                 }
             }
         });
@@ -166,13 +181,6 @@ public class PersonalDescriptionFragment extends Fragment {
                 mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1);
             }
         });
-    }
-
-    private void addComponents(View view) {
-        mDescription = view.findViewById(R.id.et_personal_description);
-        mPreviousButton = view.findViewById(R.id.btn_previous_description);
-        mDoneButton = view.findViewById(R.id.btn_done_description);
-        mViewPager = RegisterPersonalInfoActivity.getInstance().findViewById(R.id.viewPage_register);
     }
 
     public static PersonalDescriptionFragment getInstance(){

@@ -59,7 +59,9 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     style="@style/Widget.AppCompat.Button.Colored"
-                    android:theme="@style/RegisterButton"/>
+                    android:theme="@style/RegisterButton"
+                    android:layout_alignParentStart="true"
+                    tools:ignore="RtlHardcoded" />
 
                 <Button
                     android:id="@+id/btn_next_skill"
@@ -73,7 +75,9 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     style="@style/Widget.AppCompat.Button.Colored"
-                    android:theme="@style/RegisterButton"/>
+                    android:theme="@style/RegisterButton"
+                    android:layout_alignParentEnd="true"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
             </RelativeLayout>
 
         </RelativeLayout>

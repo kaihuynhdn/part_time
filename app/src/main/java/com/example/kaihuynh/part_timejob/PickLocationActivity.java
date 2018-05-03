@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 public class PickLocationActivity extends AppCompatActivity {
@@ -39,10 +40,8 @@ public class PickLocationActivity extends AppCompatActivity {
     private void initialize() {
         arraylist = new ArrayList<>();
         strings = getResources().getStringArray(R.array.location);
-        for (String s : strings) {
-            arraylist.add(s);
-        }
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arraylist);
+        Collections.addAll(arraylist, strings);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arraylist);
         listView.setAdapter(adapter);
     }
 
@@ -82,9 +81,7 @@ public class PickLocationActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String s) {
                 ArrayList<String> list = new ArrayList<>();
-                for (String ss : strings) {
-                    list.add(ss);
-                }
+                Collections.addAll(list, strings);
                 s = s.toLowerCase(Locale.getDefault());
                 arraylist.clear();
                 if (s.length() == 0) {
@@ -102,7 +99,7 @@ public class PickLocationActivity extends AppCompatActivity {
         });
 
         int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = (ImageView) searchView.findViewById(magId);
+        ImageView magImage = searchView.findViewById(magId);
         magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         magImage.setVisibility(View.GONE);
         return super.onCreateOptionsMenu(menu);

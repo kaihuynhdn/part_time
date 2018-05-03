@@ -65,7 +65,8 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_full_name"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/user" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +87,8 @@
                             android:hint="@string/hint_email"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/email" />
 
 
                     </android.support.design.widget.TextInputLayout>
@@ -110,7 +112,8 @@
                             android:hint="@string/hint_password"
                             android:inputType="textPassword"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/password" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -130,7 +133,8 @@
                             android:hint="@string/hint_confirm_password"
                             android:inputType="textPassword"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/confirm_password" />
 
                     </android.support.design.widget.TextInputLayout>
 

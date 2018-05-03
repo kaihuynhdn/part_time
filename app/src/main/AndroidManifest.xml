@@ -76,26 +76,29 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".UpdateJobActivity"></activity>
+        <activity android:name=".UpdateJobActivity" />
 
-        <service
-            android:name=".service.MyFirebaseIdService">
+        <service android:name=".service.MyFirebaseIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.MyFirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".service.MyFirebaseMessaging">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
-        <provider android:authorities="com.facebook.app.FacebookContentProvider108585286650544"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider108585286650544"
+            android:exported="true" />
 
+        <activity
+            android:name=".SearchActivity">
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
     </application>
 
 </manifest>

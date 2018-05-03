@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_custom"
     android:clickable="true"
     android:layout_marginBottom="@dimen/distance_view_2"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardElevation="@dimen/distance_view_2">
+    app:cardElevation="@dimen/distance_view_2"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/activity_padding"
-        android:paddingVertical="@dimen/distance_view_10">
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="@dimen/activity_padding"
+        android:paddingTop="@dimen/distance_view_10"
+        android:paddingBottom="@dimen/distance_view_10">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,7 +30,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/linotte_semi_bold"
-                android:text="Job Title"
                 android:textColor="@color/back_87"
                 android:textSize="18sp" />
 
@@ -35,10 +38,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:paddingHorizontal="@dimen/distance_view_10"
+                android:paddingLeft="@dimen/distance_view_10"
+                android:paddingRight="@dimen/distance_view_10"
                 android:text="@string/option"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentEnd="true"
+                tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
         <LinearLayout
@@ -58,8 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance_view_10"
-                android:text="Đà Nẵng"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/distance_view_10" />
 
         </LinearLayout>
 
@@ -80,8 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance_view_10"
-                android:text="2 triệu"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/distance_view_10" />
 
         </LinearLayout>
 
@@ -104,8 +110,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance_view_10"
                 android:layout_toRightOf="@id/tv_posted_date"
-                android:text="12/10/2017"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/distance_view_10"
+                android:layout_toEndOf="@id/tv_posted_date" />
 
         </RelativeLayout>
     </LinearLayout>

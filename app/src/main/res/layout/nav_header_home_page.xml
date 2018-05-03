@@ -17,7 +17,8 @@
         android:layout_width="@dimen/distance_view_90"
         android:layout_height="@dimen/distance_view_90"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/user_profile" />
+        app:srcCompat="@drawable/user_profile"
+        android:contentDescription="@string/img_description" />
 
     <TextView
         android:id="@+id/tv_user_name"

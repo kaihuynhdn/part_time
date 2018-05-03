@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
     private ProgressDialog mProgress;
     private ListenerRegistration listenerRegistration;
 
+    @SuppressLint("StaticFieldLeak")
     private static LoginMethodActivity sInstance = null;
 
     //Firebase instance variables
@@ -80,10 +82,18 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_method);
 
-        addComponents();
+        getWidgets();
         initialize();
-        addEvents();
+        setWidgetListeners();
 
+    }
+
+    private void getWidgets() {
+        mFbLoginButton = findViewById(R.id.btn_fb_login);
+        mCreateButton = findViewById(R.id.btn_create);
+        mToLoginTextView = findViewById(R.id.tv_toLogin_method);
+        mGoogleSignIn = findViewById(R.id.btn_google_login);
+        sInstance = this;
     }
 
     private void initialize() {
@@ -170,7 +180,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
-    private void addEvents() {
+    private void setWidgetListeners() {
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,13 +203,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         });
     }
 
-    private void addComponents() {
-        mFbLoginButton = findViewById(R.id.btn_fb_login);
-        mCreateButton = findViewById(R.id.btn_create);
-        mToLoginTextView = findViewById(R.id.tv_toLogin_method);
-        mGoogleSignIn = findViewById(R.id.btn_google_login);
-        sInstance = this;
-    }
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -214,7 +217,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             if (v instanceof TextView) {
                 TextView tv = (TextView) v;
                 tv.setTextSize(14);
-                tv.setText("ĐĂNG NHẬP BẰNG GOOGLE");
+                tv.setText(String.valueOf("ĐĂNG NHẬP BẰNG GOOGLE"));
                 tv.setSingleLine(true);
                 tv.setPadding(15, 17, 20, 17);
                 return;
@@ -251,7 +254,6 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                 if (mProgress.isShowing()) {
                     mProgress.dismiss();
                 }
-                // ...
             }
         }
 
@@ -312,16 +314,14 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                                         }
                                     }
                                     User user = new User();
-                                    user.setId(userFirebase.getUid().toString());
+                                    user.setId(userFirebase.getUid());
                                     user.setEmail(userFirebase.getEmail());
                                     user.setFullName(userFirebase.getDisplayName());
                                     UserManager.getInstance().updateUser(user);
-//                                    mUserReference.document(userFirebase.getUid()).set(user);
                                 }
                             });
                         }
 
-                        // ...
                     }
                 });
     }
@@ -349,7 +349,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                                         }
                                     }
                                     User user = new User();
-                                    user.setId(userFirebase.getUid().toString());
+                                    user.setId(userFirebase.getUid());
                                     user.setEmail(userFirebase.getEmail());
                                     user.setFullName(userFirebase.getDisplayName());
                                     UserManager.getInstance().updateUser(user);
@@ -360,13 +360,10 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginMethodActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
-                        // ...
                     }
                 });
     }
-
 
 }

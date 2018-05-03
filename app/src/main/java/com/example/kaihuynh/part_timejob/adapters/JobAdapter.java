@@ -1,6 +1,9 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +19,7 @@ import com.example.kaihuynh.part_timejob.JobLikedFragment;
 import com.example.kaihuynh.part_timejob.ListRecruitmentActivity;
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.UpdateJobActivity;
+import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
 
@@ -52,13 +56,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
 
     @NonNull
     @Override
-    public JobItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public JobItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new JobItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final JobItemViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final JobItemViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final Job job = mJobList.get(position);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(job.getTimestamp()));
@@ -89,8 +93,9 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate) {
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if (minus < 2) {
             if (minus == 1) {
@@ -106,6 +111,8 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         } else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
@@ -141,12 +148,44 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
                         Intent intent = new Intent(context, UpdateJobActivity.class);
                         intent.putExtra("job", job);
                         context.startActivity(intent);
+                        break;
+                    case R.id.recruitment_item_delete:
+                        showDeleteDialog(job);
+
+                        break;
                 }
                 return true;
             }
         });
 
         popup.show();
+    }
+
+    private void showDeleteDialog(final Job job) {
+        new AlertDialog.Builder(context)
+                .setTitle("Thông báo")
+                .setMessage("Bạn có muốn \"xóa\" tin tuyển dụng này không ?")
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (Job j : UserManager.getInstance().getUser().getRecruitmentList()) {
+                            if (j.getId().equals(job.getId())) {
+                                UserManager.getInstance().getUser().getRecruitmentList().remove(j);
+                                break;
+                            }
+                        }
+                        UserManager.getInstance().updateUser(UserManager.getInstance().getUser());
+                        ListRecruitmentActivity.getInstance().refresh();
+                        JobManager.getInstance().deleteJob(job.getId());
+                    }
+                })
+                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).create().show();
+
     }
 
     @Override

@@ -27,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean interrupt, isLoaded;
     private ProgressBar mProgressBar;
     private ImageView mRefresh;
     private Handler mHandler;
@@ -46,14 +45,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addComponents();
+        getWidgets();
         initialize();
         addWidgetListener();
     }
 
+    private void getWidgets() {
+        mProgressBar = findViewById(R.id.progressBar);
+        mRefresh = findViewById(R.id.img_refresh);
+    }
+
     private void initialize() {
-        isLoaded = false;
-        interrupt = true;
         mHandler = new Handler();
         FINISH_LOADED = 0;
         mAuth = FirebaseAuth.getInstance();
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
                     FINISH_LOADED = 1;
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mRefresh.setVisibility(View.VISIBLE);
             }
-        }, 10000);
+        }, 15000);
     }
 
     private boolean isConnect() {
@@ -152,11 +154,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
-    }
-
-    private void addComponents() {
-        mProgressBar = findViewById(R.id.progressBar);
-        mRefresh = findViewById(R.id.img_refresh);
     }
 
     @Override

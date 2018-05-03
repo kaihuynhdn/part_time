@@ -41,7 +41,8 @@
                         android:scaleType="fitCenter"
                         android:background="@drawable/avatar_profile"
                         android:padding="2dp"
-                        android:src="@drawable/loading_img" />
+                        android:src="@drawable/loading_img"
+                        android:contentDescription="@string/avarar_img_description" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -59,7 +60,8 @@
                         android:fontFamily="@font/roboto_medium"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/back_87"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        tools:ignore="RelativeOverlap" />
 
                     <TextView
                         android:id="@+id/tv_email_profile"
@@ -80,7 +82,6 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/distance_view_5"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="0935432632"
                         android:textColor="@color/back_87" />
 
                     <ImageButton
@@ -92,7 +93,10 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/distance_view_20"
                         android:background="@null"
-                        android:src="@drawable/edit_job_title_button" />
+                        android:src="@drawable/edit_job_title_button"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/distance_view_20"
+                        android:contentDescription="@string/img_description" />
 
                 </RelativeLayout>
 
@@ -105,7 +109,8 @@
                     android:layout_alignEnd="@+id/relative_layout1"
                     android:layout_alignRight="@+id/relative_layout1"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/camera" />
+                    android:src="@drawable/camera"
+                    android:contentDescription="@string/img_description" />
             </RelativeLayout>
             <View
                 android:background="@drawable/drop_shadow"
@@ -115,7 +120,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_padding"
+                android:layout_marginRight="@dimen/activity_padding"
+                android:layout_marginLeft="@dimen/activity_padding"
                 android:layout_marginTop="@dimen/distance_view_10"
                 android:layout_marginBottom="@dimen/distance_view_10"
                 app:cardCornerRadius="@dimen/distance_view_5"
@@ -135,7 +141,8 @@
                         android:paddingBottom="@dimen/distance_view_5"
                         android:text="@string/general"
                         android:textColor="@color/end_color"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_marginStart="@dimen/distance_view_5" />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_dob_profile_layout"
@@ -155,7 +162,9 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_dob"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/dob"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -174,11 +183,12 @@
                             android:drawableLeft="@drawable/gender"
                             android:drawablePadding="@dimen/distance_view_10"
                             android:editable="false"
-                            android:text="Nam"
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_gender"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/gender"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -200,7 +210,9 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_address"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/address"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -219,11 +231,12 @@
                             android:drawableLeft="@drawable/education"
                             android:drawablePadding="@dimen/distance_view_10"
                             android:editable="false"
-                            android:text="Đại học"
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/hint_education"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/education"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -233,7 +246,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_padding"
+                android:layout_marginLeft="@dimen/activity_padding"
+                android:layout_marginRight="@dimen/activity_padding"
                 android:layout_marginBottom="@dimen/distance_view_10"
                 app:cardCornerRadius="@dimen/distance_view_5"
                 app:cardElevation="@dimen/distance_view_5">
@@ -252,7 +266,8 @@
                         android:paddingBottom="@dimen/distance_view_5"
                         android:text="@string/foreign_language_title"
                         android:textColor="@color/end_color"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_marginStart="@dimen/distance_view_5" />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_language_profile_layout"
@@ -261,7 +276,8 @@
                         android:layout_marginLeft="@dimen/distance_view_10"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/green"
-                        app:hintTextAppearance="@style/TextInputLayoutHintText">
+                        app:hintTextAppearance="@style/TextInputLayoutHintText"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_language_profile"
@@ -273,7 +289,8 @@
                             android:hint="@string/foreign_language_title"
                             android:lineSpacingExtra="@dimen/distance_view_10"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -282,7 +299,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_padding"
+                android:layout_marginLeft="@dimen/activity_padding"
+                android:layout_marginRight="@dimen/activity_padding"
                 android:layout_marginBottom="@dimen/distance_view_10"
                 app:cardCornerRadius="@dimen/distance_view_5"
                 app:cardElevation="@dimen/distance_view_5">
@@ -299,9 +317,10 @@
                         android:layout_marginLeft="@dimen/distance_view_5"
                         android:fontFamily="@font/iciel_cadena"
                         android:paddingBottom="@dimen/distance_view_5"
-                        android:text="Kỹ năng cá nhân"
+                        android:text="@string/personal_skills"
                         android:textColor="@color/end_color"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_marginStart="@dimen/distance_view_5" />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_skill_profile_layout"
@@ -310,7 +329,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/distance_view_10"
                         android:textColorHint="@color/green"
-                        app:hintTextAppearance="@style/TextInputLayoutHintText">
+                        app:hintTextAppearance="@style/TextInputLayoutHintText"
+                        android:layout_marginStart="@dimen/distance_view_10">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/input_skill_profile"
@@ -319,11 +339,11 @@
                             android:lineSpacingExtra="@dimen/distance_view_10"
                             android:drawablePadding="@dimen/distance_view_10"
                             android:editable="false"
-                            android:text="Tinh thần học hỏi\nLàm việc theo nhóm"
                             android:fontFamily="@font/linotte_semi_bold"
                             android:hint="@string/skill_title"
                             android:textColor="@color/grey_600"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -332,7 +352,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/activity_padding"
+                android:layout_marginRight="@dimen/activity_padding"
+                android:layout_marginLeft="@dimen/activity_padding"
                 android:layout_marginBottom="@dimen/distance_view_10"
                 app:cardCornerRadius="@dimen/distance_view_5"
                 app:cardElevation="@dimen/distance_view_5">
@@ -349,7 +370,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginLeft="@dimen/distance_view_5"
@@ -357,7 +378,8 @@
                             android:paddingBottom="@dimen/distance_view_5"
                             android:text="@string/personal_description"
                             android:textColor="@color/end_color"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:layout_marginStart="@dimen/distance_view_5" />
 
                         <Button
                             android:id="@+id/btn_edit_personal_description"
@@ -365,7 +387,8 @@
                             android:layout_gravity="center"
                             android:background="@drawable/edit_job_title_button"
                             android:layout_width="20dp"
-                            android:layout_height="20dp" />
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="@dimen/distance_view_10" />
                     </LinearLayout>
 
 
@@ -379,15 +402,18 @@
                         android:layout_marginRight="@dimen/distance_view_10"
                         android:lineSpacingExtra="@dimen/distance_view_5"
                         android:minHeight="@dimen/distance_view_90"
-                        android:paddingHorizontal="@dimen/distance_view_10"
-                        android:paddingVertical="@dimen/distance_view_5"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
                         android:layout_marginBottom="@dimen/distance_view_10"
                         android:layout_marginLeft="@dimen/distance_view_15"
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/back_87"
                         android:hint="@string/text4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded,TextViewEdits" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

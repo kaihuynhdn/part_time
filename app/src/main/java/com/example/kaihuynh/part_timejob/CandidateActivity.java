@@ -1,11 +1,13 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -157,11 +159,11 @@ public class CandidateActivity extends AppCompatActivity {
     private void setActionButton(String action){
         if (action.equals(ApplyJob.UNEMPLOYED_STATUS)){
             mAcceptButton.setVisibility(View.GONE);
-            mIgnoreButton.setText("Bị từ chối !");
+            mIgnoreButton.setText(String.valueOf("Bị từ chối !"));
             mIgnoreButton.setClickable(false);
         }else if (action.equals(ApplyJob.EMPLOYED_STATUS)){
             mIgnoreButton.setVisibility(View.GONE);
-            mAcceptButton.setText("Được tuyển chọn !");
+            mAcceptButton.setText(String.valueOf("Được tuyển chọn !"));
             mAcceptButton.setClickable(false);
         }
     }
@@ -223,7 +225,7 @@ public class CandidateActivity extends AppCompatActivity {
         mService.sendNotification(sender)
                 .enqueue(new Callback<MyResponse>() {
                     @Override
-                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                    public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
                         if(response.isSuccessful()){
 
                         }else {
@@ -232,13 +234,14 @@ public class CandidateActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
 
                     }
                 });
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate){
         String s = "";
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);

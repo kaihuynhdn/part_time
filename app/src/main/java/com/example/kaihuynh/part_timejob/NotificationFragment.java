@@ -1,9 +1,11 @@
 package com.example.kaihuynh.part_timejob;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +34,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     private SwipeRefreshLayout swipeRefreshLayout;
     private RelativeLayout mEmptyView;
 
+    @SuppressLint("StaticFieldLeak")
     private static NotificationFragment sInstance = null;
 
     public NotificationFragment() {
@@ -40,7 +43,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
 
@@ -109,7 +112,7 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
         if (UserManager.getInstance().getUser().getNotificationList()!=null){
             mNotificationArrayList.addAll(UserManager.getInstance().getUser().getNotificationList());
         }
-        if (mNotificationArrayList.size()<1){
+        if (mNotificationArrayList==null || mNotificationArrayList.size()<1){
             mEmptyView.setVisibility(View.VISIBLE);
         }else {
             mEmptyView.setVisibility(View.GONE);

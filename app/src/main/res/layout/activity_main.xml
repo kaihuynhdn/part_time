@@ -12,10 +12,10 @@
 
     <RelativeLayout
         android:layout_weight="4"
-        android:orientation="vertical"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/txt_title1"
@@ -57,7 +57,8 @@
             android:visibility="gone"
             android:src="@drawable/refresh"
             android:layout_width="@dimen/progressBar_width"
-            android:layout_height="@dimen/progressBar_height" />
+            android:layout_height="@dimen/progressBar_height"
+            android:contentDescription="@string/img_description" />
 
     </RelativeLayout>
 

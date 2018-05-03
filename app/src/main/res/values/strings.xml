@@ -91,13 +91,13 @@
     <string name="benefit">PHÚC LỢI:</string>
     <string name="job_title">Tên công việc</string>
     <string name="job_info">THÔNG TIN CÔNG VIỆC</string>
-    <string name="text4">Nhập thông tin...</string>
+    <string name="text4">Nhập thông tin…</string>
     <string name="job_description">MÔ TẢ CÔNG VIỆC</string>
     <string name="personal_requirement">YÊU CẦU</string>
     <string name="other">Khác:</string>
     <string name="save">Lưu</string>
     <string name="apply">Ứng tuyển</string>
-    <string name="share_1">Chia sẻ...</string>
+    <string name="share_1">Chia sẻ…</string>
     <string name="delete">Xóa</string>
     <string name="personal_description">Mô tả cá nhân</string>
     <string name="general">Thông tin chung</string>
@@ -129,6 +129,18 @@
     <string name="empty_notification">Bạn chưa có thông báo !</string>
     <string name="facebook">Facebook</string>
     <string name="google_plus">Google +</string>
+    <string name="search_hint">Nhập từ khóa…</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="avarar_img_description">avatar of user</string>
+    <string name="refuse_candidate">Từ chối</string>
+    <string name="choose_candidate">Đồng ý</string>
+    <string name="img_description">img_description</string>
+    <string name="employed_text">Được tuyển dụng</string>
+    <string name="unemployed_text">Bị từ chối</string>
+    <string name="personal_skills">Kỹ năng cá nhân</string>
+    <string name="add_personal_description">Thêm mô tả cá nhân</string>
+    <string name="x">x</string>
+    <string name="dot_symbol">●</string>
 
     <string-array name="gender">
         <item>Nam</item>

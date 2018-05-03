@@ -1,6 +1,8 @@
 package com.example.kaihuynh.part_timejob.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,14 +41,15 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
         this.layout = layout;
     }
 
+    @NonNull
     @Override
-    public CandidateItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CandidateItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
         return new CandidateItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CandidateItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CandidateItemViewHolder holder, int position) {
         Candidate candidate = mCandidateList.get(position);
         holder.mName.setText(candidate.getUser().getFullName());
         holder.mEmail.setText(candidate.getUser().getEmail());
@@ -58,8 +61,9 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
         holder.mDate.setText(getTime(Calendar.getInstance(), calendar));
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate){
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if(minus<2){
             if (minus == 1){
@@ -75,6 +79,8 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
                         s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());

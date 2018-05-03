@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -119,9 +121,12 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 while (!JobManager.isLoadJobById){
 
                 }
-                if (JobManager.getInstance().getJobById()!=null){
-                    job = JobManager.getInstance().getJobById();
+                if (JobManager.getInstance().getJobById()==null || JobManager.getInstance().getJobById().getName()== null){
+                    swipeRefreshLayout.setEnabled(false);
+                    showNullJobDialog();
+                    return;
                 }
+                job = JobManager.getInstance().getJobById();
                 mTitle.setText(job.getName());
                 mStatus.setText(job.getStatus());
                 if (job.getStatus().equals(Job.RECRUITING)) {
@@ -155,7 +160,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 if (applyList.size() > 0) {
                     for (ApplyJob j : applyList) {
                         if (j.getJob().getId().equals(job.getId())) {
-                            mApplyButton.setText("Đã ứng tuyển !");
+                            mApplyButton.setText(String.valueOf("Đã ứng tuyển !"));
                             mApplyButton.setClickable(false);
                             break;
                         }
@@ -250,6 +255,22 @@ public class JobDescriptionActivity extends AppCompatActivity {
         return false;
     }
 
+    private void showNullJobDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Nhà tuyển dụng đã \"Xóa\" tin đăng này!");
+        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thông báo");
@@ -275,7 +296,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
     private void showDescriptionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater().from(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.description_candidate, null);
         final EditText editText = view.findViewById(R.id.et_candidate_description);
         if (description.equals("")) {
@@ -288,7 +309,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ứng tuyển", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mApplyButton.setText("Đã ứng tuyển !");
+                mApplyButton.setText(String.valueOf("Đã ứng tuyển !"));
                 User u = UserManager.getInstance().getUser();
                 ArrayList<ApplyJob> applyList = new ArrayList<>();
                 final Job addJob = new Job(job.getId(), job.getName(), job.getSalary(), job.getLocation(), job.getTimestamp(), job.getDescription(), job.getRequirement(), job.getBenefits(),new ArrayList<Candidate>(), job.getStatus());
@@ -373,7 +394,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mService.sendNotification(sender)
                 .enqueue(new Callback<MyResponse>() {
                     @Override
-                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                    public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
                         if(response.isSuccessful()){
 
                         }else {
@@ -382,12 +403,13 @@ public class JobDescriptionActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
 
                     }
                 });
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate) {
         String s = "";
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);

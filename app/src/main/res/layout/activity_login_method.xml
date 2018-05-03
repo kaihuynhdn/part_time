@@ -26,7 +26,6 @@
         android:orientation="vertical"
         android:background="@drawable/grey_background"
         android:gravity="center"
-        android:elevation="@dimen/distance_view_20"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
@@ -111,12 +110,13 @@
 
             <TextView
                 android:id="@+id/tv_toLogin_method"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/distance_view_5"
                 android:textColor="@color/lightBlue_700"
                 android:textSize="16sp"
                 android:text="@string/toLogin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/distance_view_5" />
         </LinearLayout>
 
     </LinearLayout>

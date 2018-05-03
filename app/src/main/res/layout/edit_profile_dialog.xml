@@ -35,7 +35,8 @@
                     android:fontFamily="@font/linotte_semi_bold"
                     android:hint="@string/hint_full_name"
                     android:textColor="@color/grey_600"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:drawableStart="@drawable/user" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +57,8 @@
                     android:fontFamily="@font/linotte_semi_bold"
                     android:hint="@string/hint_phone_number"
                     android:textColor="@color/grey_600"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:drawableStart="@drawable/phone_number" />
 
             </android.support.design.widget.TextInputLayout>
 

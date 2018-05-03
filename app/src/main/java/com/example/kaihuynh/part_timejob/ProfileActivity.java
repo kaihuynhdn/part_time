@@ -1,5 +1,6 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -60,6 +61,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.TimeZone;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -117,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private void initialize() {
         user = UserManager.getInstance().getUser();
         mName.setText(user.getFullName());
@@ -142,19 +145,16 @@ public class ProfileActivity extends AppCompatActivity {
         skills = new ArrayList<>();
 
         String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        for (String s : languageArray) {
-            languageList.add(s);
-        }
+        Collections.addAll(languageList, languageArray);
 
         String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        for (String s : skillArray) {
-            skillList.add(s);
-        }
+        Collections.addAll(skillList, skillArray);
 
         genderChoice = "";
         mUserReference = FirebaseFirestore.getInstance().collection("users");
         storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://parttimejob-8fe4f.appspot.com");
         mUserReference.document(user.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @SuppressLint("SimpleDateFormat")
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
@@ -199,11 +199,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void notification(String s) {
+    private void notification() {
         if (toast != null) {
             toast.cancel();
         }
-        toast = Toast.makeText(ProfileActivity.this, s, Toast.LENGTH_SHORT);
+        toast = Toast.makeText(ProfileActivity.this, "Lỗi! Vui lòng kiểm tra lại kết nối", Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -232,7 +232,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (b) {
                     if (inputPhoneNumber.getText().toString().equals("")) {
-                        inputPhoneNumber.setText("+84 ");
+                        inputPhoneNumber.setText(String.valueOf("+84 "));
                     }
                 } else {
                     if (inputPhoneNumber.getText().toString().equals("+84 ")) {
@@ -252,7 +252,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String s = inputPhoneNumber.getText().toString();
                 if (s.equals("+84")) {
-                    inputPhoneNumber.setText("+84 ");
+                    inputPhoneNumber.setText(String.valueOf("+84 "));
                     inputPhoneNumber.setSelection(inputPhoneNumber.length());
                 }
             }
@@ -275,7 +275,7 @@ public class ProfileActivity extends AppCompatActivity {
                     mName.setText(inputName.getText().toString());
                     mPhoneNumber.setText(inputPhoneNumber.getText().toString());
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
             }
         });
@@ -303,6 +303,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("RtlHardcoded")
     private void showEditDescription() {
         final EditText editText = new EditText(this);
         editText.setBackground(ContextCompat.getDrawable(this, R.drawable.input_template));
@@ -333,7 +334,7 @@ public class ProfileActivity extends AppCompatActivity {
                     mDescriptionTextView.setText(editText.getText().toString());
                     mDescriptionTextView.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
             }
         });
@@ -367,24 +368,24 @@ public class ProfileActivity extends AppCompatActivity {
         ListView listView = new ListView(this);
 
         String[] skillItem = s.split("\n");
-        for (int i = 0; i < skillItem.length; i++) {
+        for (String aSkillItem1 : skillItem) {
             boolean same = false;
             for (int j = 0; j < skillList.size(); j++) {
-                if (skillItem[i].toString().equals(skillList.get(j))) {
+                if (aSkillItem1.equals(skillList.get(j))) {
                     same = true;
                     break;
                 }
             }
-            if (!same && skillItem[i].toString() != "") {
-                skillList.add(skillList.size() - 1, skillItem[i].toString());
+            if (!same && !aSkillItem1.equals("")) {
+                skillList.add(skillList.size() - 1, aSkillItem1);
             }
         }
 
         skills.clear();
         for (int i = 0; i < skillList.size(); i++) {
             boolean same = false;
-            for (int j = 0; j < skillItem.length; j++) {
-                if (skillItem[j].trim().equals(skillList.get(i).trim())) {
+            for (String aSkillItem : skillItem) {
+                if (aSkillItem.trim().equals(skillList.get(i).trim())) {
                     skills.add(new Skill(skillList.get(i), true));
                     same = true;
                     break;
@@ -425,21 +426,21 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 for (Skill f : skills) {
                     if (f.isChecked()) {
-                        s += f.getName() + "\n";
+                        s.append(f.getName()).append("\n");
                     }
                 }
 
                 if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
-                    u.setSkills(s == "" ? "" : s.substring(0, s.length() - 1));
+                    u.setSkills(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
                     inputSkill.setText(u.getSkills());
                     UserManager.getInstance().updateUser(u);
                     inputSkill.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
 
             }
@@ -462,7 +463,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (editText.getText().toString() != "" && editText.getText().toString() != null) {
+                if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
                     skills.add(skills.size() - 1, new Skill(editText.getText().toString(), true));
                     skillAdapter.notifyDataSetChanged();
                 }
@@ -501,24 +502,24 @@ public class ProfileActivity extends AppCompatActivity {
         ListView listView = new ListView(this);
 
         String[] languageItem = s.split("\n");
-        for (int i = 0; i < languageItem.length; i++) {
+        for (String aLanguageItem1 : languageItem) {
             boolean same = false;
             for (int j = 0; j < languageList.size(); j++) {
-                if (languageItem[i].equals(languageList.get(j))) {
+                if (aLanguageItem1.equals(languageList.get(j))) {
                     same = true;
                     break;
                 }
             }
-            if (!same && languageItem[i] != "") {
-                languageList.add(languageList.size() - 1, languageItem[i]);
+            if (!same && !aLanguageItem1.equals("")) {
+                languageList.add(languageList.size() - 1, aLanguageItem1);
             }
         }
 
         languages.clear();
         for (int i = 0; i < languageList.size(); i++) {
             boolean same = false;
-            for (int j = 0; j < languageItem.length; j++) {
-                if (languageItem[j].trim().equals(languageList.get(i).trim())) {
+            for (String aLanguageItem : languageItem) {
+                if (aLanguageItem.trim().equals(languageList.get(i).trim())) {
                     languages.add(new ForeignLanguage(languageList.get(i), true));
                     break;
                 }
@@ -559,20 +560,20 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 for (ForeignLanguage f : languages) {
                     if (f.isChecked()) {
-                        s += f.getName() + "\n";
+                        s.append(f.getName()).append("\n");
                     }
                 }
                 if (isConnect()) {
                     User u = UserManager.getInstance().getUser();
-                    u.setForeignLanguages(s == "" ? "" : s.substring(0, s.length() - 1));
+                    u.setForeignLanguages(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
                     inputLanguage.setText(u.getForeignLanguages());
                     UserManager.getInstance().updateUser(u);
                     inputLanguage.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
 
             }
@@ -595,7 +596,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (editText.getText().toString() != "" && editText.getText().toString() != null) {
+                if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
                     languages.add(languages.size() - 1, new ForeignLanguage(editText.getText().toString(), true));
                     languageAdapter.notifyDataSetChanged();
                 }
@@ -645,11 +646,11 @@ public class ProfileActivity extends AppCompatActivity {
         numberPicker.setDisplayedValues(strings);
         numberPicker.setWrapSelectorWheel(false);
 
-        if (string == "") {
+        if (string.equals("")) {
             numberPicker.setValue(0);
         } else {
             for (int i = 0; i < strings.length; i++) {
-                if (string == strings[i] || string.equals(strings[i])) {
+                if (string.equals(strings[i]) || string.equals(strings[i])) {
                     numberPicker.setValue(i);
                     break;
                 }
@@ -666,7 +667,7 @@ public class ProfileActivity extends AppCompatActivity {
                     UserManager.getInstance().updateUser(u);
                     inputEducation.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
 
 
@@ -753,7 +754,7 @@ public class ProfileActivity extends AppCompatActivity {
                     inputGender.setText(u.getGender());
                     inputGender.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
 
             }
@@ -789,6 +790,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("SimpleDateFormat")
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 Calendar calendar = Calendar.getInstance();
@@ -801,7 +803,7 @@ public class ProfileActivity extends AppCompatActivity {
                     inputDOB.setText(new SimpleDateFormat("dd-MM-yyyy").format(u.getDayOfBirth()));
                     inputDOB.requestFocus();
                 } else {
-                    notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                    notification();
                 }
 
             }
@@ -850,12 +852,12 @@ public class ProfileActivity extends AppCompatActivity {
                 inputAddress.setText(u.getAddress());
                 inputAddress.requestFocus();
             } else {
-                notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                notification();
             }
 
         } else if (requestCode == PICK_PICTURE_CODE && resultCode == Activity.RESULT_OK && data != null) {
             if (!isConnect()){
-                notification("Lỗi! Vui lòng kiểm tra lại kết nối");
+                notification();
                 return;
             }
             final Uri imageUri = data.getData();
@@ -865,7 +867,7 @@ public class ProfileActivity extends AppCompatActivity {
             StorageReference avatarRef = storageReference.child(UserManager.getInstance().getUser().getId() + ".png");
             mAvatar.setDrawingCacheEnabled(true);
             mAvatar.buildDrawingCache();
-            InputStream imageStream = null;
+            InputStream imageStream;
             try {
                 imageStream = getContentResolver().openInputStream(imageUri);
             } catch (FileNotFoundException e) {

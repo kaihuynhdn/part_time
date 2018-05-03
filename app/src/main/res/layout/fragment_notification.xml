@@ -34,7 +34,8 @@
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/bell_empty"
                     android:layout_width="@dimen/size_empty_img"
-                    android:layout_height="@dimen/size_empty_img" />
+                    android:layout_height="@dimen/size_empty_img"
+                    android:contentDescription="@string/img_description" />
 
                 <TextView
                     android:layout_below="@id/img_empty"

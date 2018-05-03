@@ -269,17 +269,17 @@ public class RecruitingActivity extends AppCompatActivity {
                 input.setSelection(input.getText().length());
                 AlertDialog dialog = (new AlertDialog.Builder(RecruitingActivity.this))
                         .setTitle("Tiêu đề công việc:")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if (input.getText().toString() != "") {
+                                if (!input.getText().toString().equals("")) {
                                     mJobTitle.setText(input.getText());
                                 }else {
-                                    mJobTitle.setText("Tên công việc");
+                                    mJobTitle.setText(String.valueOf("Tên công việc"));
                                 }
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -342,14 +342,14 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 for (Skill f : skills) {
                     if (f.isChecked() && !f.getName().equals("Không")) {
-                        s += f.getName() + "\n";
+                        s.append(f.getName()).append("\n");
                     }
                 }
 
-                inputSkill.setText(s == "" ? "" : s.substring(0, s.length() - 1));
+                inputSkill.setText(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -370,7 +370,7 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (editText.getText().toString() != "" && editText.getText().toString() != null && editText.getText().toString() != "Không") {
+                if (!editText.getText().toString().equals("") && editText.getText().toString() != null && !editText.getText().toString().equals("Không")) {
                     skills.add(skills.size() - 1, new Skill(editText.getText().toString(), true));
                     skillAdapter.notifyDataSetChanged();
                 }
@@ -437,13 +437,13 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 for (ForeignLanguage f : languages) {
                     if (f.isChecked() && !f.getName().equals("Không")) {
-                        s += f.getName() + "\n";
+                        s.append(f.getName()).append("\n");
                     }
                 }
-                inputLanguage.setText(s == "" ? "" : s.substring(0, s.length() - 1));
+                inputLanguage.setText(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -464,7 +464,7 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (editText.getText().toString() != "" && editText.getText().toString() != null && editText.getText().toString() != "Không") {
+                if (!editText.getText().toString().equals("") && editText.getText().toString() != null && !editText.getText().toString().equals("Không")) {
                     languages.add(languages.size() - 1, new ForeignLanguage(editText.getText().toString(), true));
                     languageAdapter.notifyDataSetChanged();
                 }
@@ -506,13 +506,13 @@ public class RecruitingActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
                     case 0:
-                        inputGender.setText("Nam");
+                        inputGender.setText(String.valueOf("Nam"));
                         break;
                     case 1:
-                        inputGender.setText("Nữ");
+                        inputGender.setText(String.valueOf("Nữ"));
                         break;
                     case 2:
-                        inputGender.setText("Không");
+                        inputGender.setText(String.valueOf("Không"));
                         break;
                 }
                 genderDialog.dismiss();
