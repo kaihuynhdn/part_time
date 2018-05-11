@@ -84,7 +84,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
         getWidgets();
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
 
     }
 
@@ -180,7 +180,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

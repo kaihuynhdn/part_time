@@ -15,7 +15,8 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.example.kaihuynh.part_timejob.JobLikedFragment;
+import com.example.kaihuynh.part_timejob.SearchActivity;
+import com.example.kaihuynh.part_timejob.fragments.JobLikedFragment;
 import com.example.kaihuynh.part_timejob.ListRecruitmentActivity;
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.UpdateJobActivity;
@@ -80,15 +81,17 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobItemViewHolde
                 }
             });
         } else {
-            holder.mOption.setText("");
-            holder.mOption.setBackground(ContextCompat.getDrawable(context, R.drawable.delete));
-            holder.mOption.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    UserManager.getInstance().removeFavouriteJob(job.getId());
-                    JobLikedFragment.getInstance().refreshData();
-                }
-            });
+            if (context != SearchActivity.getInstance()){
+                holder.mOption.setText("");
+                holder.mOption.setBackground(ContextCompat.getDrawable(context, R.drawable.delete));
+                holder.mOption.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UserManager.getInstance().removeFavouriteJob(job.getId());
+                        JobLikedFragment.getInstance().refreshData();
+                    }
+                });
+            }
         }
 
     }

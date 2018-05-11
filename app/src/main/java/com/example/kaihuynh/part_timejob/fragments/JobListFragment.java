@@ -1,9 +1,12 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,12 +20,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.JobDescriptionActivity;
+import com.example.kaihuynh.part_timejob.PickLocationActivity;
+import com.example.kaihuynh.part_timejob.R;
+import com.example.kaihuynh.part_timejob.SearchActivity;
 import com.example.kaihuynh.part_timejob.adapters.MyAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.interfaces.LoadMore;
 import com.example.kaihuynh.part_timejob.models.Job;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,8 +55,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     private CollectionReference mUserReference;
     private ListenerRegistration listenerRegistration;
     private TextView mJobQuantity;
-
+    private DatabaseReference connectedRef;
     private boolean isLoaded = false;
+    private boolean isConnected = true;
 
     @SuppressLint("StaticFieldLeak")
     private static JobListFragment sInstance = null;
@@ -65,7 +75,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
         addComponents(view);
         initialize();
-        setWidgetListener();
+        setWidgetsListener();
 
         return view;
     }
@@ -86,7 +96,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
 
         mJobArrayList = JobManager.getInstance().getJobs();
-        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return true;
@@ -97,11 +107,11 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         mAdapter = new MyAdapter(mJobRecyclerView, getContext(), R.layout.job_list_item, mJobArrayList, this);
         mJobRecyclerView.setAdapter(mAdapter);
 
-        if (!isLoaded){
+        if (!isLoaded) {
             mJobArrayList = JobManager.getInstance().getJobs();
             mAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
-            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                 @Override
                 public boolean canScrollVertically() {
                     return true;
@@ -114,47 +124,49 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
     }
 
-    private void enableLoadMore(){
+    private void enableLoadMore() {
         mAdapter.setLoadMore(new LoadMore() {
             @Override
             public void onLoadMore() {
-                if(mJobArrayList.size() <= JobManager.getInstance().getJobQuantity() && mJobArrayList.size()>=10){
-                    if (mJobArrayList.size()>0 && mJobArrayList.get(mJobArrayList.size()-1)!= null){
+                if (mJobArrayList.size() <= JobManager.getInstance().getJobQuantity() && mJobArrayList.size() >= 10) {
+                    if (mJobArrayList.size() > 0 && mJobArrayList.get(mJobArrayList.size() - 1) != null) {
                         mJobArrayList.add(null);
                     }
-                    mAdapter.notifyItemInserted(mJobArrayList.size()-1);
+                    mAdapter.notifyItemInserted(mJobArrayList.size() - 1);
                     final String s = mLocationButton.getText().toString();
-                    if (s.equals("Địa điểm")){
-                        JobManager.getInstance().loadMoreJob(mJobArrayList.get(mJobArrayList.size()-2).getTimestamp());
-                    }else {
-                        JobManager.getInstance().loadMoreJobByLocation(mJobArrayList.get(mJobArrayList.size()-2).getTimestamp(), s);
+                    if (s.equals("Địa điểm")) {
+                        JobManager.getInstance().loadMoreJob(mJobArrayList.get(mJobArrayList.size() - 2).getTimestamp());
+                    } else {
+                        JobManager.getInstance().loadMoreJobByLocation(mJobArrayList.get(mJobArrayList.size() - 2).getTimestamp(), s);
                     }
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            while (!JobManager.isLoadMoreJob && !JobManager.isLoadMoreJobByLocation){
-
-                            }
-                            if(mJobArrayList.size()>0 && mJobArrayList.get(mJobArrayList.size()-1) == null){
-                                mJobArrayList.remove(mJobArrayList.size()-1);
+                            if (mJobArrayList.size() > 0 && mJobArrayList.get(mJobArrayList.size() - 1) == null) {
+                                mJobArrayList.remove(mJobArrayList.size() - 1);
                                 mAdapter.notifyItemRemoved(mJobArrayList.size());
                             }
-                            if (s.equals("Địa điểm")){
-                                mJobArrayList.addAll(JobManager.getInstance().getLoadMoreJobs());
-                            }{
-                                mJobArrayList.addAll(JobManager.getInstance().getMoreJobListByLocation());
+                            if (!JobManager.isLoadMoreJob && !JobManager.isLoadMoreJobByLocation) {
+                                Toast.makeText(getContext(), "Vui lòng kiểm tra lại đường truyền !", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                if (s.equals("Địa điểm")) {
+                                    mJobArrayList.addAll(JobManager.getInstance().getLoadMoreJobs());
+                                } else {
+                                    mJobArrayList.addAll(JobManager.getInstance().getMoreJobListByLocation());
+                                }
+                                mAdapter.notifyDataSetChanged();
+                                mAdapter.setLoaded();
                             }
-                            mAdapter.notifyDataSetChanged();
-                            mAdapter.setLoaded();
                         }
-                    }, 1000);
+                    }, 1300);
                 }
             }
         });
     }
 
 
-    private void setWidgetListener() {
+    private void setWidgetsListener() {
         listenerRegistration = mUserReference.document(UserManager.getInstance().getUser().getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
@@ -162,37 +174,38 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             }
         });
 
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                     @Override
                     public boolean canScrollVertically() {
                         return false;
                     }
                 });
                 final String s = mLocationButton.getText().toString();
-                if (s.equals("Địa điểm")){
+                if (s.equals("Địa điểm")) {
                     JobManager.getInstance().refreshData();
-                }else {
+                } else {
                     JobManager.getInstance().loadJobByLocation(s);
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
-
-                        while (!JobManager.isRefreshed && !JobManager.isLoadJobByLocation){
-
+                        if (!JobManager.isRefreshed && !JobManager.isLoadJobByLocation) {
+                            Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
+                            if (s.equals("Địa điểm")) {
+                                mJobArrayList = JobManager.getInstance().getJobs();
+                            } else {
+                                mJobArrayList = JobManager.getInstance().getJobListByLocation();
+                            }
+                            mAdapter.notifyDataSetChanged();
                         }
-                        if (s.equals("Địa điểm")){
-                            mJobArrayList = JobManager.getInstance().getJobs();
-                        }else {
-                            mJobArrayList = JobManager.getInstance().getJobListByLocation();
-                        }
-                        mAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
-                        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                             @Override
                             public boolean canScrollVertically() {
                                 return true;
@@ -200,7 +213,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                         });
                         mAdapter.setLoaded();
                     }
-                }, 1000);
+                }, 1800);
             }
         });
 
@@ -216,8 +229,6 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             @Override
             public void onClick(View view) {
                 refresh();
-                mLocationButton.setText("Địa điểm");
-                mRemoveLocation.setVisibility(View.GONE);
             }
         });
 
@@ -229,9 +240,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         });
     }
 
-    private void refresh(){
+    private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+        mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -241,12 +252,18 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                while (!JobManager.isRefreshed);
-                mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
-                mJobArrayList = JobManager.getInstance().getJobs();
-                mAdapter.notifyDataSetChanged();
+                if (!JobManager.isRefreshed) {
+                    Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
+                    mJobArrayList = JobManager.getInstance().getJobs();
+                    mAdapter.notifyDataSetChanged();
+                    mLocationButton.setText("Địa điểm");
+                    mRemoveLocation.setVisibility(View.GONE);
+                }
+
                 swipeRefreshLayout.setRefreshing(false);
-                mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                     @Override
                     public boolean canScrollVertically() {
                         return true;
@@ -254,17 +271,32 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 });
                 isLoaded = true;
             }
-        }, 1000);
+        }, 1800);
+    }
+
+    private boolean isConnected() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getContext()
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             mLocationButton.setText(data.getStringExtra("location"));
 
             swipeRefreshLayout.setRefreshing(true);
-            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+            mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                 @Override
                 public boolean canScrollVertically() {
                     return false;
@@ -274,14 +306,16 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    while (!JobManager.isLoadJobByLocation){
-
+                    if (!JobManager.isLoadJobByLocation) {
+                        Toast.makeText(getContext(), "Lỗi đường truyền", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mJobArrayList.clear();
+                        mJobArrayList.addAll(JobManager.getInstance().getJobListByLocation());
+                        mAdapter.notifyDataSetChanged();
                     }
-                    mJobArrayList.clear();
-                    mJobArrayList.addAll(JobManager.getInstance().getJobListByLocation());
-                    mAdapter.notifyDataSetChanged();
+
                     swipeRefreshLayout.setRefreshing(false);
-                    mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                    mJobRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
                         @Override
                         public boolean canScrollVertically() {
                             return true;
@@ -289,7 +323,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     });
                     mAdapter.setLoaded();
                 }
-            }, 1000);
+            }, 1800);
         }
     }
 
@@ -303,9 +337,9 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     @Override
     public void onResume() {
         super.onResume();
-        if (mLocationButton.getText().equals("Địa điểm")){
+        if (mLocationButton.getText().equals("Địa điểm")) {
             mRemoveLocation.setVisibility(View.GONE);
-        }else {
+        } else {
             mRemoveLocation.setVisibility(View.VISIBLE);
         }
 
@@ -320,12 +354,12 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     @Override
     public void onPause() {
         super.onPause();
-        if (listenerRegistration!=null){
+        if (listenerRegistration != null) {
             listenerRegistration.remove();
         }
     }
 
-    public static JobListFragment getInstance(){
+    public static JobListFragment getInstance() {
         if (sInstance == null) {
             sInstance = new JobListFragment();
         }

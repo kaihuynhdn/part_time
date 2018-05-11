@@ -62,7 +62,7 @@ public class CandidateActivity extends AppCompatActivity {
 
         getWidgets();
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
     }
 
     private void getWidgets() {
@@ -115,7 +115,7 @@ public class CandidateActivity extends AppCompatActivity {
         setActionButton(candidate.getStatus());
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         mIgnoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

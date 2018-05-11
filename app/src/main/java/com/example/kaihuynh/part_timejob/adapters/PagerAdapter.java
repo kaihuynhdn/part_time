@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.kaihuynh.part_timejob.ForeignLanguageFragment;
-import com.example.kaihuynh.part_timejob.PersonalDescriptionFragment;
-import com.example.kaihuynh.part_timejob.PersonalInfoFragment;
-import com.example.kaihuynh.part_timejob.SkillFragment;
+import com.example.kaihuynh.part_timejob.fragments.ForeignLanguageFragment;
+import com.example.kaihuynh.part_timejob.fragments.PersonalDescriptionFragment;
+import com.example.kaihuynh.part_timejob.fragments.PersonalInfoFragment;
+import com.example.kaihuynh.part_timejob.fragments.SkillFragment;
 
 /**
  * Created by Kai on 2018-02-07.

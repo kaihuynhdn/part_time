@@ -136,7 +136,7 @@ public class JobManager {
         });
     }
 
-    public void loadALlJob(){
+    public void loadAllJob(){
         isLoadedAllJob = false;
         mJobReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -151,6 +151,10 @@ public class JobManager {
                 }
             }
         });
+    }
+
+    public ArrayList<Job> getAllJob() {
+        return mAllJob;
     }
 
     public void updateJob(Job job) {

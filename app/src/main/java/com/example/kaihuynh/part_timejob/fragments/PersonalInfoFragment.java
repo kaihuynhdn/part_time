@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
 
+import com.example.kaihuynh.part_timejob.PickLocationActivity;
+import com.example.kaihuynh.part_timejob.R;
+import com.example.kaihuynh.part_timejob.RegisterPersonalInfoActivity;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 
 import java.util.Calendar;

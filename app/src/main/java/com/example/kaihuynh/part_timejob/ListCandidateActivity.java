@@ -1,6 +1,9 @@
 package com.example.kaihuynh.part_timejob;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -15,12 +18,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.adapters.CandidateAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
+import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Candidate;
 import com.example.kaihuynh.part_timejob.models.Job;
-import com.example.kaihuynh.part_timejob.models.ApplyJob;
 
 import java.util.ArrayList;
 
@@ -48,7 +52,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
 
         addComponents();
         initialize();
-        setWidgetListeners();
+        setWidgetsListeners();
     }
 
     private void initialize() {
@@ -63,13 +67,14 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                while (!JobManager.isLoadCandidateList){
-
+                if (!JobManager.isLoadCandidateList){
+                    Toast.makeText(ListCandidateActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                }else {
+                    refreshData();
                 }
-                refreshData();
                 swipeRefreshLayout.setRefreshing(false);
             }
-        }, 500);
+        }, 1300);
 
         mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mListCandidateRecyclerView.setHasFixedSize(true);
@@ -116,7 +121,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         scrollView = findViewById(R.id.scrollView);
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListeners() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -131,14 +136,16 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        while (!JobManager.isLoadCandidateList){
+                        if (!JobManager.isLoadCandidateList){
+                            Toast.makeText(ListCandidateActivity.this, "Lỗi đường truyền", Toast.LENGTH_SHORT).show();
+                        }else {
+                            refreshData();
 
                         }
-                        refreshData();
                         swipeRefreshLayout.setRefreshing(false);
                         mListCandidateRecyclerView.setLayoutManager(new LinearLayoutManager(ListCandidateActivity.this));
                     }
-                }, 2000);
+                }, 1500);
             }
         });
 
@@ -276,6 +283,21 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         }
     }
 
+    private boolean isConnected() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -293,10 +315,9 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                while (!JobManager.isLoadCandidateList){
-
+                if (JobManager.isLoadCandidateList){
+                    refreshData();
                 }
-                refreshData();
             }
         }, 1000);
     }

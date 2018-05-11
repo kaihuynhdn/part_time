@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.kaihuynh.part_timejob.R;
+import com.example.kaihuynh.part_timejob.RegisterPersonalInfoActivity;
 import com.example.kaihuynh.part_timejob.adapters.ForeignLanguageAdapter;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.example.kaihuynh.part_timejob.models.ForeignLanguage;
@@ -50,7 +52,7 @@ public class ForeignLanguageFragment extends Fragment {
 
         getWidgets(view);
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
 
         return view;
     }
@@ -76,7 +78,7 @@ public class ForeignLanguageFragment extends Fragment {
         mForeignLanguageListView.setAdapter(mForeignLanguageAdapter);
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         listViewEvents();
         nextButtonEvents();
         previousButtonEvents();

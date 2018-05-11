@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
@@ -130,15 +129,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (mAuthStateListener==null){
+            mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user == null) {
+                        FINISH_LOADED = 1;
+                        t.start();
+                    } else {
+                        mUserReference.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful() && task.getResult() != null) {
+                                    Common.currentToken = FirebaseInstanceId.getInstance().getToken();
+                                    User u = task.getResult().toObject(User.class);
+                                    UserManager.getInstance().updateUser(u);
+                                    FINISH_LOADED = 2;
+                                    t.start();
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+        }
+
         mHandler.postDelayed(runnable = new Runnable() {
             @Override
             public void run() {
                 t.interrupt();
-                Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
                 mProgressBar.setVisibility(View.GONE);
                 mRefresh.setVisibility(View.VISIBLE);
+                mAuthStateListener = null;
             }
-        }, 15000);
+        }, 10000);
     }
 
     private boolean isConnect() {

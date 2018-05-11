@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.kaihuynh.part_timejob.JobDescriptionActivity;
+import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.adapters.ApplyJobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.ApplyJob;
@@ -55,7 +57,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
 
         addComponents(view);
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
 
         return view;
     }
@@ -112,7 +114,7 @@ public class JobAppliedFragment extends Fragment implements ApplyJobAdapter.List
         mQuantityUnemployedJob = view.findViewById(R.id.tv_quantity_unemployed_job);
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

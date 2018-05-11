@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.example.kaihuynh.part_timejob.adapters.HomeViewPagerAdapter;
 import com.example.kaihuynh.part_timejob.controllers.JobManager;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
+import com.example.kaihuynh.part_timejob.fragments.JobAppliedFragment;
+import com.example.kaihuynh.part_timejob.fragments.NotificationFragment;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.CircleTransform;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
@@ -94,7 +96,7 @@ public class HomePageActivity extends AppCompatActivity
 
         getWidgets();
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -168,7 +170,7 @@ public class HomePageActivity extends AppCompatActivity
         }
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         navigationView.setNavigationItemSelectedListener(this);
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -393,8 +395,13 @@ public class HomePageActivity extends AppCompatActivity
                     mUserEmail.setText(u.getEmail());
                     mUserName.setText(u.getFullName());
                     UserManager.getInstance().load(u);
-                    NotificationFragment.getInstance().refreshData();
-                    JobAppliedFragment.getInstance().refreshData();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            NotificationFragment.getInstance().refreshData();
+                            JobAppliedFragment.getInstance().refreshData();
+                        }
+                    }, 1000);
                 }
             }
         });

@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.example.kaihuynh.part_timejob.JobDescriptionActivity;
+import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.adapters.JobAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Job;
@@ -49,7 +51,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
 
         addComponents(view);
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
 
 
         return  view;
@@ -82,7 +84,7 @@ public class JobLikedFragment extends Fragment implements JobAdapter.ListItemCli
 
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

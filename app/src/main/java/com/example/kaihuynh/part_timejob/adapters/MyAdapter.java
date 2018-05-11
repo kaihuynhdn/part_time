@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.kaihuynh.part_timejob.JobLikedFragment;
+import com.example.kaihuynh.part_timejob.fragments.JobLikedFragment;
 import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.interfaces.LoadMore;

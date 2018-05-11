@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.example.kaihuynh.part_timejob.HomePageActivity;
+import com.example.kaihuynh.part_timejob.ListCandidateActivity;
+import com.example.kaihuynh.part_timejob.R;
 import com.example.kaihuynh.part_timejob.adapters.NotificationAdapter;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.Notification;
@@ -55,9 +58,9 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
     }
 
     private void addComponents(View view) {
+        mEmptyView = view.findViewById(R.id.rl_empty_notification);
         mNotificationRecyclerView = view.findViewById(R.id.rv_notification);
         swipeRefreshLayout = view.findViewById(R.id.sw_notification);
-        mEmptyView = view.findViewById(R.id.rl_empty_notification);
     }
 
     private void initialize() {
@@ -146,20 +149,5 @@ public class NotificationFragment extends Fragment implements NotificationAdapte
             UserManager.getInstance().getUser().setNotificationList(mNotificationArrayList);
             UserManager.getInstance().updateUser(UserManager.getInstance().getUser());
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 }

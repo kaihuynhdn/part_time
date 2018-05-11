@@ -61,7 +61,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.TimeZone;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -139,16 +138,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         dpi = ProfileActivity.this.getResources().getDisplayMetrics().density;
 
-        languageList = new ArrayList<>();
-        skillList = new ArrayList<>();
         languages = new ArrayList<>();
         skills = new ArrayList<>();
 
-        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        Collections.addAll(languageList, languageArray);
-
-        String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        Collections.addAll(skillList, skillArray);
+        initSkillArray();
+        initLanguageArray();
 
         genderChoice = "";
         mUserReference = FirebaseFirestore.getInstance().collection("users");
@@ -186,6 +180,22 @@ public class ProfileActivity extends AppCompatActivity {
 
         editDescriptionEvents();
         editInfoProfileEvents();
+    }
+
+    private void initSkillArray() {
+        String[] skillArray = getResources().getStringArray(R.array.skill_array);
+        skills = new ArrayList<>();
+        for (String s : skillArray) {
+            skills.add(new Skill(s, false));
+        }
+    }
+
+    private void initLanguageArray() {
+        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
+        languages = new ArrayList<>();
+        for (String s : languageArray) {
+            languages.add(new ForeignLanguage(s, false));
+        }
     }
 
     private void pickPictureEvents() {
@@ -365,38 +375,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showSkillDialog(String s) {
-        ListView listView = new ListView(this);
-
-        String[] skillItem = s.split("\n");
-        for (String aSkillItem1 : skillItem) {
-            boolean same = false;
-            for (int j = 0; j < skillList.size(); j++) {
-                if (aSkillItem1.equals(skillList.get(j))) {
-                    same = true;
+        initSkillArray();
+        String[] splits = s.split("\n");
+        for (String split : splits) {
+            int j;
+            for (j = 0; j < skills.size(); j++) {
+                if (skills.get(j).getName().equals(split)) {
+                    skills.get(j).setChecked(true);
                     break;
                 }
+
             }
-            if (!same && !aSkillItem1.equals("")) {
-                skillList.add(skillList.size() - 1, aSkillItem1);
+            if (j == skills.size() && !split.equals("")) {
+                skills.add(skills.size() - 1, new Skill(split, false));
             }
         }
-
-        skills.clear();
-        for (int i = 0; i < skillList.size(); i++) {
-            boolean same = false;
-            for (String aSkillItem : skillItem) {
-                if (aSkillItem.trim().equals(skillList.get(i).trim())) {
-                    skills.add(new Skill(skillList.get(i), true));
-                    same = true;
-                    break;
-                }
-            }
-            if (!same) {
-                skills.add(new Skill(skillList.get(i), false));
-            }
-        }
-
-
+        ListView listView = new ListView(ProfileActivity.this);
         skillAdapter = new SkillAdapter(this, R.layout.skill_item, skills);
         listView.setAdapter(skillAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -501,32 +495,18 @@ public class ProfileActivity extends AppCompatActivity {
     private void showLanguageDialog(String s) {
         ListView listView = new ListView(this);
 
-        String[] languageItem = s.split("\n");
-        for (String aLanguageItem1 : languageItem) {
-            boolean same = false;
-            for (int j = 0; j < languageList.size(); j++) {
-                if (aLanguageItem1.equals(languageList.get(j))) {
-                    same = true;
+        initLanguageArray();
+        String[] splits = s.split("\n");
+        for (String split : splits) {
+            int j;
+            for (j = 0; j < languages.size(); j++) {
+                if (languages.get(j).getName().equals(split)) {
+                    languages.get(j).setChecked(true);
                     break;
                 }
             }
-            if (!same && !aLanguageItem1.equals("")) {
-                languageList.add(languageList.size() - 1, aLanguageItem1);
-            }
-        }
-
-        languages.clear();
-        for (int i = 0; i < languageList.size(); i++) {
-            boolean same = false;
-            for (String aLanguageItem : languageItem) {
-                if (aLanguageItem.trim().equals(languageList.get(i).trim())) {
-                    languages.add(new ForeignLanguage(languageList.get(i), true));
-                    break;
-                }
-            }
-
-            if (!same) {
-                languages.add(new ForeignLanguage(languageList.get(i), false));
+            if (j == languages.size() && !split.equals("")) {
+                languages.add(languages.size() - 1, new ForeignLanguage(split, true));
             }
         }
 

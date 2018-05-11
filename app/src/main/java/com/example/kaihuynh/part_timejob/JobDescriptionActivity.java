@@ -35,6 +35,8 @@ import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.Common;
 import com.example.kaihuynh.part_timejob.remote.APIService;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +59,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private Job job;
     private APIService mService;
 
+    private DatabaseReference connectedRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +71,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
         getWidgets();
         setWidgets();
         initial();
-        setWidgetListeners();
+        setWidgetsListener();
     }
 
     private void getWidgets() {
@@ -109,7 +113,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
     private void initial() {
         mService = Common.getClientFCM();
-
+        connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.lightBlue_700));
         Intent intent = getIntent();
         job = (Job) intent.getSerializableExtra("job");
@@ -118,73 +122,75 @@ public class JobDescriptionActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                while (!JobManager.isLoadJobById){
+                if (!JobManager.isLoadJobById){
+                    showNetworkError();
+                }else {
+                    if (JobManager.getInstance().getJobById()==null || JobManager.getInstance().getJobById().getName()== null){
+                        swipeRefreshLayout.setEnabled(false);
+                        showNullJobDialog();
+                        return;
+                    }
+                    job = JobManager.getInstance().getJobById();
+                    mTitle.setText(job.getName());
+                    mStatus.setText(job.getStatus());
+                    if (job.getStatus().equals(Job.RECRUITING)) {
+                        mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.green));
+                    } else {
+                        mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.red));
+                    }
+                    mSalary.setText(job.getSalary());
+                    mLocation.setText(job.getLocation());
+                    mBenefit.setText(job.getBenefits());
+                    mDescription.setText(job.getDescription());
+                    mRequirement.setText(job.getRequirement());
+                    mRecruiterName.setText(job.getRecruiter().getFullName());
+                    mRecruiterEmail.setText(job.getRecruiter().getEmail());
+                    mRecruiterPhone.setText(job.getRecruiter().getPhoneNumber());
+                    mRecruiterAddress.setText(job.getRecruiter().getAddress());
 
-                }
-                if (JobManager.getInstance().getJobById()==null || JobManager.getInstance().getJobById().getName()== null){
-                    swipeRefreshLayout.setEnabled(false);
-                    showNullJobDialog();
-                    return;
-                }
-                job = JobManager.getInstance().getJobById();
-                mTitle.setText(job.getName());
-                mStatus.setText(job.getStatus());
-                if (job.getStatus().equals(Job.RECRUITING)) {
-                    mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.green));
-                } else {
-                    mStatusSymbol.setTextColor(ContextCompat.getColor(JobDescriptionActivity.this, R.color.red));
-                }
-                mSalary.setText(job.getSalary());
-                mLocation.setText(job.getLocation());
-                mBenefit.setText(job.getBenefits());
-                mDescription.setText(job.getDescription());
-                mRequirement.setText(job.getRequirement());
-                mRecruiterName.setText(job.getRecruiter().getFullName());
-                mRecruiterEmail.setText(job.getRecruiter().getEmail());
-                mRecruiterPhone.setText(job.getRecruiter().getPhoneNumber());
-                mRecruiterAddress.setText(job.getRecruiter().getAddress());
-
-                User u = UserManager.getInstance().getUser();
+                    User u = UserManager.getInstance().getUser();
 
 
-                if (job.getRecruiter().getId().equals(u.getId())) {
-                    mSaveButton.setVisibility(View.GONE);
-                    mApplyButton.setVisibility(View.GONE);
-                    mManageButton.setVisibility(View.VISIBLE);
-                }
+                    if (job.getRecruiter().getId().equals(u.getId())) {
+                        mSaveButton.setVisibility(View.GONE);
+                        mApplyButton.setVisibility(View.GONE);
+                        mManageButton.setVisibility(View.VISIBLE);
+                    }
 
-                ArrayList<ApplyJob> applyList = new ArrayList<>();
-                if (u.getAppliedJobList() != null) {
-                    applyList.addAll(u.getAppliedJobList());
-                }
-                if (applyList.size() > 0) {
-                    for (ApplyJob j : applyList) {
-                        if (j.getJob().getId().equals(job.getId())) {
-                            mApplyButton.setText(String.valueOf("Đã ứng tuyển !"));
-                            mApplyButton.setClickable(false);
+                    ArrayList<ApplyJob> applyList = new ArrayList<>();
+                    if (u.getAppliedJobList() != null) {
+                        applyList.addAll(u.getAppliedJobList());
+                    }
+                    if (applyList.size() > 0) {
+                        for (ApplyJob j : applyList) {
+                            if (j.getJob().getId().equals(job.getId())) {
+                                mApplyButton.setText(String.valueOf("Đã ứng tuyển !"));
+                                mApplyButton.setClickable(false);
+                                break;
+                            }
+                        }
+                    }
+
+                    ArrayList<Job> arrayList = new ArrayList<>();
+                    if (u.getFavouriteJobList() != null) {
+                        arrayList.addAll(u.getFavouriteJobList());
+                    }
+                    for (Job j : arrayList) {
+                        if (j.getId().equals(job.getId())) {
+                            mSaveButton.setText("Hủy Lưu");
                             break;
                         }
                     }
                 }
 
-                ArrayList<Job> arrayList = new ArrayList<>();
-                if (u.getFavouriteJobList() != null) {
-                    arrayList.addAll(u.getFavouriteJobList());
-                }
-                for (Job j : arrayList) {
-                    if (j.getId().equals(job.getId())) {
-                        mSaveButton.setText("Hủy Lưu");
-                        break;
-                    }
-                }
                 swipeRefreshLayout.setRefreshing(false);
                 relativeLayout.setVisibility(View.VISIBLE);
                 swipeRefreshLayout.setEnabled(false);
             }
-        }, 800);
+        }, 1300);
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         mApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -253,6 +259,22 @@ public class JobDescriptionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void showNetworkError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Lỗi");
+        builder.setMessage("Đường truyền xảy ra lỗi !");
+        builder.setPositiveButton("Quay về", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     private void showNullJobDialog() {
@@ -407,6 +429,21 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private boolean isConnected() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @SuppressLint("SimpleDateFormat")

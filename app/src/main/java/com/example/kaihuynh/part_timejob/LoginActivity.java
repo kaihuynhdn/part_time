@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity{
 
         getWidgets();
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
     }
 
     private void getWidgets() {
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity{
         };
     }
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

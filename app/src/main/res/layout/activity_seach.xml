@@ -3,15 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".SearchActivity">
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_search_job"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
     </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/pb_search_job"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/progressBar_width"
+        android:layout_height="@dimen/progressBar_width" />
+
+    <RelativeLayout
+        android:id="@+id/rl_empty_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_empty_search"
+            android:layout_width="@dimen/size_empty_img"
+            android:layout_height="@dimen/size_empty_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/distance_view_20"
+            android:contentDescription="@string/img_description"
+            android:src="@drawable/empty_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_empty_search"
+            android:layout_centerInParent="true"
+            android:text="@string/empty_search" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

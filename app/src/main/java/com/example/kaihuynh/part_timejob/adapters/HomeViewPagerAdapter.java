@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.kaihuynh.part_timejob.JobAppliedFragment;
-import com.example.kaihuynh.part_timejob.JobLikedFragment;
-import com.example.kaihuynh.part_timejob.JobListFragment;
-import com.example.kaihuynh.part_timejob.NotificationFragment;
+import com.example.kaihuynh.part_timejob.fragments.JobAppliedFragment;
+import com.example.kaihuynh.part_timejob.fragments.JobLikedFragment;
+import com.example.kaihuynh.part_timejob.fragments.JobListFragment;
+import com.example.kaihuynh.part_timejob.fragments.NotificationFragment;
 
 public class HomeViewPagerAdapter extends FragmentPagerAdapter {
     private int mNoOfTabs;

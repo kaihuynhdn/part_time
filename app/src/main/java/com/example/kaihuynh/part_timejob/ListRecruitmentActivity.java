@@ -40,7 +40,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
 
         addComponents();
         initialize();
-        setWidgetListeners();
+        setWidgetsListener();
     }
 
     private void addComponents() {
@@ -61,7 +61,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
     }
 
 
-    private void setWidgetListeners() {
+    private void setWidgetsListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -100,6 +100,7 @@ public class ListRecruitmentActivity extends AppCompatActivity implements JobAda
         mAdapter = new JobAdapter(ListRecruitmentActivity.this, R.layout.rv_job_item, mJobArrayList, this);
         mListRecruitmentRecyclerView.setAdapter(mAdapter);
     }
+
 
     @Override
     public void onListItemClick(int clickItemIndex) {

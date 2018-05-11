@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.kaihuynh.part_timejob.R;
+import com.example.kaihuynh.part_timejob.RegisterPersonalInfoActivity;
 import com.example.kaihuynh.part_timejob.adapters.SkillAdapter;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.example.kaihuynh.part_timejob.others.NonScrollListView;

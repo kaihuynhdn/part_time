@@ -84,17 +84,8 @@ public class RecruitingActivity extends AppCompatActivity {
         mJobReference = FirebaseFirestore.getInstance().collection("jobs");
 
         dpi = RecruitingActivity.this.getResources().getDisplayMetrics().density;
-        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        languages = new ArrayList<>();
-        for (String s : languageArray) {
-            languages.add(new ForeignLanguage(s, false));
-        }
-
-        String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        skills = new ArrayList<>();
-        for (String s : skillArray) {
-            skills.add(new Skill(s, false));
-        }
+        initLanguageArray();
+        initSkillArray();
     }
 
     private void addEvents() {
@@ -137,6 +128,23 @@ public class RecruitingActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    private void initSkillArray() {
+        String[] skillArray = getResources().getStringArray(R.array.skill_array);
+        skills = new ArrayList<>();
+        for (String s : skillArray) {
+            skills.add(new Skill(s, false));
+        }
+    }
+
+    private void initLanguageArray() {
+        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
+        languages = new ArrayList<>();
+        for (String s : languageArray) {
+            languages.add(new ForeignLanguage(s, false));
+        }
+    }
+
 
     private void recruitButtonEvents() {
         mRecruitButton.setOnClickListener(new View.OnClickListener() {
@@ -297,7 +305,7 @@ public class RecruitingActivity extends AppCompatActivity {
         inputSkill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSkillDialog();
+                showSkillDialog(inputSkill.getText().toString());
             }
         });
 
@@ -305,13 +313,29 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    showSkillDialog();
+                    showSkillDialog(inputSkill.getText().toString());
                 }
             }
         });
     }
 
-    private void showSkillDialog() {
+    private void showSkillDialog(String s) {
+        initSkillArray();
+        String[] splits = s.split("\n");
+        for (String split : splits) {
+            int j;
+            for (j = 0; j < skills.size(); j++) {
+                if (skills.get(j).getName().equals(split)) {
+                    skills.get(j).setChecked(true);
+                    break;
+                }
+
+            }
+            if (j == skills.size() && !split.equals("")) {
+                skills.add(skills.size() - 1, new Skill(split, false));
+            }
+        }
+
         ListView listView = new ListView(RecruitingActivity.this);
         skillAdapter = new SkillAdapter(RecruitingActivity.this, R.layout.skill_item, skills);
         listView.setAdapter(skillAdapter);
@@ -393,19 +417,33 @@ public class RecruitingActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    showLanguageDialog();
+                    showLanguageDialog(inputLanguage.getText().toString());
                 }
             }
         });
         inputLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLanguageDialog();
+                showLanguageDialog(inputLanguage.getText().toString());
             }
         });
     }
 
-    private void showLanguageDialog() {
+    private void showLanguageDialog(String s) {
+        initLanguageArray();
+        String[] splits = s.split("\n");
+        for (String split : splits) {
+            int j;
+            for (j = 0; j < languages.size(); j++) {
+                if (languages.get(j).getName().equals(split)) {
+                    languages.get(j).setChecked(true);
+                    break;
+                }
+            }
+            if (j == languages.size() && !split.equals("")) {
+                languages.add(languages.size() - 1, new ForeignLanguage(split, true));
+            }
+        }
         ListView listView = new ListView(RecruitingActivity.this);
         languageAdapter = new ForeignLanguageAdapter(RecruitingActivity.this, R.layout.foreign_language_item, languages);
         listView.setAdapter(languageAdapter);
@@ -501,7 +539,7 @@ public class RecruitingActivity extends AppCompatActivity {
 
     private void showGenderDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setSingleChoiceItems(new String[]{"Nam", "Nữ", "Không"}, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(new String[]{"Nam", "Nữ", "Nam/Nữ"}, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -512,7 +550,7 @@ public class RecruitingActivity extends AppCompatActivity {
                         inputGender.setText(String.valueOf("Nữ"));
                         break;
                     case 2:
-                        inputGender.setText(String.valueOf("Không"));
+                        inputGender.setText(String.valueOf("Nam/Nữ"));
                         break;
                 }
                 genderDialog.dismiss();
@@ -521,7 +559,6 @@ public class RecruitingActivity extends AppCompatActivity {
         builder.setTitle("Chọn...");
 
         genderDialog = builder.create();
-        genderDialog.setCanceledOnTouchOutside(false);
         genderDialog.show();
     }
 

@@ -1,4 +1,4 @@
-package com.example.kaihuynh.part_timejob;
+package com.example.kaihuynh.part_timejob.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -20,6 +20,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kaihuynh.part_timejob.HomePageActivity;
+import com.example.kaihuynh.part_timejob.LoginMethodActivity;
+import com.example.kaihuynh.part_timejob.ProfileActivity;
+import com.example.kaihuynh.part_timejob.R;
+import com.example.kaihuynh.part_timejob.RecruitingActivity;
+import com.example.kaihuynh.part_timejob.RegisterPersonalInfoActivity;
 import com.example.kaihuynh.part_timejob.controllers.UserManager;
 import com.example.kaihuynh.part_timejob.models.ApplyJob;
 import com.example.kaihuynh.part_timejob.models.Job;

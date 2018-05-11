@@ -141,6 +141,7 @@
     <string name="add_personal_description">Thêm mô tả cá nhân</string>
     <string name="x">x</string>
     <string name="dot_symbol">●</string>
+    <string name="empty_search">Không có kết quả!</string>
 
     <string-array name="gender">
         <item>Nam</item>

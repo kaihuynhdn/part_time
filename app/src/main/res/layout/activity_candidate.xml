@@ -294,6 +294,7 @@
                         android:fontFamily="@font/iciel_cadena"
                         android:paddingBottom="@dimen/distance_view_5"
                         android:textColor="@color/end_color"
+                        android:text="@string/personal_skills"
                         android:textSize="20sp"
                         android:layout_marginStart="@dimen/distance_view_5" />
 

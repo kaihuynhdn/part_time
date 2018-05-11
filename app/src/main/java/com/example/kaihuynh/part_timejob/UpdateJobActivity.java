@@ -87,17 +87,8 @@ public class UpdateJobActivity extends AppCompatActivity {
         mJobReference = FirebaseFirestore.getInstance().collection("jobs");
 
         dpi = UpdateJobActivity.this.getResources().getDisplayMetrics().density;
-        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
-        languages = new ArrayList<>();
-        for (String s : languageArray) {
-            languages.add(new ForeignLanguage(s, false));
-        }
-
-        String[] skillArray = getResources().getStringArray(R.array.skill_array);
-        skills = new ArrayList<>();
-        for (String s : skillArray) {
-            skills.add(new Skill(s, false));
-        }
+        initSkillArray();
+        initLanguageArray();
 
         Intent intent = getIntent();
         intentJob = (Job) intent.getSerializableExtra("job");
@@ -193,6 +184,22 @@ public class UpdateJobActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void initSkillArray() {
+        String[] skillArray = getResources().getStringArray(R.array.skill_array);
+        skills = new ArrayList<>();
+        for (String s : skillArray) {
+            skills.add(new Skill(s, false));
+        }
+    }
+
+    private void initLanguageArray() {
+        String[] languageArray = getResources().getStringArray(R.array.foreign_language);
+        languages = new ArrayList<>();
+        for (String s : languageArray) {
+            languages.add(new ForeignLanguage(s, false));
+        }
     }
 
     private void recruitButtonEvents() {
@@ -384,6 +391,7 @@ public class UpdateJobActivity extends AppCompatActivity {
     }
 
     private void showSkillDialog(String s) {
+        initSkillArray();
         String[] splits = s.split("\n");
         for (String split : splits) {
             int j;
@@ -395,7 +403,7 @@ public class UpdateJobActivity extends AppCompatActivity {
 
             }
             if (j == skills.size() && !split.equals("")) {
-                skills.add(skills.size() - 1, new Skill(split, true));
+                skills.add(skills.size() - 1, new Skill(split, false));
             }
         }
 
@@ -493,6 +501,7 @@ public class UpdateJobActivity extends AppCompatActivity {
     }
 
     private void showLanguageDialog(String s) {
+        initLanguageArray();
         String[] splits = s.split("\n");
         for (String split : splits) {
             int j;
@@ -603,7 +612,7 @@ public class UpdateJobActivity extends AppCompatActivity {
 
     private void showGenderDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setSingleChoiceItems(new String[]{"Nam", "Nữ", "Không"}, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(new String[]{"Nam", "Nữ", "Nam/Nữ"}, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -614,7 +623,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                         inputGender.setText(String.valueOf("Nữ"));
                         break;
                     case 2:
-                        inputGender.setText(String.valueOf("Không"));
+                        inputGender.setText(String.valueOf("Nam/Nữ"));
                         break;
                 }
                 genderDialog.dismiss();

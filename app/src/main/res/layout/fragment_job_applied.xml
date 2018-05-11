@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kaihuynh.part_timejob.JobAppliedFragment">
+    tools:context="com.example.kaihuynh.part_timejob.fragments.JobAppliedFragment">
 
     <RelativeLayout
         android:id="@+id/rl_empty_apply_job"
