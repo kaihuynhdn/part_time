@@ -6,12 +6,13 @@
     <item android:id="@+id/personal_info_menu" android:title="@string/profile" android:icon="@drawable/resume"/>
     <item android:id="@+id/recruitment_menu" android:title="@string/recruitment" android:icon="@drawable/post"/>
     <item android:id="@+id/manage_recruitment_post_menu" android:title="@string/management" android:icon="@drawable/management"/>
+    <item android:id="@+id/language_menu" android:title="@string/language" android:icon="@drawable/language"/>
 
     <item android:title="">
         <menu>
             <group>
-                <item android:id="@+id/log_out_menu" android:title="@string/logout" android:icon="@drawable/log_out"/>
                 <item android:id="@+id/contact_menu" android:title="@string/contact" android:icon="@drawable/contact"/>
+                <item android:id="@+id/log_out_menu" android:title="@string/logout" android:icon="@drawable/log_out"/>
             </group>
         </menu>
     </item>

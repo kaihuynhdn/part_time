@@ -92,7 +92,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
 
     private void initialize() {
         mUserReference = FirebaseFirestore.getInstance().collection("users");
-        mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
+        mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " " + getContext().getResources().getString(R.string.quantity_job)));
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.lightBlue_700));
 
         mJobArrayList = JobManager.getInstance().getJobs();
@@ -134,7 +134,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     }
                     mAdapter.notifyItemInserted(mJobArrayList.size() - 1);
                     final String s = mLocationButton.getText().toString();
-                    if (s.equals("Địa điểm")) {
+                    if (s.equals(getResources().getString(R.string.location))) {
                         JobManager.getInstance().loadMoreJob(mJobArrayList.get(mJobArrayList.size() - 2).getTimestamp());
                     } else {
                         JobManager.getInstance().loadMoreJobByLocation(mJobArrayList.get(mJobArrayList.size() - 2).getTimestamp(), s);
@@ -147,10 +147,10 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                                 mAdapter.notifyItemRemoved(mJobArrayList.size());
                             }
                             if (!JobManager.isLoadMoreJob && !JobManager.isLoadMoreJobByLocation) {
-                                Toast.makeText(getContext(), "Vui lòng kiểm tra lại đường truyền !", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getContext().getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
 
                             } else {
-                                if (s.equals("Địa điểm")) {
+                                if (s.equals(getResources().getString(R.string.location))) {
                                     mJobArrayList.addAll(JobManager.getInstance().getLoadMoreJobs());
                                 } else {
                                     mJobArrayList.addAll(JobManager.getInstance().getMoreJobListByLocation());
@@ -185,7 +185,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     }
                 });
                 final String s = mLocationButton.getText().toString();
-                if (s.equals("Địa điểm")) {
+                if (s.equals(getResources().getString(R.string.location))) {
                     JobManager.getInstance().refreshData();
                 } else {
                     JobManager.getInstance().loadJobByLocation(s);
@@ -194,10 +194,11 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                     @Override
                     public void run() {
                         if (!JobManager.isRefreshed && !JobManager.isLoadJobByLocation) {
-                            Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getContext().getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                         } else {
-                            mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
-                            if (s.equals("Địa điểm")) {
+                            mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity()
+                                    + " " + getContext().getResources().getString(R.string.quantity_job)));
+                            if (s.equals(getResources().getString(R.string.location))) {
                                 mJobArrayList = JobManager.getInstance().getJobs();
                             } else {
                                 mJobArrayList = JobManager.getInstance().getJobListByLocation();
@@ -253,12 +254,13 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
             @Override
             public void run() {
                 if (!JobManager.isRefreshed) {
-                    Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 } else {
-                    mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity() + " việc làm"));
+                    mJobQuantity.setText(String.valueOf(JobManager.getInstance().getJobQuantity()
+                            + " " + getContext().getResources().getString(R.string.quantity_job)));
                     mJobArrayList = JobManager.getInstance().getJobs();
                     mAdapter.notifyDataSetChanged();
-                    mLocationButton.setText("Địa điểm");
+                    mLocationButton.setText(getResources().getString(R.string.location));
                     mRemoveLocation.setVisibility(View.GONE);
                 }
 
@@ -307,7 +309,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
                 @Override
                 public void run() {
                     if (!JobManager.isLoadJobByLocation) {
-                        Toast.makeText(getContext(), "Lỗi đường truyền", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                     } else {
                         mJobArrayList.clear();
                         mJobArrayList.addAll(JobManager.getInstance().getJobListByLocation());
@@ -337,7 +339,7 @@ public class JobListFragment extends Fragment implements MyAdapter.ListItemClick
     @Override
     public void onResume() {
         super.onResume();
-        if (mLocationButton.getText().equals("Địa điểm")) {
+        if (mLocationButton.getText().equals(getResources().getString(R.string.location))) {
             mRemoveLocation.setVisibility(View.GONE);
         } else {
             mRemoveLocation.setVisibility(View.VISIBLE);

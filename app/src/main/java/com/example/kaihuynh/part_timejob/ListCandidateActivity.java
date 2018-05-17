@@ -68,7 +68,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
             @Override
             public void run() {
                 if (!JobManager.isLoadCandidateList){
-                    Toast.makeText(ListCandidateActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListCandidateActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }else {
                     refreshData();
                 }
@@ -137,7 +137,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
                     @Override
                     public void run() {
                         if (!JobManager.isLoadCandidateList){
-                            Toast.makeText(ListCandidateActivity.this, "Lỗi đường truyền", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ListCandidateActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                         }else {
                             refreshData();
 

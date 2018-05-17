@@ -68,7 +68,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
     private void initialize() {
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Đang kiểm tra dữ liệu...");
+        mProgress.setMessage(getResources().getString(R.string.login_method_loading_message));
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
@@ -91,7 +91,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.register_notification_dialog, null);
         builder.setView(view);
-        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.next_button_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(RegisterAccountInfoActivity.this, RegisterPersonalInfoActivity.class);
@@ -102,7 +102,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                 finish();
             }
         });
-        builder.setNegativeButton("Về Trang chủ", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.to_home_page), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 startActivity(new Intent(RegisterAccountInfoActivity.this, HomePageActivity.class));
@@ -151,7 +151,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
                                 signIn();
                             } else {
                                 // If sign in fails, display a message to the user.
-                                inputEmailLayout.setError("Địa chỉ email đã tồn tại.");
+                                inputEmailLayout.setError(getResources().getString(R.string.email_exist));
                                 mProgress.dismiss();
                             }
 
@@ -184,7 +184,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
     private boolean isValid(){
         if(mFullName.getText().toString().equals("")){
             inputNameLayout.setErrorEnabled(true);
-            inputNameLayout.setError("Chưa điền đủ thông tin.");
+            inputNameLayout.setError(getResources().getString(R.string.lack_of_info_notification));
             inputNameLayout.requestFocus();
             return false;
         }else {
@@ -193,7 +193,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
         if(TextUtils.isEmpty(mEmail.getText().toString()) || !Patterns.EMAIL_ADDRESS.matcher(mEmail.getText().toString()).matches()){
             inputEmailLayout.setErrorEnabled(true);
-            inputEmailLayout.setError("Thông tin email chưa chính xác.");
+            inputEmailLayout.setError(getResources().getString(R.string.mail_error));
             inputEmailLayout.requestFocus();
             return false;
         }else {
@@ -202,7 +202,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
         if (mPassword.getText().toString().equals("") || mPassword.getText().toString().length()<6){
             inputPasswordLayout.setErrorEnabled(true);
-            inputPasswordLayout.setError("Mật khẩu phải ít nhất 6 ký tự.");
+            inputPasswordLayout.setError(getResources().getString(R.string.password_register_error));
             inputPasswordLayout.requestFocus();
             return false;
         }else {
@@ -211,7 +211,7 @@ public class RegisterAccountInfoActivity extends AppCompatActivity {
 
         if(!mPassword.getText().toString().equals(mConfirmPassword.getText().toString())){
             inputConfirmPasswordLayout.setErrorEnabled(true);
-            inputConfirmPasswordLayout.setError("Xác nhận mật khẩu chưa chính xác.");
+            inputConfirmPasswordLayout.setError(getResources().getString(R.string.repassword_error));
             inputConfirmPasswordLayout.requestFocus();
             return false;
         }else {

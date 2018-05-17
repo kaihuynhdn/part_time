@@ -213,7 +213,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (toast != null) {
             toast.cancel();
         }
-        toast = Toast.makeText(ProfileActivity.this, "Lỗi! Vui lòng kiểm tra lại kết nối", Toast.LENGTH_SHORT);
+        toast = Toast.makeText(ProfileActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -273,7 +273,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (isConnect()) {
@@ -290,7 +290,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
@@ -319,7 +319,7 @@ public class ProfileActivity extends AppCompatActivity {
         editText.setBackground(ContextCompat.getDrawable(this, R.drawable.input_template));
         editText.setMinHeight(300);
         editText.setTextSize(16);
-        editText.setHint("Nhập thông tin...");
+        editText.setHint(getResources().getString(R.string.description_hint));
         editText.setPadding(15, 10, 10, 15);
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, getResources().getDisplayMetrics()), 1.0f);
@@ -327,14 +327,14 @@ public class ProfileActivity extends AppCompatActivity {
         editText.setSelection(mDescriptionTextView.getText().toString().length());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mô tả bản thân:");
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.description_title));
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
         });
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (isConnect()) {
@@ -416,7 +416,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chọn:");
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -439,7 +439,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -452,9 +452,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showAddSkillDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thêm kĩ năng:");
+        builder.setTitle(getResources().getString(R.string.add_new_skill_title));
         final EditText editText = new EditText(this);
-        builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.add_new_language_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
@@ -463,7 +463,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -535,7 +535,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chọn:");
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
         builder.setView(listView);
         builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
             @Override
@@ -558,7 +558,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -571,9 +571,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showAddLanguageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thêm ngoại ngữ:");
+        builder.setTitle(getResources().getString(R.string.add_new_language_title));
         final EditText editText = new EditText(this);
-        builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.add_new_language_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
@@ -582,7 +582,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -616,7 +616,7 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.education_picker_dialog, null);
-        builder.setTitle("Chọn:");
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
         builder.setView(view);
 
         final NumberPicker numberPicker = view.findViewById(R.id.np_education);
@@ -637,7 +637,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (isConnect()) {
@@ -654,7 +654,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -724,7 +724,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         builder.setTitle("Chọn...");
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (isConnect()) {
@@ -739,7 +739,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Huỷ", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();

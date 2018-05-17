@@ -3,6 +3,7 @@ package com.example.kaihuynh.part_timejob;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,6 +55,7 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
@@ -69,6 +71,7 @@ public class HomePageActivity extends AppCompatActivity
     private ImageView imageView, share;
     private CustomViewPager viewPager;
     private HomeViewPagerAdapter adapter;
+    private AlertDialog languageDialog;
     private View header;
     private User user;
     private ListenerRegistration listenerRegistration;
@@ -105,6 +108,12 @@ public class HomePageActivity extends AppCompatActivity
         toggle.syncState();
 
         disableShiftMode(mBottomNavigationView);
+
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        String language = sharedPreferences.getString("language", "");
+        if (!language.isEmpty()){
+            setLanguage(language);
+        }
 
     }
 
@@ -207,7 +216,7 @@ public class HomePageActivity extends AppCompatActivity
                 switch (item.getItemId()) {
                     case R.id.action_share_fb:
                         ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setQuote("http://play.google.com/store/apps/details?id=com.example.kaihuynh.part_timejob")
+                                .setQuote("The content of status...")
                                 .setContentUrl(Uri.parse("https://play.google.com/store"))
                                 .build();
                         ShareDialog.show(HomePageActivity.this, content);
@@ -238,15 +247,15 @@ public class HomePageActivity extends AppCompatActivity
                 break;
             case R.id.action_like_jobs:
                 viewPager.setCurrentItem(1);
-                toolbar.setTitle("Công việc yêu thích");
+                toolbar.setTitle(getResources().getString(R.string.favourite_job));
                 break;
             case R.id.action_applied_jobs:
                 viewPager.setCurrentItem(2);
-                toolbar.setTitle("Công việc ứng tuyển");
+                toolbar.setTitle(getResources().getString(R.string.apply_job));
                 break;
             case R.id.action_notification:
                 viewPager.setCurrentItem(3);
-                toolbar.setTitle("Thông báo");
+                toolbar.setTitle(getResources().getString(R.string.notify));
                 break;
         }
 
@@ -334,6 +343,8 @@ public class HomePageActivity extends AppCompatActivity
                             signOut();
                         } else if (id == R.id.contact_menu) {
 
+                        } else if (id == R.id.language_menu){
+                            showLanguageDialog();
                         }
                     }
                 });
@@ -343,11 +354,51 @@ public class HomePageActivity extends AppCompatActivity
         return true;
     }
 
+    private void showLanguageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setSingleChoiceItems(new String[]{"Tiếng Việt", "English"}, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                    case 0:
+                        setLanguage("vn");
+                        break;
+                    case 1:
+                        setLanguage("en");
+                        break;
+                }
+                languageDialog.dismiss();
+            }
+        });
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
+
+        languageDialog = builder.create();
+        languageDialog.show();
+    }
+
+    private void setLanguage(String languages){
+        Locale locale = new Locale (languages);
+        Locale.setDefault(locale);
+        getResources().getConfiguration().locale = locale;
+        getResources().updateConfiguration(getResources().getConfiguration(), getResources().getDisplayMetrics());
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.activity_home_page_drawer);
+        mBottomNavigationView.getMenu().clear();
+        mBottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
+        adapter = new HomeViewPagerAdapter(getSupportFragmentManager(), NUM_TABS);
+        viewPager.setAdapter(adapter);
+        disableShiftMode(mBottomNavigationView);
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("language", languages);
+        editor.apply();
+    }
+
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo");
-        builder.setMessage("Bạn cần hoàn thiện hồ sơ cá nhân để đăng tuyển");
-        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.register_info_dialog_title));
+        builder.setMessage(getResources().getString(R.string.register_info_dialog_message));
+        builder.setPositiveButton(getResources().getString(R.string.next_button_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(HomePageActivity.this, RegisterPersonalInfoActivity.class);
@@ -355,7 +406,7 @@ public class HomePageActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

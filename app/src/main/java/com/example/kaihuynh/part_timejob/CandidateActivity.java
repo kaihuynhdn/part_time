@@ -120,12 +120,12 @@ public class CandidateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isConnect()){
-                    if (mIgnoreButton.getText().equals("Từ chối")){
+                    if (mIgnoreButton.getText().equals(getResources().getString(R.string.refuse_candidate))){
                         actionToCandidate(ApplyJob.UNEMPLOYED_STATUS);
                         setActionButton(ApplyJob.UNEMPLOYED_STATUS);
                     }
                 }else {
-                    Toast.makeText(CandidateActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CandidateActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,7 +133,7 @@ public class CandidateActivity extends AppCompatActivity {
         mAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAcceptButton.getText().equals("Đồng ý")){
+                if (mAcceptButton.getText().equals(getResources().getString(R.string.choose_candidate))){
                     actionToCandidate(ApplyJob.EMPLOYED_STATUS);
                     setActionButton(ApplyJob.EMPLOYED_STATUS);
                 }
@@ -159,11 +159,11 @@ public class CandidateActivity extends AppCompatActivity {
     private void setActionButton(String action){
         if (action.equals(ApplyJob.UNEMPLOYED_STATUS)){
             mAcceptButton.setVisibility(View.GONE);
-            mIgnoreButton.setText(String.valueOf("Bị từ chối !"));
+            mIgnoreButton.setText(getResources().getString(R.string.failed_status));
             mIgnoreButton.setClickable(false);
         }else if (action.equals(ApplyJob.EMPLOYED_STATUS)){
             mIgnoreButton.setVisibility(View.GONE);
-            mAcceptButton.setText(String.valueOf("Được tuyển chọn !"));
+            mAcceptButton.setText(getResources().getString(R.string.passed_status));
             mAcceptButton.setClickable(false);
         }
     }
@@ -243,22 +243,26 @@ public class CandidateActivity extends AppCompatActivity {
 
     @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate){
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if(minus<2){
             if (minus == 1){
-                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+                s = getResources().getString(R.string.get_time_text_1)
+                        + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
             }else if(minus == 0){
                 int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
                 if (minus1>0){
-                    s = minus1 + " giờ trước";
+                    s = minus1 + getResources().getString(R.string.get_time_text_2);
                 }else {
                     if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
-                        s = "1 phút trước";
+                        s = getResources().getString(R.string.get_time_text_3);
                     }else {
-                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)
+                                + getResources().getString(R.string.get_time_text_4);
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
         }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());

@@ -21,7 +21,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="@dimen/background_img_profile_size"
                 android:background="@drawable/background_profile">
 
                 <RelativeLayout
@@ -36,11 +36,11 @@
 
                     <ImageView
                         android:id="@+id/img_profile"
-                        android:layout_width="@dimen/distance_view_100"
-                        android:layout_height="@dimen/distance_view_100"
+                        android:layout_width="@dimen/avatar_profile_size"
+                        android:layout_height="@dimen/avatar_profile_size"
                         android:scaleType="fitCenter"
                         android:background="@drawable/avatar_profile"
-                        android:padding="2dp"
+                        android:padding="@dimen/distance_view_2"
                         android:src="@drawable/loading_img"
                         android:contentDescription="@string/avarar_img_description" />
                 </RelativeLayout>
@@ -102,8 +102,8 @@
 
                 <ImageButton
                     android:id="@+id/img_pick_picture"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="@dimen/change_avatar_btn_profile"
+                    android:layout_height="@dimen/change_avatar_btn_profile"
                     android:scaleType="fitXY"
                     android:background="@null"
                     android:layout_alignEnd="@+id/relative_layout1"
@@ -386,8 +386,8 @@
                             android:layout_marginRight="@dimen/distance_view_10"
                             android:layout_gravity="center"
                             android:background="@drawable/edit_job_title_button"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="@dimen/edit_description_profile_size"
+                            android:layout_height="@dimen/edit_description_profile_size"
                             android:layout_marginEnd="@dimen/distance_view_10" />
                     </LinearLayout>
 

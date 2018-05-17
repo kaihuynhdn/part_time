@@ -98,7 +98,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
     private void initialize() {
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Đang kiểm tra dữ liệu...");
+        mProgress.setMessage(getResources().getString(R.string.login_method_loading_message));
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
@@ -217,7 +217,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             if (v instanceof TextView) {
                 TextView tv = (TextView) v;
                 tv.setTextSize(14);
-                tv.setText(String.valueOf("ĐĂNG NHẬP BẰNG GOOGLE"));
+                tv.setText(getResources().getString(R.string.login_google));
                 tv.setSingleLine(true);
                 tv.setPadding(15, 17, 20, 17);
                 return;
@@ -234,7 +234,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(LoginMethodActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginMethodActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -250,7 +250,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(LoginMethodActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginMethodActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 if (mProgress.isShowing()) {
                     mProgress.dismiss();
                 }
@@ -357,9 +357,34 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             });
 
                         } else {
+                            if (mProgress.isShowing()){
+                                mProgress.dismiss();
+                            }
+                            final FirebaseUser userFirebase = mAuth.getCurrentUser();
+                            if (userFirebase!= null){
+                                mUserReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful() && task.getResult()!=null){
+                                            for (DocumentSnapshot d : task.getResult()){
+                                                User u = d.toObject(User.class);
+                                                if (u.getId().equals(userFirebase.getUid())) {
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                        User user = new User();
+                                        user.setId(userFirebase.getUid());
+                                        user.setEmail(userFirebase.getEmail());
+                                        user.setFullName(userFirebase.getDisplayName());
+                                        UserManager.getInstance().updateUser(user);
+                                    }
+                                });
+                            }else {
+                                Toast.makeText(LoginMethodActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginMethodActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
                         }
 
                     }

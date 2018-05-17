@@ -75,7 +75,7 @@
                 android:layout_weight="1"
                 android:background="@color/red"
                 android:layout_width="0dp"
-                android:layout_height="1dp" />
+                android:layout_height="@dimen/distance_view_1" />
 
         </LinearLayout>
 

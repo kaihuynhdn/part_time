@@ -79,7 +79,7 @@ public class PersonalDescriptionFragment extends Fragment {
 
     private void initialize() {
         mProgress = new ProgressDialog(getContext());
-        mProgress.setMessage("Đang xử lý thông tin...");
+        mProgress.setMessage(getContext().getResources().getString(R.string.personal_description_loading_message));
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
@@ -135,7 +135,7 @@ public class PersonalDescriptionFragment extends Fragment {
                     UserManager.getInstance().updateUser(user);
                     showAlertDialog();
                 }else {
-                    Toast.makeText(getContext(), "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -148,10 +148,10 @@ public class PersonalDescriptionFragment extends Fragment {
         View view = inflater.inflate(R.layout.register_notification_dialog, null);
         TextView t1 = view.findViewById(R.id.tv_success);
         TextView t2 = view.findViewById(R.id.tv_content_success);
-        t1.setText(String.valueOf("Đăng ký thông tin thành công"));
+        t1.setText(String.valueOf(getContext().getResources().getString(R.string.success_register_info_dialog)));
         t2.setVisibility(View.GONE);
         builder.setView(view);
-        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getContext().getResources().getString(R.string.next_button_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (getActivity().getIntent().getStringExtra("activity")) {

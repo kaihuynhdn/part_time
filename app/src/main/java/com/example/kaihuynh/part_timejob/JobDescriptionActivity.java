@@ -99,12 +99,12 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private void setWidgets() {
         mTabHost.setup();
         TabHost.TabSpec mJobDetailTabSpec = mTabHost.newTabSpec("t1");
-        mJobDetailTabSpec.setIndicator("CÔNG VIỆC");
+        mJobDetailTabSpec.setIndicator(getResources().getString(R.string.job_tab_host));
         mJobDetailTabSpec.setContent(R.id.tab1);
         mTabHost.addTab(mJobDetailTabSpec);
 
         TabHost.TabSpec mRecruiterDetailTabSpec = mTabHost.newTabSpec("t2");
-        mRecruiterDetailTabSpec.setIndicator("NGƯỜI TUYỂN");
+        mRecruiterDetailTabSpec.setIndicator(getResources().getString(R.string.recruiter_tab_host));
         mRecruiterDetailTabSpec.setContent(R.id.tab2);
         mTabHost.addTab(mRecruiterDetailTabSpec);
 
@@ -201,7 +201,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                         showDescriptionDialog();
                     }
                 }else {
-                    Toast.makeText(JobDescriptionActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JobDescriptionActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -230,7 +230,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                         mSaveButton.setText("Lưu");
                     }
                 }else {
-                    Toast.makeText(JobDescriptionActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JobDescriptionActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -279,7 +279,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
     private void showNullJobDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo");
+        builder.setTitle(getResources().getString(R.string.register_info_dialog_title));
         builder.setMessage("Nhà tuyển dụng đã \"Xóa\" tin đăng này!");
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
             @Override
@@ -295,7 +295,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo");
+        builder.setTitle(getResources().getString(R.string.register_info_dialog_title));
         builder.setMessage("Bạn cần hoàn thiện hồ sơ cá nhân để ứng tuyển");
         builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
             @Override
@@ -305,7 +305,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -398,7 +398,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 description = editText.getText().toString();
@@ -448,24 +448,28 @@ public class JobDescriptionActivity extends AppCompatActivity {
 
     @SuppressLint("SimpleDateFormat")
     private String getTime(Calendar current, Calendar postingDate) {
-        String s = "";
+        String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
-        if (minus < 2) {
-            if (minus == 1) {
-                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
-            } else if (minus == 0) {
+        if(minus<2){
+            if (minus == 1){
+                s = getResources().getString(R.string.get_time_text_1)
+                        + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+            }else if(minus == 0){
                 int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
-                if (minus1 > 0) {
-                    s = minus1 + " giờ trước";
-                } else {
-                    if (current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) == 0) {
-                        s = "1 phút trước";
-                    } else {
-                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                if (minus1>0){
+                    s = minus1 + getResources().getString(R.string.get_time_text_2);
+                }else {
+                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                        s = getResources().getString(R.string.get_time_text_3);
+                    }else {
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)
+                                + getResources().getString(R.string.get_time_text_4);
                     }
                 }
+            }else {
+                s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
-        } else {
+        }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
         }
 

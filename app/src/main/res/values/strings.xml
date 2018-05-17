@@ -72,7 +72,6 @@
     <string name="notification">Thông Báo</string>
     <string name="hint_gender">Giới tính</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="arrangement">Sắp xếp</string>
     <string name="location">Địa điểm</string>
@@ -104,6 +103,45 @@
     <string name="update">Chỉnh sửa</string>
     <string name="applied_date">Thời gian ứng tuyển:</string>
     <string name="age">Tuổi</string>
+    <string name="get_time_text_1">Hôm qua lúc </string>
+    <string name="get_time_text_2"> giờ trước</string>
+    <string name="get_time_text_3">1 phút trước</string>
+    <string name="get_time_text_4"> phút trước</string>
+    <string name="delete_job_title">Thông báo</string>
+    <string name="delete_job_message">Bạn có muốn xóa tin tuyển dụng này không ?</string>
+    <string name="positive_btn_dialog">Có</string>
+    <string name="negative_btn_dialog">Hủy</string>
+    <string name="add_new_language_title">Thêm ngoại ngữ:</string>
+    <string name="add_new_skill_title">Thêm kĩ năng:</string>
+    <string name="add_new_language_positive">Thêm</string>
+    <string name="quantity_job">việc làm</string>
+    <string name="connection_error"> Lỗi kết nối!</string>
+    <string name="personal_description_loading_message">Đang xử lý thông tin…</string>
+    <string name="login_loading_message">Đang xác nhận thông tin…</string>
+    <string name="login_method_loading_message">Đang xử lý dữ liệu…</string>
+    <string name="next_button_dialog">Tiếp tục</string>
+    <string name="success_register_info_dialog">Đăng ký thông tin thành công</string>
+    <string name="pick_education_dialog_title">Chọn:</string>
+    <string name="exit">Thoát</string>
+    <string name="status_title">Trạng thái</string>
+    <string name="notify">Thông báo</string>
+    <string name="exit_recruiting_notify">Thoát khỏi đăng tuyển ?</string>
+    <string name="positive_save_dialog">Lưu</string>
+    <string name="empty_edittext_error">Cần nhập đủ thông tin.</string>
+    <string name="failed_status">Bị từ chối !</string>
+    <string name="passed_status">Được tuyển chọn !</string>
+    <string name="to_home_page">Về trang chủ</string>
+    <string name="login_google">ĐĂNG NHẬP BẰNG GOOGLE</string>
+    <string name="lack_of_info_notification">Cần nhập đủ thông tin.</string>
+    <string name="lack_of_title_notification">Cần thêm tiều đề cho công việc.</string>
+    <string name="update_job_success">Cập nhật công việc thành công !</string>
+    <string name="update_success">Cập nhật công việc</string>
+    <string name="mail_error">Thông tin email chưa chính xác.</string>
+    <string name="repassword_error">Xác nhận mật khẩu chưa chính xác.</string>
+    <string name="password_register_error">Mật khẩu phải ít nhất 6 ký tự.</string>
+    <string name="email_exist">Địa chỉ email đã tồn tại.</string>
+    <string name="favourite_job">Công việc yêu thích</string>
+    <string name="apply_job">Công việc ứng tuyển</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
@@ -142,6 +180,15 @@
     <string name="x">x</string>
     <string name="dot_symbol">●</string>
     <string name="empty_search">Không có kết quả!</string>
+    <string name="location_item">Địa điểm:</string>
+    <string name="register_info_dialog_title">Thông báo</string>
+    <string name="register_info_dialog_message">Bạn cần hoàn thiện hồ sơ cá nhân để đăng tuyển</string>
+    <string name="job_tab_host">CÔNG VIỆC</string>
+    <string name="recruiter_tab_host">NGƯỜI TUYỂN</string>
+    <string name="description_hint">Nhập thông tin…</string>
+    <string name="description_title">Mô tả bản thân:</string>
+    <string name="recruiting_success">Đăng tuyển công việc thành công !</string>
+    <string name="language">Ngôn ngữ</string>
 
     <string-array name="gender">
         <item>Nam</item>

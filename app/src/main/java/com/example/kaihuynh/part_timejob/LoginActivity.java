@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private void initialize() {
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Đang xác nhận thông tin...");
+        mProgress.setMessage(getResources().getString(R.string.login_loading_message));
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
 
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity{
                                 }
                             });
                 }else {
-                    Toast.makeText(LoginActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
 
             }

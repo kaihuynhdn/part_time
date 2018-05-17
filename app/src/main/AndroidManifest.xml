@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +24,15 @@
         </activity>
         <activity
             android:name=".LoginMethodActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".RegisterPersonalInfoActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/ActionBarTransparent" />
         <activity
             android:name=".RegisterAccountInfoActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".LoginActivity"
@@ -36,24 +40,34 @@
         <activity
             android:name=".HomePageActivity"
             android:label="@string/title_activity_home_page"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".JobDescriptionActivity" />
-        <activity android:name=".PickLocationActivity" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".JobDescriptionActivity" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".PickLocationActivity" />
         <activity
             android:name=".RecruitingActivity"
+            android:screenOrientation="portrait"
             android:label="@string/recruiting_activity" />
         <activity
             android:name=".ProfileActivity"
             android:label="@string/profile_activity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".ListRecruitmentActivity"
+            android:screenOrientation="portrait"
             android:label="Danh sách CV đăng tuyển" />
         <activity
             android:name=".ListCandidateActivity"
+            android:screenOrientation="portrait"
             android:label="Danh sách Ứng viên" />
         <activity
             android:name=".CandidateActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -95,6 +109,7 @@
             android:exported="true" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".SearchActivity">
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />

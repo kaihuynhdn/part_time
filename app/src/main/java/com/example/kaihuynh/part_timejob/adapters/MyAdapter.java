@@ -149,24 +149,26 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String getTime(Calendar current, Calendar postingDate) {
         String s;
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
-        if (minus < 2) {
-            if (minus == 1) {
-                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
-            } else if (minus == 0) {
+        if(minus<2){
+            if (minus == 1){
+                s = context.getResources().getString(R.string.get_time_text_1)
+                        + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+            }else if(minus == 0){
                 int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
-                if (minus1 > 0) {
-                    s = minus1 + " giờ trước";
-                } else {
-                    if (current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) == 0) {
-                        s = "1 phút trước";
-                    } else {
-                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                if (minus1>0){
+                    s = minus1 + context.getResources().getString(R.string.get_time_text_2);
+                }else {
+                    if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
+                        s = context.getResources().getString(R.string.get_time_text_3);
+                    }else {
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)
+                                + context.getResources().getString(R.string.get_time_text_4);
                     }
                 }
             }else {
                 s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
             }
-        } else {
+        }else {
             s = new SimpleDateFormat("hh:ss dd-MM-yyy").format(postingDate.getTime());
         }
 

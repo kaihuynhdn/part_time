@@ -165,7 +165,7 @@ public class PersonalInfoFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.education_picker_dialog, null);
-        builder.setTitle("Chọn...");
+        builder.setTitle(getContext().getResources().getString(R.string.pick_education_dialog_title));
         builder.setView(view);
 
         final NumberPicker numberPicker = view.findViewById(R.id.np_education);
@@ -181,14 +181,14 @@ public class PersonalInfoFragment extends Fragment {
             }
         });
 
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getContext().getResources().getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 inputEducation.setText(strings[numberPicker.getValue()]);
             }
         });
 
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getContext().getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -238,7 +238,7 @@ public class PersonalInfoFragment extends Fragment {
 
     private void showGenderDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setSingleChoiceItems(new String[]{"Nam", "Nữ", "Khác"}, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(getContext().getResources().getStringArray(R.array.gender), -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i){
@@ -255,7 +255,7 @@ public class PersonalInfoFragment extends Fragment {
                 genderDialog.dismiss();
             }
         });
-        builder.setTitle("Chọn...");
+        builder.setTitle(getContext().getResources().getString(R.string.pick_education_dialog_title));
 
         genderDialog = builder.create();
         genderDialog.setCanceledOnTouchOutside(false);
@@ -309,7 +309,7 @@ public class PersonalInfoFragment extends Fragment {
     private boolean isValid(){
         if (TextUtils.isEmpty(inputDob.getText())){
             inputLayoutDob.setErrorEnabled(true);
-            inputLayoutDob.setError("Cần nhập đủ thông tin.");
+            inputLayoutDob.setError(getContext().getResources().getString(R.string.empty_edittext_error));
             return false;
         }else {
             inputLayoutDob.setErrorEnabled(false);
@@ -317,7 +317,7 @@ public class PersonalInfoFragment extends Fragment {
 
         if (TextUtils.isEmpty(inputGender.getText())){
             inputLayoutGender.setErrorEnabled(true);
-            inputLayoutGender.setError("Cần nhập đủ thông tin.");
+            inputLayoutGender.setError(getContext().getResources().getString(R.string.empty_edittext_error));
             return false;
         }else {
             inputLayoutGender.setErrorEnabled(false);
@@ -325,7 +325,7 @@ public class PersonalInfoFragment extends Fragment {
 
         if (TextUtils.isEmpty(inputAddress.getText())){
             inputLayoutAddress.setErrorEnabled(true);
-            inputLayoutAddress.setError("Cần nhập đủ thông tin.");
+            inputLayoutAddress.setError(getContext().getResources().getString(R.string.empty_edittext_error));
             return false;
         }else {
             inputLayoutAddress.setErrorEnabled(false);
@@ -333,7 +333,7 @@ public class PersonalInfoFragment extends Fragment {
 
         if (TextUtils.isEmpty(inputPhoneNumber.getText())){
             inputLayoutPhone.setErrorEnabled(true);
-            inputLayoutPhone.setError("Cần nhập đủ thông tin.");
+            inputLayoutPhone.setError(getContext().getResources().getString(R.string.empty_edittext_error));
             return false;
         }else {
             inputLayoutPhone.setErrorEnabled(false);
@@ -341,7 +341,7 @@ public class PersonalInfoFragment extends Fragment {
 
         if (TextUtils.isEmpty(inputEducation.getText())){
             inputLayoutEducation.setErrorEnabled(true);
-            inputLayoutEducation.setError("Cần nhập đủ thông tin.");
+            inputLayoutEducation.setError(getContext().getResources().getString(R.string.empty_edittext_error));
             return false;
         }else {
             inputLayoutEducation.setErrorEnabled(false);

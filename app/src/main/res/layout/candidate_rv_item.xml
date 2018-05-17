@@ -48,8 +48,8 @@
                 <ImageView
                     android:src="@drawable/email_2"
                     android:contentDescription="@string/img_description"
-                    android:layout_width="@dimen/distance_view_20"
-                    android:layout_height="@dimen/distance_view_20" />
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size" />
 
                 <TextView
                     android:id="@+id/tv_candidate_email"
@@ -73,8 +73,8 @@
                 <ImageView
                     android:src="@drawable/phone_2"
                     android:contentDescription="@string/img_description"
-                    android:layout_width="@dimen/distance_view_20"
-                    android:layout_height="@dimen/distance_view_20" />
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size" />
 
                 <TextView
                     android:id="@+id/tv_candidate_phone"
@@ -97,8 +97,8 @@
 
                 <ImageView
                     android:src="@drawable/gender_2"
-                    android:layout_width="@dimen/distance_view_20"
-                    android:layout_height="@dimen/distance_view_20"
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size"
                     android:contentDescription="@string/img_description" />
 
                 <TextView

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -40,6 +41,8 @@ public class SearchActivity extends AppCompatActivity implements SearchJobAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seach);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         getWidgets();
@@ -76,7 +79,7 @@ public class SearchActivity extends AppCompatActivity implements SearchJobAdapte
                     mArrayList.addAll(JobManager.getInstance().getAllJob());
                     adapter.notifyDataSetChanged();
                 }else {
-                    Toast.makeText(SearchActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
             }
         }, 1300);
@@ -95,7 +98,7 @@ public class SearchActivity extends AppCompatActivity implements SearchJobAdapte
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconified(false);
         searchView.setIconifiedByDefault(false);
-        searchView.setQueryHint("Nhập từ khóa ... ");
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -139,6 +142,16 @@ public class SearchActivity extends AppCompatActivity implements SearchJobAdapte
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static SearchActivity getInstance() {

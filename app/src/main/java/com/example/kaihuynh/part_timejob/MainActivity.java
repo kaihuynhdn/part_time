@@ -2,6 +2,7 @@ package com.example.kaihuynh.part_timejob;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
@@ -55,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        String language = sharedPreferences.getString("language", "");
+        if (!language.isEmpty()){
+            setLanguage(language);
+        }
+
         mHandler = new Handler();
         FINISH_LOADED = 0;
         mAuth = FirebaseAuth.getInstance();
@@ -98,6 +107,18 @@ public class MainActivity extends AppCompatActivity {
                 loadFunction();
             }
         });
+    }
+
+    private void setLanguage(String languages){
+        Locale locale = new Locale (languages);
+        Locale.setDefault(locale);
+        getResources().getConfiguration().locale = locale;
+        getResources().updateConfiguration(getResources().getConfiguration(), getResources().getDisplayMetrics());
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("language", languages);
+        editor.apply();
+//        setContentView(R.layout.activity_main);
     }
 
     private void loadFunction(){

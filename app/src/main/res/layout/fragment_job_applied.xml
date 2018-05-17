@@ -105,8 +105,8 @@
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/distance_view_20"
-                            android:layout_width="@dimen/distance_view_20"
-                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_width="@dimen/sliding_button_size"
+                            android:layout_height="@dimen/sliding_button_size"
                             android:layout_alignParentRight="true"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_marginEnd="@dimen/distance_view_20" />
@@ -168,8 +168,8 @@
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/distance_view_20"
-                            android:layout_width="@dimen/distance_view_20"
-                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_width="@dimen/sliding_button_size"
+                            android:layout_height="@dimen/sliding_button_size"
                             android:layout_alignParentRight="true"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_marginEnd="@dimen/distance_view_20" />
@@ -241,8 +241,8 @@
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/distance_view_20"
-                            android:layout_width="@dimen/distance_view_20"
-                            android:layout_height="@dimen/distance_view_20"
+                            android:layout_width="@dimen/sliding_button_size"
+                            android:layout_height="@dimen/sliding_button_size"
                             android:layout_alignParentRight="true"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_marginEnd="@dimen/distance_view_20" />

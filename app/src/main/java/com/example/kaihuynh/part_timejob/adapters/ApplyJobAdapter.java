@@ -65,16 +65,16 @@ public class ApplyJobAdapter extends RecyclerView.Adapter<ApplyJobAdapter.JobIte
         int minus = current.get(Calendar.DAY_OF_MONTH) - postingDate.get(Calendar.DAY_OF_MONTH);
         if(minus<2){
             if (minus == 1){
-                s = "Hôm qua lúc " + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
+                s = context.getResources().getString(R.string.get_time_text_1) + new SimpleDateFormat("hh:mm").format(postingDate.getTime());
             }else if(minus == 0){
                 int minus1 = current.get(Calendar.HOUR_OF_DAY) - postingDate.get(Calendar.HOUR_OF_DAY);
                 if (minus1>0){
-                    s = minus1 + " giờ trước";
+                    s = minus1 + context.getResources().getString(R.string.get_time_text_2);
                 }else {
                     if(current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE)==0){
-                        s = "1 phút trước";
+                        s = context.getResources().getString(R.string.get_time_text_3);
                     }else {
-                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + " phút trước";
+                        s = current.get(Calendar.MINUTE) - postingDate.get(Calendar.MINUTE) + context.getResources().getString(R.string.get_time_text_4);
                     }
                 }
             }else {

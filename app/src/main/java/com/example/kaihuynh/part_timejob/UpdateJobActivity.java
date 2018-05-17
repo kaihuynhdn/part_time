@@ -62,7 +62,7 @@ public class UpdateJobActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_job);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Cập nhật công việc");
+        getSupportActionBar().setTitle(getResources().getString(R.string.update_job));
 
         addComponents();
         initialize();
@@ -255,7 +255,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                         showSuccessDialog();
                     }
                 }else {
-                    Toast.makeText(UpdateJobActivity.this, "Lỗi kết nối! Vui lòng kiểm tra đường truyền.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateJobActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -283,10 +283,11 @@ public class UpdateJobActivity extends AppCompatActivity {
 
     private void showSuccessDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo");
+        builder.setTitle(getResources().getString(R.string.notify));
         builder.setIcon(ContextCompat.getDrawable(this, R.drawable.checked));
-        builder.setMessage(intentJob!=null ? "Cập nhật công việc thành công !" : "Đăng tuyển thành công!");
-        builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+        builder.setMessage(intentJob!=null ? getResources().getString(R.string.update_job_success)
+                : getResources().getString(R.string.recruiting_success));
+        builder.setPositiveButton(getResources().getString(R.string.next_button_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
@@ -299,33 +300,34 @@ public class UpdateJobActivity extends AppCompatActivity {
     }
 
     private boolean isValid() {
-        if (edited == 0 && mJobTitle.getText().toString().equals("Tên công việc")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần thêm tiều đề cho công việc.", Toast.LENGTH_SHORT).show();
+        String s = getResources().getString(R.string.lack_of_info_notification);
+        if (edited == 0 && mJobTitle.getText().toString().equals(getResources().getString(R.string.job_title))) {
+            Toast.makeText(UpdateJobActivity.this, getResources().getString(R.string.lack_of_title_notification), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (inputSalary.getText().toString().equals("")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, s, Toast.LENGTH_SHORT).show();
             inputSalary.requestFocus();
             return false;
         }
         if (inputLocation.getText().toString().equals("")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần nhập thông tin nơi làm việc.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, s, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mJobBenefits.getText().toString().equals("")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, s, Toast.LENGTH_SHORT).show();
             mJobBenefits.requestFocus();
             return false;
         }
 
         if (mJobDescriptionDetail.getText().toString().equals("")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, s, Toast.LENGTH_SHORT).show();
             mJobDescriptionDetail.requestFocus();
             return false;
         }
 
         if (mJobRequirement.getText().toString().equals("") && inputLanguage.getText().toString().equals("") && inputSkill.getText().toString().equals("")) {
-            Toast.makeText(UpdateJobActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateJobActivity.this, s, Toast.LENGTH_SHORT).show();
             mJobRequirement.requestFocus();
             return false;
         }
@@ -355,7 +357,7 @@ public class UpdateJobActivity extends AppCompatActivity {
     private void showStatusDialog() {
         final String []status = getResources().getStringArray(R.array.status_job);
         new AlertDialog.Builder(this)
-                .setTitle("Trạng thái")
+                .setTitle(getResources().getString(R.string.status_title))
                 .setItems(status, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -433,8 +435,8 @@ public class UpdateJobActivity extends AppCompatActivity {
             }
         });
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chọn:");
-        builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
+        builder.setPositiveButton(getResources().getString(R.string.done), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 StringBuilder s = new StringBuilder();
@@ -447,7 +449,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                 inputSkill.setText(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -460,9 +462,9 @@ public class UpdateJobActivity extends AppCompatActivity {
 
     private void showAddSkillDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateJobActivity.this);
-        builder.setTitle("Thêm kĩ năng:");
+        builder.setTitle(getResources().getString(R.string.add_new_skill_title));
         final EditText editText = new EditText(UpdateJobActivity.this);
-        builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.add_new_language_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!editText.getText().toString().equals("") && editText.getText().toString() != null && !editText.getText().toString().equals("Không")) {
@@ -471,7 +473,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -542,9 +544,9 @@ public class UpdateJobActivity extends AppCompatActivity {
             }
         });
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chọn:");
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
         builder.setView(listView);
-        builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.done), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 StringBuilder s = new StringBuilder();
@@ -557,7 +559,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                 inputLanguage.setText(s.toString().equals("") ? "" : s.substring(0, s.length() - 1));
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -570,9 +572,9 @@ public class UpdateJobActivity extends AppCompatActivity {
 
     private void showAddLanguageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UpdateJobActivity.this);
-        builder.setTitle("Thêm ngoại ngữ:");
+        builder.setTitle(getResources().getString(R.string.add_new_language_title));
         final EditText editText = new EditText(UpdateJobActivity.this);
-        builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.add_new_language_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!editText.getText().toString().equals("") && editText.getText().toString() != null && !editText.getText().toString().equals("Không")) {
@@ -581,7 +583,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -629,7 +631,7 @@ public class UpdateJobActivity extends AppCompatActivity {
                 genderDialog.dismiss();
             }
         });
-        builder.setTitle("Chọn...");
+        builder.setTitle(getResources().getString(R.string.pick_education_dialog_title));
 
         genderDialog = builder.create();
         genderDialog.show();
@@ -655,15 +657,15 @@ public class UpdateJobActivity extends AppCompatActivity {
 
     private void showBackDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo");
-        builder.setMessage("Thoát khỏi đăng tuyển ?");
-        builder.setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.notify));
+        builder.setMessage(getResources().getString(R.string.exit_recruiting_notify));
+        builder.setPositiveButton(getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

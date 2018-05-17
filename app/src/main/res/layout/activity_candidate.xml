@@ -20,7 +20,7 @@
             <RelativeLayout
                 android:background="@drawable/background_profile"
                 android:layout_width="match_parent"
-                android:layout_height="250dp">
+                android:layout_height="@dimen/background_img_profile_size">
 
                 <RelativeLayout
                     android:id="@+id/relative_layout1"
@@ -35,10 +35,10 @@
                     <ImageView
                         android:id="@+id/img_profile"
                         android:contentDescription="@string/avarar_img_description"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="@dimen/avatar_profile_size"
+                        android:layout_height="@dimen/avatar_profile_size"
                         android:background="@drawable/avatar_profile"
-                        android:padding="2dp"
+                        android:padding="@dimen/distance_view_2"
                         android:src="@drawable/user_profile" />
                 </RelativeLayout>
 

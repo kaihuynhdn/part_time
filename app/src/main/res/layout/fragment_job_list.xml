@@ -70,8 +70,8 @@
                         android:textSize="14sp"
                         android:fontFamily="@font/linotte_semi_bold"
                         android:textColor="@color/white"
-                        android:layout_width="@dimen/distance_view_20"
-                        android:layout_height="@dimen/distance_view_20"
+                        android:layout_width="@dimen/remove_location_btn"
+                        android:layout_height="@dimen/remove_location_btn"
                         android:layout_alignEnd="@+id/btn_location" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>

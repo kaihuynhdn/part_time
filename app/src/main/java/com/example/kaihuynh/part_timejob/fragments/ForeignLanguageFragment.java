@@ -129,9 +129,9 @@ public class ForeignLanguageFragment extends Fragment {
 
     private void showAddLanguageDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Thêm ngoại ngữ:");
+        builder.setTitle(getResources().getString(R.string.add_new_language_title));
         final EditText editText = new EditText(getContext());
-        builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.add_new_language_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!editText.getText().toString().equals("") && editText.getText().toString() != null) {
@@ -140,7 +140,7 @@ public class ForeignLanguageFragment extends Fragment {
                 }
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.negative_btn_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

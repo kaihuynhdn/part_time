@@ -160,7 +160,7 @@
                                 android:id="@+id/tv_job_requirement"
                                 android:layout_marginLeft="@dimen/distance_view_10"
                                 android:textSize="16sp"
-                                android:lineSpacingExtra="5dp"
+                                android:lineSpacingExtra="@dimen/line_spacing"
                                 android:layout_marginTop="@dimen/distance_view_10"
                                 android:textColor="@color/back_87"
                                 android:fontFamily="@font/roboto_regular"
