@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent"
+    tools:context="com.example.kaihuynh.part_timejob.UpdateJobActivity">
+
+    <ScrollView
+        android:background="@drawable/grey_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_job_title"
+                    android:layout_marginTop="@dimen/distance_view_10"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="@dimen/job_title_width"
+                    android:layout_marginLeft="@dimen/distance_view_23"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:padding="@dimen/distance_view_5"
+                    android:text="@string/job_title"
+                    android:textColor="@color/back_87"
+                    android:textSize="22sp"
+                    android:layout_marginStart="@dimen/distance_view_23" />
+
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_15"
+                app:cardElevation="@dimen/distance_view_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/job_info"
+                        android:textColor="@color/back_87"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_status_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_status_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:lineSpacingExtra="@dimen/distance_view_5"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/status"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_salary_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_salary_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="@dimen/distance_view_5"
+                            android:drawableLeft="@drawable/salary"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/salary"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/salary" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_location_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_location_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/address"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:editable="false"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/location"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            android:drawableStart="@drawable/address"
+                            tools:ignore="Deprecated" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/distance_view_15"
+                        android:textSize="20sp"
+                        android:textColor="@color/back_87"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:text="@string/benefit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/et_benefits"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textSize="16sp"
+                        android:inputType="textMultiLine"
+                        android:gravity="top|left"
+                        android:minHeight="@dimen/distance_view_90"
+                        android:lineSpacingExtra="@dimen/distance_view_5"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
+                        android:background="@drawable/input_template"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/back_87"
+                        android:hint="@string/text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_5"
+                app:cardCornerRadius="@dimen/distance_view_2"
+                app:cardElevation="@dimen/distance_view_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="@dimen/activity_padding"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/job_description"
+                        android:textColor="@color/back_87"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:textSize="20sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/et_description_detail"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textSize="16sp"
+                        android:lineSpacingExtra="@dimen/distance_view_5"
+                        android:inputType="textMultiLine"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
+                        android:background="@drawable/input_template"
+                        android:gravity="top|left"
+                        android:minHeight="@dimen/distance_view_90"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/back_87"
+                        android:hint="@string/text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="@dimen/distance_view_5"
+                app:cardElevation="@dimen/distance_view_5"
+                app:cardCornerRadius="@dimen/distance_view_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="@dimen/activity_padding"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/personal_requirement"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/back_87"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_skill_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_skill_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:lineSpacingExtra="@dimen/distance_view_5"
+                            android:editable="false"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/skill_title"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_language_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_language_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="@dimen/distance_view_5"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:editable="false"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/foreign_language_title"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_gender_job_layout"
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textColorHint="@color/back_87"
+                        app:hintTextAppearance="@style/TextInputLayoutHintTextForJob"
+                        android:layout_marginStart="@dimen/distance_view_10">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/input_gender_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/distance_view_10"
+                            android:editable="false"
+                            android:fontFamily="@font/linotte_semi_bold"
+                            android:hint="@string/hint_gender"
+                            android:textColor="@color/grey_600"
+                            android:textSize="18sp"
+                            tools:ignore="Deprecated" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_marginLeft="@dimen/distance_view_10"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:text="@string/other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/distance_view_10" />
+
+                    <EditText
+                        android:id="@+id/et_job_requirement"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:textSize="16sp"
+                        android:background="@drawable/input_template"
+                        android:inputType="textMultiLine"
+                        android:gravity="top|left"
+                        android:lineSpacingExtra="@dimen/distance_view_5"
+                        android:minHeight="@dimen/distance_view_90"
+                        android:paddingLeft="@dimen/distance_view_10"
+                        android:paddingRight="@dimen/distance_view_10"
+                        android:paddingTop="@dimen/distance_view_5"
+                        android:paddingBottom="@dimen/distance_view_5"
+                        android:layout_marginLeft="@dimen/distance_view_15"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/back_87"
+                        android:hint="@string/text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlHardcoded" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/distance_view_5"
+                app:cardElevation="@dimen/distance_view_5"
+                app:contentPaddingRight="@dimen/distance_view_2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/distance_view_5">
+
+                    <Button
+                        android:id="@+id/btn_recruit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:theme="@style/LocationButton"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:padding="@dimen/distance_view_5"
+                        android:text="@string/update_job" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

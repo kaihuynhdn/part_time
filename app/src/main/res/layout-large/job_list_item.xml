@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layout_marginBottom="@dimen/distance_view_2"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardElevation="@dimen/distance_view_2"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_padding"
+        android:paddingRight="@dimen/activity_padding"
+        android:paddingTop="@dimen/distance_view_10"
+        android:paddingBottom="@dimen/distance_view_10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_job_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/linotte_semi_bold"
+                android:textColor="@color/back_87"
+                android:textSize="18sp"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:id="@+id/image_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="@dimen/distance_view_10"
+                android:paddingRight="@dimen/distance_view_10"
+                android:src="@drawable/like"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/img_description" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location_item"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_job_item_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/distance_view_10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_job_item_salary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:textSize="13sp"
+                android:layout_marginStart="@dimen/distance_view_10" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/distance_view_5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_posted_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_posted"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_job_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_toRightOf="@id/tv_posted_date"
+                android:textSize="13sp"
+                android:layout_toEndOf="@id/tv_posted_date"
+                android:layout_marginStart="@dimen/distance_view_10" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+

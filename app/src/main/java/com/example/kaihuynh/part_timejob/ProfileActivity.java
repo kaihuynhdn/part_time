@@ -133,6 +133,8 @@ public class ProfileActivity extends AppCompatActivity {
         mDescriptionTextView.setText(user.getPersonalDescription());
         if (!user.getImageURL().equals("")){
             Picasso.get().load(user.getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(mAvatar);
+        }else{
+            mAvatar.setImageResource(R.drawable.user_profile);
         }
 
 
@@ -873,6 +875,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     user.setImageURL(downloadUrl.toString());
                     UserManager.getInstance().updateUser(user);
+                    HomePageActivity.getInstance().updateImage(downloadUrl.toString());
                 }
             });
         }

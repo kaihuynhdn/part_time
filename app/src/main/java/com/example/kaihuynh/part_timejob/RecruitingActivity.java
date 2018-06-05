@@ -258,7 +258,8 @@ public class RecruitingActivity extends AppCompatActivity {
             return false;
         }
 
-        if (mJobRequirement.getText().toString().equals("") && inputLanguage.getText().toString().equals("") && inputSkill.getText().toString().equals("")) {
+        if (mJobRequirement.getText().toString().equals("") && inputLanguage.getText().toString().equals("")
+                && inputSkill.getText().toString().equals("") && inputGender.getText().toString().equals("")) {
             Toast.makeText(RecruitingActivity.this, "Cần nhập đủ thông tin.", Toast.LENGTH_SHORT).show();
             mJobRequirement.requestFocus();
             return false;

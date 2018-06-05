@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kaihuynh.part_timejob.fragments.NotificationFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sw_notification"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_notification"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <RelativeLayout
+                android:id="@+id/rl_empty_notification"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/img_empty"
+                    android:layout_marginBottom="@dimen/distance_view_20"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/bell_empty"
+                    android:layout_width="@dimen/size_empty_img"
+                    android:layout_height="@dimen/size_empty_img"
+                    android:contentDescription="@string/img_description" />
+
+                <TextView
+                    android:layout_below="@id/img_empty"
+                    android:text="@string/empty_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</FrameLayout>

@@ -96,16 +96,25 @@
     <string name="management">Recruitment Management</string>
     <string name="logout">Log out</string>
     <string name="contact">Contact</string>
+    <string name="update_profile">You have to update your profile before applying</string>
+    <string name="back">Back</string>
+    <string name="error">Error</string>
     <string name="date_posted">Date:</string>
     <string name="benefit">Benefits:</string>
     <string name="job_title">Job Title</string>
+    <string name="remove">Remove</string>
     <string name="job_info">Job Information</string>
-    <string name="job_description">Job Detail</string>
+    <string name="job_description">Job Details</string>
+    <string name="job_details">Job Description</string>
     <string name="personal_requirement">Requirement</string>
+    <string name="applied">Applied</string>
     <string name="other">Other:</string>
     <string name="save">Save</string>
     <string name="apply">Apply</string>
     <string name="share_1">Share…</string>
     <string name="language">Language</string>
     <string name="update_success">Updating Job</string>
+    <string name="empty_like_jobs">Your favourite Job list is empty!</string>
+    <string name="empty_apply_job">Let find some interesting Job !</string>
+    <string name="empty_notification">You don\'t have any notification!</string>
 </resources>

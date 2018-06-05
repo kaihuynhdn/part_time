@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/ripple_custom"
+    android:clickable="true"
+    android:layout_marginBottom="@dimen/distance_view_2"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardElevation="@dimen/distance_view_2"
+    android:layout_height="wrap_content"
+    android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_padding"
+            android:paddingRight="@dimen/activity_padding"
+            android:paddingTop="@dimen/distance_view_10"
+            android:paddingBottom="@dimen/distance_view_10">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_candidate_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/linotte_semi_bold"
+                    android:textColor="@color/back_87"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/distance_view_5"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/distance_view_10"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:src="@drawable/email_2"
+                    android:contentDescription="@string/img_description"
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size" />
+
+                <TextView
+                    android:id="@+id/tv_candidate_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/distance_view_10"
+                    android:textSize="14sp"
+                    android:layout_marginStart="@dimen/distance_view_10" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/distance_view_5"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/distance_view_10"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:src="@drawable/phone_2"
+                    android:contentDescription="@string/img_description"
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size" />
+
+                <TextView
+                    android:id="@+id/tv_candidate_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/distance_view_10"
+                    android:textSize="14sp"
+                    android:layout_marginStart="@dimen/distance_view_10" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/distance_view_5"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/distance_view_10"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:src="@drawable/gender_2"
+                    android:layout_width="@dimen/icon_candidate_item_size"
+                    android:layout_height="@dimen/icon_candidate_item_size"
+                    android:contentDescription="@string/img_description" />
+
+                <TextView
+                    android:id="@+id/tv_candidate_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/distance_view_10"
+                    android:textSize="14sp"
+                    android:layout_marginStart="@dimen/distance_view_10" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="@dimen/distance_view_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/distance_view_5"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/distance_view_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/applied_date"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_candidate_applied"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/distance_view_10"
+                    android:textSize="14sp"
+                    android:layout_marginStart="@dimen/distance_view_10" />
+
+            </LinearLayout>
+        </LinearLayout>
+</android.support.v7.widget.CardView>

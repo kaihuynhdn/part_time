@@ -75,6 +75,7 @@ public class UserManager {
         for (Job job : jobs){
             if (job.getId().equals(id)){
                 jobs.remove(job);
+                break;
             }
         }
         User u = user;

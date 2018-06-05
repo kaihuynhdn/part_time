@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_padding"
+    android:background="@drawable/splash_background"
+    android:weightSum="5"
+    tools:context="com.example.kaihuynh.part_timejob.LoginActivity">
+
+    <TextView
+        android:text="@string/title"
+        android:fontFamily="@font/iciel_cadena"
+        android:textColor="@color/white"
+        android:layout_weight="1"
+        android:textSize="30sp"
+        android:gravity="center|bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/distance_view_40"
+        android:layout_marginLeft="@dimen/distance_view_20"
+        android:layout_marginRight="@dimen/distance_view_20"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <EditText
+            android:id="@+id/editText_email_login"
+            android:fontFamily="@font/linotte_semi_bold"
+            android:textSize="18sp"
+            android:padding="@dimen/distance_view_10"
+            android:textColor="@color/grey_600"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:hint="@string/hint_email"
+            android:drawableLeft="@drawable/user"
+            android:drawablePadding="@dimen/distance_view_10"
+            android:background="@drawable/edit_text_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/user" />
+
+        <EditText
+            android:id="@+id/editText_password_login"
+            android:fontFamily="@font/linotte_semi_bold"
+            android:textSize="18sp"
+            android:layout_marginTop="@dimen/distance_view_20"
+            android:padding="@dimen/distance_view_10"
+            android:textColor="@color/grey_600"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="@dimen/distance_view_10"
+            android:background="@drawable/edit_text_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/password" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_marginTop="@dimen/distance_view_30"
+            android:background="@drawable/login_btn"
+            android:text="@string/login"
+            android:enabled="false"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/linotte_semi_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:padding="@dimen/activity_padding"
+        android:orientation="horizontal"
+        android:gravity="center|bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:text="@string/text2"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/linotte_semi_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_to_register"
+            android:text="@string/toRegister"
+            android:paddingLeft="@dimen/distance_view_5"
+            android:paddingTop="@dimen/distance_view_10"
+            android:paddingBottom="@dimen/distance_view_10"
+            android:textSize="18sp"
+            android:textColor="@color/lightBlue_700"
+            android:fontFamily="@font/linotte_semi_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="RtlSymmetry"
+            android:paddingStart="@dimen/distance_view_5" />
+
+    </LinearLayout>
+
+</LinearLayout>

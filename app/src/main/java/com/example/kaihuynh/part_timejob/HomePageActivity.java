@@ -111,7 +111,7 @@ public class HomePageActivity extends AppCompatActivity
 
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         String language = sharedPreferences.getString("language", "");
-        if (!language.isEmpty()){
+        if (!language.isEmpty()) {
             setLanguage(language);
         }
 
@@ -143,7 +143,7 @@ public class HomePageActivity extends AppCompatActivity
             mUserName.setText(user.getFullName());
             mUserEmail.setText(user.getEmail());
         }
-    if (user.getImageURL() != null && !user.getImageURL().equals("")) {
+        if (user.getImageURL() != null && !user.getImageURL().equals("")) {
             Picasso.get().load(user.getImageURL()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(imageView);
         }
 
@@ -279,9 +279,9 @@ public class HomePageActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_page_menu, menu);
-        share  = (ImageView) menu.findItem(R.id.action_share).getActionView();
+        share = (ImageView) menu.findItem(R.id.action_share).getActionView();
         share.setImageResource(R.drawable.share);
-        share.setPadding(0,0,20,0);
+        share.setPadding(0, 0, 20, 0);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -343,7 +343,7 @@ public class HomePageActivity extends AppCompatActivity
                             signOut();
                         } else if (id == R.id.contact_menu) {
 
-                        } else if (id == R.id.language_menu){
+                        } else if (id == R.id.language_menu) {
                             showLanguageDialog();
                         }
                     }
@@ -376,8 +376,8 @@ public class HomePageActivity extends AppCompatActivity
         languageDialog.show();
     }
 
-    private void setLanguage(String languages){
-        Locale locale = new Locale (languages);
+    private void setLanguage(String languages) {
+        Locale locale = new Locale(languages);
         Locale.setDefault(locale);
         getResources().getConfiguration().locale = locale;
         getResources().updateConfiguration(getResources().getConfiguration(), getResources().getDisplayMetrics());
@@ -431,6 +431,10 @@ public class HomePageActivity extends AppCompatActivity
 
         LoginManager.getInstance().logOut();
 
+    }
+
+    public void updateImage(String downloadUrl) {
+        Picasso.get().load(downloadUrl).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(imageView);
     }
 
     @Override

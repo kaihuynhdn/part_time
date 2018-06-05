@@ -91,7 +91,7 @@
     <string name="job_title">Tên công việc</string>
     <string name="job_info">THÔNG TIN CÔNG VIỆC</string>
     <string name="text4">Nhập thông tin…</string>
-    <string name="job_description">MÔ TẢ CÔNG VIỆC</string>
+    <string name="job_description">CHI TIẾT CÔNG VIỆC</string>
     <string name="personal_requirement">YÊU CẦU</string>
     <string name="other">Khác:</string>
     <string name="save">Lưu</string>
@@ -99,6 +99,7 @@
     <string name="share_1">Chia sẻ…</string>
     <string name="delete">Xóa</string>
     <string name="personal_description">Mô tả cá nhân</string>
+    <string name="job_details">Mô tả công việc</string>
     <string name="general">Thông tin chung</string>
     <string name="update">Chỉnh sửa</string>
     <string name="applied_date">Thời gian ứng tuyển:</string>
@@ -111,17 +112,21 @@
     <string name="delete_job_message">Bạn có muốn xóa tin tuyển dụng này không ?</string>
     <string name="positive_btn_dialog">Có</string>
     <string name="negative_btn_dialog">Hủy</string>
+    <string name="remove">Hủy Lưu</string>
     <string name="add_new_language_title">Thêm ngoại ngữ:</string>
     <string name="add_new_skill_title">Thêm kĩ năng:</string>
     <string name="add_new_language_positive">Thêm</string>
     <string name="quantity_job">việc làm</string>
+    <string name="back">Quay về</string>
     <string name="connection_error"> Lỗi kết nối!</string>
+    <string name="error">Lỗi</string>
     <string name="personal_description_loading_message">Đang xử lý thông tin…</string>
     <string name="login_loading_message">Đang xác nhận thông tin…</string>
     <string name="login_method_loading_message">Đang xử lý dữ liệu…</string>
     <string name="next_button_dialog">Tiếp tục</string>
     <string name="success_register_info_dialog">Đăng ký thông tin thành công</string>
     <string name="pick_education_dialog_title">Chọn:</string>
+    <string name="update_profile">Bạn cần hoàn thiện hồ sơ cá nhân để ứng tuyển</string>
     <string name="exit">Thoát</string>
     <string name="status_title">Trạng thái</string>
     <string name="notify">Thông báo</string>
@@ -142,6 +147,7 @@
     <string name="email_exist">Địa chỉ email đã tồn tại.</string>
     <string name="favourite_job">Công việc yêu thích</string>
     <string name="apply_job">Công việc ứng tuyển</string>
+    <string name="applied">Đã ứng tuyển !</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
@@ -242,6 +248,7 @@
         <item>Hải Phòng</item>
         <item>Hậu Giang</item>
         <item>Hòa Bình</item>
+        <item>Hội An</item>
         <item>Hưng Yên</item>
         <item>Khánh Hòa</item>
         <item>Kiên Giang</item>
@@ -262,7 +269,6 @@
         <item>Quảng Ngãi</item>
         <item>Quảng Ninh</item>
         <item>Quảng Trị</item>
-        <item>Sài Gòn</item>
         <item>Sóc Trăng</item>
         <item>Sơn La</item>
         <item>Tây Ninh</item>
@@ -271,6 +277,7 @@
         <item>Thanh Hóa</item>
         <item>Thừa Thiên Huế</item>
         <item>Tiền Giang</item>
+        <item>TP Hồ Chí Minh</item>
         <item>Trà Vinh</item>
         <item>Tuyên Quang</item>
         <item>Vĩnh Long</item>

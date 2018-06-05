@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.kaihuynh.part_timejob.ListCandidateActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <RelativeLayout
+            android:id="@+id/rl_empty_candidate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_empty"
+                android:layout_width="@dimen/size_empty_img"
+                android:layout_height="@dimen/size_empty_img"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/distance_view_40"
+                android:src="@drawable/empty_candidate"
+                android:contentDescription="@string/img_description" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_empty"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/distance_view_5"
+                android:text="@string/empty_candidate" />
+
+        </RelativeLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/sw_list_candidate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:background="@drawable/drop_shadow_up" />
+
+                    <RelativeLayout
+                        android:id="@+id/layout_waiting"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/distance_view_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_list_candidate"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/rl_waiting">
+
+                        </android.support.v7.widget.RecyclerView>
+
+                        <View
+                            android:id="@+id/shadow_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/distance_view_2"
+                            android:layout_below="@+id/rl_waiting"
+                            android:background="@drawable/drop_shadow" />
+
+                        <RelativeLayout
+                            android:id="@+id/rl_waiting"
+                            android:background="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_quantity_waiting_job"
+                                android:textSize="18sp"
+                                android:textColor="@color/grey_54"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:layout_toLeftOf="@id/btn_show_waiting_job"
+                                android:padding="@dimen/distance_view_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_waiting_job"
+                                tools:ignore="RelativeOverlap" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:padding="@dimen/distance_view_10"
+                                android:text="@string/waiting_check"
+                                android:textColor="@color/lightBlue_700"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btn_show_waiting_job"
+                                android:background="@drawable/blue_up_narrow"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:layout_width="@dimen/sliding_button_size"
+                                android:layout_height="@dimen/sliding_button_size"
+                                android:layout_alignParentRight="true"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
+
+                        </RelativeLayout>
+
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layout_employed"
+                        android:layout_below="@id/layout_waiting"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_employed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/rl_employed" />
+
+                        <RelativeLayout
+                            android:id="@+id/rl_employed"
+                            android:background="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_quantity_employed_job"
+                                android:textSize="18sp"
+                                android:textColor="@color/grey_54"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:layout_toLeftOf="@id/btn_show_employed_job"
+                                android:padding="@dimen/distance_view_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_employed_job"
+                                tools:ignore="RelativeOverlap" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:padding="@dimen/distance_view_10"
+                                android:text="@string/employed_text"
+                                android:textColor="@color/green"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btn_show_employed_job"
+                                android:background="@drawable/blue_up_narrow"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:layout_width="@dimen/sliding_button_size"
+                                android:layout_height="@dimen/sliding_button_size"
+                                android:layout_alignParentRight="true"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/distance_view_2"
+                            android:layout_below="@+id/rl_employed"
+                            android:background="@drawable/drop_shadow" />
+
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/layout_waiting"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:background="@drawable/drop_shadow_up" />
+                    <RelativeLayout
+                        android:id="@+id/layout_unemployed"
+                        android:layout_below="@+id/layout_employed"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_unemployed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/rl_unemployed" />
+
+
+                        <RelativeLayout
+                            android:id="@+id/rl_unemployed"
+                            android:background="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_quantity_unemployed_job"
+                                android:textSize="18sp"
+                                android:textColor="@color/grey_54"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:layout_toLeftOf="@id/btn_show_unemployed_job"
+                                android:padding="@dimen/distance_view_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/distance_view_20"
+                                android:layout_toStartOf="@id/btn_show_unemployed_job"
+                                tools:ignore="RelativeOverlap" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:padding="@dimen/distance_view_10"
+                                android:text="@string/unemployed_text"
+                                android:textColor="@color/red"
+                                android:textSize="18sp" />
+
+                            <Button
+                                android:id="@+id/btn_show_unemployed_job"
+                                android:background="@drawable/blue_up_narrow"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginRight="@dimen/distance_view_20"
+                                android:layout_width="@dimen/sliding_button_size"
+                                android:layout_height="@dimen/sliding_button_size"
+                                android:layout_alignParentRight="true"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_marginEnd="@dimen/distance_view_20" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/distance_view_2"
+                            android:layout_below="@+id/rl_unemployed"
+                            android:background="@drawable/drop_shadow" />
+
+                    </RelativeLayout>
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/layout_employed"
+                        android:layout_marginTop="@dimen/distance_view_10"
+                        android:layout_height="@dimen/distance_view_2"
+                        android:background="@drawable/drop_shadow_up" />
+                </RelativeLayout>
+            </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

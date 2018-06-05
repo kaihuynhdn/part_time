@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/distance_view_10"
+        app:cardElevation="@dimen/distance_view_5">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/add_personal_description"
+                android:paddingRight="@dimen/distance_view_20"
+                android:paddingLeft="@dimen/distance_view_20"
+                android:paddingBottom="@dimen/distance_view_5"
+                android:paddingTop="@dimen/distance_view_5"
+                android:textSize="18sp"
+                android:fontFamily="@font/iciel_cadena"
+                android:textColor="@color/lightBlue_700"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/et_candidate_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance_view_20"
+                android:layout_marginRight="@dimen/distance_view_20"
+                android:layout_marginTop="@dimen/distance_view_10"
+                android:layout_marginBottom="@dimen/distance_view_10"
+                android:background="@drawable/input_template"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="top|left"
+                android:hint="@string/text4"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="@dimen/distance_view_5"
+                android:minHeight="@dimen/min_height_description_candidate"
+                android:paddingLeft="@dimen/distance_view_10"
+                android:paddingRight="@dimen/distance_view_10"
+                android:paddingTop="@dimen/distance_view_5"
+                android:paddingBottom="@dimen/distance_view_5"
+                android:textColor="@color/back_87"
+                android:textSize="16sp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
