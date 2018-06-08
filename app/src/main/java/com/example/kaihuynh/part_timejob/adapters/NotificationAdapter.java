@@ -65,7 +65,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(notification.getDate()));
         holder.mTime.setText(getTime(Calendar.getInstance(), calendar));
-        Picasso.get().load(notification.getAvatarSender()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(holder.imageView);
+        if (notification.getAvatarSender() != null && !notification.getAvatarSender().equals("")) {
+            Picasso.get().load(notification.getAvatarSender()).transform(new CircleTransform()).placeholder(R.drawable.loading_img).into(holder.imageView);
+        }
 
         if (notification.getStatus() == Notification.STATUS_NOT_SEEN){
             holder.mCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.notificationUnSeen));

@@ -78,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
                     FINISH_LOADED = 1;
-                    t.start();
+                    if (!t.isInterrupted()){
+                        t.start();
+                    }
                 } else {
                     mUserReference.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override

@@ -39,6 +39,12 @@ import com.example.kaihuynh.part_timejob.models.Sender;
 import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.Common;
 import com.example.kaihuynh.part_timejob.remote.APIService;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.plus.PlusShare;
@@ -49,6 +55,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -67,6 +74,7 @@ public class JobDescriptionActivity extends AppCompatActivity {
     private ImageView share;
     private String description = "";
     private Job job;
+    private CallbackManager callbackManager;
     private APIService mService;
 
     private DatabaseReference connectedRef;
@@ -122,6 +130,32 @@ public class JobDescriptionActivity extends AppCompatActivity {
     }
 
     private void initial() {
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setQuote("\n" + getString())
+                                .setContentUrl(Uri.parse("https://play.google.com/store"))
+                                .build();
+                        ShareDialog.show(JobDescriptionActivity.this, content);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(JobDescriptionActivity.this, "Login Cancel", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(JobDescriptionActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
         mService = Common.getClientFCM();
         connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.lightBlue_700));
@@ -211,7 +245,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
                         showDescriptionDialog();
                     }
                 } else {
-                    Toast.makeText(JobDescriptionActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JobDescriptionActivity.this,
+                            getResources().getString(R.string.connection_error),
+                            Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -510,11 +546,8 @@ public class JobDescriptionActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_share_fb:
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setQuote("\n" + getString())
-                                .setContentUrl(Uri.parse("https://play.google.com/store"))
-                                .build();
-                        ShareDialog.show(JobDescriptionActivity.this, content);
+                        LoginManager.getInstance().
+                                logInWithReadPermissions(JobDescriptionActivity.this, Arrays.asList("public_profile", "email"));
                         break;
                     case R.id.action_share_google:
                         Intent shareIntent = new PlusShare.Builder(JobDescriptionActivity.this)
@@ -579,4 +612,9 @@ public class JobDescriptionActivity extends AppCompatActivity {
         mDate.setText(getTime(current, postingDate));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }

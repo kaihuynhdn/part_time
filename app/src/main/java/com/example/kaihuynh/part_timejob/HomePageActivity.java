@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,11 +18,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.kaihuynh.part_timejob.adapters.HomeViewPagerAdapter;
@@ -35,15 +32,12 @@ import com.example.kaihuynh.part_timejob.models.User;
 import com.example.kaihuynh.part_timejob.others.CircleTransform;
 import com.example.kaihuynh.part_timejob.others.CustomViewPager;
 import com.facebook.login.LoginManager;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.plus.PlusShare;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -54,7 +48,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 public class HomePageActivity extends AppCompatActivity
@@ -191,54 +184,6 @@ public class HomePageActivity extends AppCompatActivity
         });
     }
 
-    private void showPopupWindow(View view, int menu) {
-        PopupMenu popup = new PopupMenu(this, view);
-        try {
-            Field[] fields = popup.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if ("mPopup".equals(field.getName())) {
-                    field.setAccessible(true);
-                    Object menuPopupHelper = field.get(popup);
-                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
-                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
-                    setForceIcons.invoke(menuPopupHelper, true);
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        popup.getMenuInflater().inflate(menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_share_fb:
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setQuote("The content of status...")
-                                .setContentUrl(Uri.parse("https://play.google.com/store"))
-                                .build();
-                        ShareDialog.show(HomePageActivity.this, content);
-                        break;
-                    case R.id.action_share_google:
-                        Intent shareIntent = new PlusShare.Builder(HomePageActivity.this)
-                                .setType("text/plain")
-                                .setText("Link: \nhttp://play.google.com/store/apps/details?id=com.example.kaihuynh.part_timejob")
-                                .setContentUrl(Uri.parse("https://play.google.com/store"))
-                                .getIntent();
-                        startActivity(shareIntent);
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-        popup.show();
-    }
-
     private void bottomNavigationEvents(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_home:
@@ -274,25 +219,6 @@ public class HomePageActivity extends AppCompatActivity
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_page_menu, menu);
-        share = (ImageView) menu.findItem(R.id.action_share).getActionView();
-        share.setImageResource(R.drawable.share);
-        share.setPadding(0, 0, 20, 0);
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupWindow(share, R.menu.share_menu);
-
-            }
-        });
-
-
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

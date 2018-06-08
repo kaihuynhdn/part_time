@@ -234,7 +234,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(LoginMethodActivity.this, getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -258,7 +258,7 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
         }
 
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -326,6 +326,12 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                 });
     }
 
+    /**
+     * This method works on my real device but not on virtual machine
+     * I dont know how to fix it.
+     *
+     * @param token
+     */
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -360,30 +366,8 @@ public class LoginMethodActivity extends AppCompatActivity implements GoogleApiC
                             if (mProgress.isShowing()){
                                 mProgress.dismiss();
                             }
-                            final FirebaseUser userFirebase = mAuth.getCurrentUser();
-                            if (userFirebase!= null){
-                                mUserReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful() && task.getResult()!=null){
-                                            for (DocumentSnapshot d : task.getResult()){
-                                                User u = d.toObject(User.class);
-                                                if (u.getId().equals(userFirebase.getUid())) {
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                        User user = new User();
-                                        user.setId(userFirebase.getUid());
-                                        user.setEmail(userFirebase.getEmail());
-                                        user.setFullName(userFirebase.getDisplayName());
-                                        UserManager.getInstance().updateUser(user);
-                                    }
-                                });
-                            }else {
                                 Toast.makeText(LoginMethodActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
-                            }
                             // If sign in fails, display a message to the user.
                         }
 

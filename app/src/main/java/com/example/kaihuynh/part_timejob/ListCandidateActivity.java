@@ -33,7 +33,7 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
     private CandidateAdapter mAdapter, mEmployedAdapter, mUnemployedAdapter;
     private RecyclerView mListCandidateRecyclerView, mEmployedRecyclerView, mUnemployedRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<Candidate> mCandidateList, mEmployedJobArrayList, mUnemployedJobArrayList;
+    private ArrayList<Candidate> mCandidateList, mAllCandidate, mEmployedJobArrayList, mUnemployedJobArrayList;
     private RelativeLayout mEmptyView, waitingLayout, relativeViewing, employedLayout, relativeEmployed, unemployedLayout, relativeUnemployed;
     private View view1, view2, view3;
     private Button mShowWaiting, mShowEmployed, mShowUnemployed;
@@ -229,21 +229,23 @@ public class ListCandidateActivity extends AppCompatActivity implements Candidat
     }
 
     private void loadData() {
+        mAllCandidate = new ArrayList<>();
         mCandidateList = new ArrayList<>();
         mEmployedJobArrayList = new ArrayList<>();
         mUnemployedJobArrayList = new ArrayList<>();
 
+
         if (JobManager.getInstance().getCandidateList() != null) {
-            mCandidateList.addAll(JobManager.getInstance().getCandidateList());
+            mAllCandidate.addAll(JobManager.getInstance().getCandidateList());
         }
 
-        for (Candidate c : mCandidateList) {
+        for (Candidate c : mAllCandidate) {
             if (c.getStatus().equals(ApplyJob.EMPLOYED_STATUS)) {
                 mEmployedJobArrayList.add(c);
-                mCandidateList.remove(c);
             } else if (c.getStatus().equals(ApplyJob.UNEMPLOYED_STATUS)) {
                 mUnemployedJobArrayList.add(c);
-                mCandidateList.remove(c);
+            }else {
+                mCandidateList.add(c);
             }
         }
 
